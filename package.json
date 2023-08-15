@@ -1,5 +1,8 @@
 {
   "dependencies": {
     "kontra": "^9.0.0"
+  },
+  "devDependencies": {
+    "js13k-packer": "^1.0.2"
   }
 }

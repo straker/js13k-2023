@@ -1,7 +1,8 @@
 import { GameLoop, emit } from './libs/kontra.js';
 import { RESOURCE_TICK } from './constants.js';
 
-import './ui/index.js';
+import init from './init.js';
+init();
 
 let count = 0;
 const loop = GameLoop({
