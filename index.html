@@ -45,8 +45,8 @@
     grid-area: resources;
     display: flex;
     gap: 1rem;
-    color: #fdfdfd;
     background: #222;
+    color: #fdfdfd;
     padding: 1rem;
   }
 
@@ -58,6 +58,10 @@
     height: 2rem;
     font-size: 1rem;
     position: relative;
+  }
+
+  .icon {
+    text-shadow: 1px 0px 1px #fdfdfd, 0px 1px 1px #fdfdfd, 0px -1px 1px #fdfdfd, -1px 0px 1px #fdfdfd
   }
 
   .cooldown {
@@ -77,6 +81,16 @@
   button[aria-disabled="true"]:hover {
     background: rgb(233, 233, 237);
     opacity: 0.5;
+  }
+
+  #buildingGroup button {
+    display: flex;
+  }
+
+  #buildingGroup span:last-child {
+    margin-left: auto;
+    display: inline-flex;
+    gap: 0.75rem;
   }
 
   #autoActionNameGroup > div,

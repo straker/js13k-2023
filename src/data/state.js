@@ -16,13 +16,13 @@ const state = {
     const obj = traversePath(this._state, p);
     return obj[index] ?? defaultValue;
   },
-  set(path) {
+  set(path, max) {
     const p = [...path];  // clone
     const value = p.pop();
     const index = p.pop();
     const obj = this.get(p);
     if (typeof value === 'number') {
-      obj[index] = (obj[index] ?? 0) + value;
+      obj[index] = Math.min((obj[index] ?? 0) + value, max ?? Infinity);
     }
     else if (typeof value === 'boolean') {
       obj[index] = value;

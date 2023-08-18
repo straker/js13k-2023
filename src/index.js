@@ -19,9 +19,6 @@ const loop = GameLoop({
     manualActions.map((a, index) => {
       if (a[timer] > 0) {
         const t = state.set([action, index, timer, -dt]);
-        if (t <= 0) {
-          state.set([action, index, disabled, false]);
-        }
       }
     });
 

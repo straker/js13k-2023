@@ -7,10 +7,10 @@ import {
 
 // indices
 export const name = 0;
-export const prereq = 1;
-export const icon = 2;
-export const amount = 3;
-export const max = 4;
+export const icon = 1;
+export const max = 2;
+export const prereq = 3;
+export const amount = 4;
 export const visible = 5;
 
 export const wood = 0;
@@ -35,11 +35,17 @@ export default resources;
 export function initResources() {
   resources.push.call(resources,
     // 0
-    ['Wood'],
+    [
+      'Wood',
+      '🪵',
+      200
+    ],
 
     // 1
     [
       'Stone',
+      '🪨',
+      200,
       [
         [action, digStone, actionVisible, true]
       ]
@@ -48,6 +54,8 @@ export function initResources() {
     // 2
     [
       'Skeletons',
+      '💀',
+      0,
       [
         [action, stealCorpse, actionVisible, true]
       ]
@@ -56,72 +64,96 @@ export function initResources() {
     // 3
     [
       'Wood Planks',
+      '',
+      200,
       []
     ],
 
     // 4
     [
       'Stone Bricks',
+      '🧱',
+      200,
       []
     ],
 
     // 5
     [
       'Coal',
+      '',
+      200,
       []
     ],
 
     // 6
     [
       'Iron ore',
+      '',
+      200,
       []
     ],
 
     // 7
     [
       'Iron',
+      '',
+      200,
       []
     ],
 
     // 8
     [
       'Steel',
+      '',
+      200,
       []
     ],
 
     // 9
     [
       'Wood Beam',
+      '',
+      200,
       []
     ],
 
     // 10
     [
       'Tools',
+      '🔨',
+      100,
       []
     ],
 
     // 11
     [
       'Research',
+      '📜',
+      Infinity,
       []
     ],
 
     // 12
     [
       'Swords',
+      '⚔️',
+      50,
       []
     ],
 
     // 13
     [
       'Bows',
+      '🏹',
+      50,
       []
     ],
 
     // 14
     [
       'Magic Crystal',
+      '💎',
+      25,
       []
     ]
   );
