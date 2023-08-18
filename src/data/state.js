@@ -10,16 +10,25 @@ export const building = 1;
 export const action = 2;
 
 const state = {
-  get(path) {
-    return traversePath(this._state, path);
+  get(path, defaultValue) {
+    const p = [...path];
+    const index = p.pop();
+    const obj = traversePath(this._state, p);
+    return obj[index] ?? defaultValue;
   },
   set(path) {
     const p = [...path];  // clone
     const value = p.pop();
     const index = p.pop();
     const obj = this.get(p);
-    obj[index] = (obj[index] ?? 0) + value;
-    emit([...p, index], obj[index]);
+    if (typeof value === 'number') {
+      obj[index] = (obj[index] ?? 0) + value;
+    }
+    else if (typeof value === 'boolean') {
+      obj[index] = value;
+    }
+    emit([...p, index], obj[index], value);
+    return obj[index];
   }
 };
 export default state;

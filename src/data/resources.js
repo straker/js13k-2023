@@ -1,9 +1,17 @@
+import { resource, action, building } from './state.js';
+import {
+  visible as actionVisible,
+  digStone,
+  stealCorpse
+} from './actions.js';
+
 // indices
 export const name = 0;
-export const icon = 1;
-export const prereq = 2;
+export const prereq = 1;
+export const icon = 2;
 export const amount = 3;
 export const max = 4;
+export const visible = 5;
 
 export const wood = 0;
 export const stone = 1;
@@ -25,50 +33,96 @@ let resources = [];
 export default resources;
 
 export function initResources() {
-  resources.push.apply(resources, [
+  resources.push.call(resources,
     // 0
     ['Wood'],
 
     // 1
-    ['Stone'],
+    [
+      'Stone',
+      [
+        [action, digStone, actionVisible, true]
+      ]
+    ],
 
     // 2
-    ['Skeletons'],
+    [
+      'Skeletons',
+      [
+        [action, stealCorpse, actionVisible, true]
+      ]
+    ],
 
     // 3
-    ['Wood Planks'],
+    [
+      'Wood Planks',
+      []
+    ],
 
     // 4
-    ['Stone Bricks'],
+    [
+      'Stone Bricks',
+      []
+    ],
 
     // 5
-    ['Coal'],
+    [
+      'Coal',
+      []
+    ],
 
     // 6
-    ['Iron ore'],
+    [
+      'Iron ore',
+      []
+    ],
 
     // 7
-    ['Iron'],
+    [
+      'Iron',
+      []
+    ],
 
     // 8
-    ['Steel'],
+    [
+      'Steel',
+      []
+    ],
 
     // 9
-    ['Wood Beam'],
+    [
+      'Wood Beam',
+      []
+    ],
 
     // 10
-    ['Tools'],
+    [
+      'Tools',
+      []
+    ],
 
     // 11
-    ['Research'],
+    [
+      'Research',
+      []
+    ],
 
     // 12
-    ['Swords'],
+    [
+      'Swords',
+      []
+    ],
 
     // 13
-    ['Bows'],
+    [
+      'Bows',
+      []
+    ],
 
     // 14
-    ['Magic Crystal']
-  ]);
+    [
+      'Magic Crystal',
+      []
+    ]
+  );
 }

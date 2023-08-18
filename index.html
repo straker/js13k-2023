@@ -5,22 +5,97 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>JS13k 2023</title>
   <style>
+  * {
+    box-sizing: border-box;
+  }
+
+  [hidden] {
+    visibility: hidden !important;
+  }
+
   html,
   body {
     height: 100%;
     overflow: hidden;
+    font-family: arial;
   }
 
-  .sr-only {
+  body {
+    font-size: 18px;
+  }
+
+  main {
+    display: grid;
+    grid-template-columns: 1fr 1fr 0.5fr 0.5fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+      "resources resources resources resources"
+      "actions buildings auto-actions-name auto-actions-input "
+
+  }
+
+  main > div:not(#resourceGroup) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+  }
+
+  #resourceGroup {
+    grid-area: resources;
+    display: flex;
+    gap: 1rem;
+    color: #fdfdfd;
+    background: #222;
+    padding: 1rem;
+  }
+
+  button {
+    padding: 0.25rem 0.5rem;
+    background: rgb(233, 233, 237);
+    border: 1px solid;
+    border-radius: 4px;
+    height: 2rem;
+    font-size: 1rem;
+    position: relative;
+  }
+
+  .cooldown {
     position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip: rect(0,0,0,0);
+    top: 0;
+    left: 0;
+    bottom: 0;
+    background: rgba(0,0,0, 0.5);
+  }
+
+  button:hover {
+    background: rgb(200, 200, 200);
+  }
+
+  button[aria-disabled="true"],
+  button[aria-disabled="true"]:focus,
+  button[aria-disabled="true"]:hover {
+    background: rgb(233, 233, 237);
+    opacity: 0.5;
+  }
+
+  #autoActionNameGroup > div,
+  #autoActionInputGroup > input {
+    height: 2rem;
+    padding: 0.25rem 0.5rem;
+    display: flex;
+    align-items: center;
   }
   </style>
 </head>
 <body>
+  <main>
+    <div id="resourceGroup"></div>
+    <div id="actionGroup"></div>
+    <div id="buildingGroup"></div>
+    <div id="autoActionNameGroup"></div>
+    <div id="autoActionInputGroup"></div>
+  </main>
   <script src="./src/index.js" type="module"></script>
 </body>
 </html>
