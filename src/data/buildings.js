@@ -1,17 +1,16 @@
-import { resource, building, action } from './state.js';
-import {
+import { resource, building, task } from './state.js';
+import resources, {
   wood,
   stone,
   skeleton,
+  icon,
   amount,
   max
 } from './resources.js';
 import {
-  digStone,
   woodcutters,
   assignable,
-  clicked as actionClicked
-} from './actions.js';
+} from './tasks.js';
 
 // indices
 export const name = 0;
@@ -31,11 +30,14 @@ const buildings = [];
 export default buildings;
 
 export function initBuildings() {
+  const woodIcon = resources[wood][icon];
+  const skeletonIcon = resources[skeleton][icon];
+
   buildings.push.call(buildings,
     // 0
     [
       'Ritual Circle',
-      'Increases Skeleton capacity by 4',
+      `Increases ${skeletonIcon} capacity by 4`,
       [
         [wood, 50],
         [stone, 25]
@@ -50,11 +52,11 @@ export function initBuildings() {
     // 1
     [
       'Woodcutters Camp',
-      'Allows 3 Skeletons to chop down trees into Wood',
+      `Allows up to 3 ${skeletonIcon} to chop down trees into ${woodIcon}`,
       [
         [wood, 50]
       ],
-      [action, woodcutters, assignable, 3],
+      [task, woodcutters, assignable, 3],
       [
         [building, rituralCircle, built, 1]
       ]

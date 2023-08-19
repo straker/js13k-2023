@@ -1,6 +1,6 @@
 import { GameLoop } from './libs/kontra.js';
 import { RESOURCE_TICK } from './constants.js';
-import { emit } from './events.js';
+import { on, emit } from './events.js';
 
 import init from './init.js';
 init();

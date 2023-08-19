@@ -1,4 +1,4 @@
-import state, { resource, action } from '../data/state.js';
+import state, { resource, task } from '../data/state.js';
 import {
   name,
   effect,
@@ -7,53 +7,61 @@ import {
   assignable,
   visible,
   idle
-} from '../data/actions.js';
+} from '../data/tasks.js';
 import { amount, max, skeleton } from '../data/resources.js';
 import { on } from '../events.js';
 import { html, showWhenPrereqMet } from '../utils.js';
 
 /**
- * Display an automated action performed by skeletons.
+ * Display an automated task performed by skeletons.
  *
- * @param {*[]} data - Action data.
+ * @param {*[]} data - task data.
  * @param {Number} index - The current item of the data.
  */
-export default function displayAutoAction(data, index) {
-  const actionName = html(`<div hidden>${data[name]}</div>`);
+export default function displayTask(data, index) {
+  const taskName = html(`<div hidden>${data[name]}</div>`);
 
-  // `autoActG` is a global HTML id from index.html
-  autoActG.appendChild(actionName);
+  // `tskG` is a global HTML id from index.html
+  tskG.appendChild(taskName);
 
   const input = html(`<input type="number" min="0" max="0" value="0">`);
   input.hidden = data[prereq];
-  showWhenPrereqMet(data, prereq, input, action, index, visible);
+  showWhenPrereqMet(data, prereq, input, task, index, visible);
 
-  // bind hidden state to the action name
-  on([action, index, visible], (value) => {
-    actionName.hidden = !value;
+  // show tasks heading when first task is shown
+  if (index === 0) {
+    on([task, 0, visible], (value) => {
+      // `tskT` is a global HTML id from index.html
+      tskT.hidden = !value;
+    });
+  }
+
+  // bind hidden state to the task name
+  on([task, index, visible], (value) => {
+    taskName.hidden = !value;
   });
 
   // prevent user from typing into the input
   input.addEventListener('keydown', (e) => e.preventDefault());
 
-  // special auto action that user cannot change
+  // special auto task that user cannot change
   if (index === idle) {
     input.setAttribute('readonly', true);
     input.setAttribute('type', 'text');
 
     // bind skeleton resource to idle skeleton value
     on([resource, skeleton, amount], (value, diff) => {
-      state.set([action, index, assigned, diff])
+      state.set([task, index, assigned, diff])
     });
 
     // bind the assigned idle value to the input value
-    on([action, index, assigned], (value) => {
+    on([task, index, assigned], (value) => {
       input.value = value;
     });
   }
   else {
     // bind the max assignable value to the max attribute
-    on([action, idle, assigned], (value) => {
+    on([task, idle, assigned], (value) => {
       input.setAttribute('max', Math.min(
         // total assignable includes both idle and already
         // assigned skeletons
@@ -61,9 +69,9 @@ export default function displayAutoAction(data, index) {
         (data[assignable] ?? 0)
       ));
     });
-    on([action, index, assignable], (value) => {
+    on([task, index, assignable], (value) => {
       input.setAttribute('max', Math.min(
-        state.get([action, idle, assigned], 0) + (data[assigned] ?? 0),
+        state.get([task, idle, assigned], 0) + (data[assigned] ?? 0),
         value
       ));
     });
@@ -74,8 +82,8 @@ export default function displayAutoAction(data, index) {
       const value = +input.value;
       const diff = value - numAssigned;
 
-      state.set([action, index, assigned, diff])
-      state.set([action, idle, assigned, -diff])
+      state.set([task, index, assigned, diff])
+      state.set([task, idle, assigned, -diff])
     });
 
     // increase resources every tick
@@ -91,13 +99,13 @@ export default function displayAutoAction(data, index) {
       }
 
       state.set(
-        // auto actions gain resources per assigned skeleton
+        // auto tasks gain resources per assigned skeleton
         [...path, value * data[assigned]],
         state.get([resource, resourceIndex, max])
       );
     });
   }
 
-  // `autoInpG` is a global HTML id from index.html
-  autoInpG.appendChild(input);
+  // `tskInpG` is a global HTML id from index.html
+  tskInpG.appendChild(input);
 }

@@ -1,21 +1,15 @@
 import resources from '../data/resources.js';
 import buildings from '../data/buildings.js';
-import actions, { assignable} from '../data/actions.js';
+import actions from '../data/actions.js';
+import tasks from '../data/tasks.js';
 import displayResource from './display-resource.js';
 import displayBuilding from './display-building.js';
-import displayManualAction from './display-manual-action.js';
-import displayAutoAction from './display-auto-action.js';
+import displayAction from './display-action.js';
+import displayTask from './display-task.js';
 
 export default function initUI() {
   resources.map(displayResource);
   buildings.map(displayBuilding);
-
-  actions.map((actionData, index) => {
-    if (actionData[assignable] === 1) {
-      displayManualAction(actionData, index);
-    }
-    else {
-      displayAutoAction(actionData, index);
-    }
-  });
+  actions.map(displayAction);
+  tasks.map(displayTask);
 }

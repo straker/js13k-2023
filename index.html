@@ -30,7 +30,10 @@
     grid-template-rows: auto;
     grid-template-areas:
       "resources resources resources resources"
+  }
 
+  h2 {
+    margin: 0;
   }
 
   main > div:not(#resG) {
@@ -96,22 +99,28 @@
     gap: 0.75rem;
   }
 
-  #autoActG > div,
-  #autoInpG > input {
+  #tskG > div,
+  #tskInpG > input {
     height: 2rem;
     padding: 0.25rem 0.5rem;
     display: flex;
     align-items: center;
+  }
+
+  #rchT {
+    margin-top: 1rem;
   }
   </style>
 </head>
 <body>
   <main>
     <div id="resG"></div>
-    <div id="actG"></div>
-    <div id="bldG"></div>
-    <div id="autoActG"></div>
-    <div id="autoInpG"></div>
+    <div id="actG"><h2>Actions</h2></div>
+    <div id="bldG"><h2 hidden id="bldT">Buildings</h2></div>
+    <div id="tskG"><h2 hidden id="tskT">Tasks</h2></div>
+    <div id="tskInpG"><h2>&nbsp;</h2></div>
+    <div></div>
+    <div id="rchG"><h2 hidden id="rchT">Research</h2></div>
   </main>
   <script src="./src/index.js" type="module"></script>
 </body>

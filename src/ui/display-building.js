@@ -31,6 +31,14 @@ export default function displayBuilding(data, index) {
   button.hidden = data[prereq];
   showWhenPrereqMet(data, prereq, button, building, index, visible);
 
+  // show building heading when first building is shown
+  if (index === 0) {
+    on([building, 0, visible], (value) => {
+      // `bldT` is a global HTML id from index.html
+      bldT.hidden = !value;
+    });
+  }
+
   // bind disabled state to the aria-disabled attribute
   on([building, index, disabled], (value) => {
     button.setAttribute('aria-disabled', value);

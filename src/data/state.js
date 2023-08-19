@@ -3,11 +3,13 @@ import { emit } from '../events.js';
 import actions from './actions.js';
 import buildings from './buildings.js';
 import resources from './resources.js';
+import tasks from './tasks.js';
 
 // indices
 export const resource = 0;
 export const building = 1;
 export const action = 2;
+export const task = 3;
 
 const state = {
   get(path, defaultValue) {
@@ -38,6 +40,7 @@ export function initState() {
   state._state = [
     resources,
     buildings,
-    actions
+    actions,
+    tasks
   ];
 }

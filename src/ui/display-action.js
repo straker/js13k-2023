@@ -19,7 +19,7 @@ import { html, showWhenPrereqMet } from '../utils.js';
  * @param {*[]} data - Action data.
  * @param {Number} index - The current item of the data.
  */
-export default function displayManualAction(data, index) {
+export default function displayAction(data, index) {
   const button = html(`
     <button>
       ${data[name]}
