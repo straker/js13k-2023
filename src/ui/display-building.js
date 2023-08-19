@@ -38,7 +38,7 @@ export default function displayBuilding(data, index) {
 
   // subtract resources when built
   button.addEventListener('click', (e) => {
-    if (state.get([building, index, disabled])) {
+    if (data[disabled]) {
       return e.preventDefault();
     }
 
@@ -66,6 +66,6 @@ export default function displayBuilding(data, index) {
     });
   });
 
-  // `buildingGroup` is a global HTML id from index.html
-  buildingGroup.appendChild(button);
+  // `bldG` is a global HTML id from index.html
+  bldG.appendChild(button);
 }

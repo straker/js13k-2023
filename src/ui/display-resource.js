@@ -30,8 +30,8 @@ export default function displayResource(data, index) {
     setText(div, data, value);
   });
 
-  // `resourceGroup` is a global HTML id from index.html
-  resourceGroup.appendChild(div);
+  // `resG` is a global HTML id from index.html
+  resG.appendChild(div);
 }
 
 function setText(div, data) {

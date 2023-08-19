@@ -36,7 +36,7 @@ export function initActions() {
       SHORT_COOLDOWN,
       [resource, wood, amount, 15],
       ,
-      1
+      1  // 1 = manual action
     ],
 
     // 1

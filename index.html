@@ -30,18 +30,17 @@
     grid-template-rows: auto;
     grid-template-areas:
       "resources resources resources resources"
-      "actions buildings auto-actions-name auto-actions-input "
 
   }
 
-  main > div:not(#resourceGroup) {
+  main > div:not(#resG) {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
     padding: 1rem;
   }
 
-  #resourceGroup {
+  #resG {
     grid-area: resources;
     display: flex;
     gap: 1rem;
@@ -83,18 +82,22 @@
     opacity: 0.5;
   }
 
-  #buildingGroup button {
+  input:focus {
+    outline: 0;
+  }
+
+  #bldG button {
     display: flex;
   }
 
-  #buildingGroup span:last-child {
+  #bldG span:last-child {
     margin-left: auto;
     display: inline-flex;
     gap: 0.75rem;
   }
 
-  #autoActionNameGroup > div,
-  #autoActionInputGroup > input {
+  #autoActG > div,
+  #autoInpG > input {
     height: 2rem;
     padding: 0.25rem 0.5rem;
     display: flex;
@@ -104,11 +107,11 @@
 </head>
 <body>
   <main>
-    <div id="resourceGroup"></div>
-    <div id="actionGroup"></div>
-    <div id="buildingGroup"></div>
-    <div id="autoActionNameGroup"></div>
-    <div id="autoActionInputGroup"></div>
+    <div id="resG"></div>
+    <div id="actG"></div>
+    <div id="bldG"></div>
+    <div id="autoActG"></div>
+    <div id="autoInpG"></div>
   </main>
   <script src="./src/index.js" type="module"></script>
 </body>

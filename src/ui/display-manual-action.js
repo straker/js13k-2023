@@ -40,7 +40,7 @@ export default function displayManualAction(data, index) {
 
   // perform action
   button.addEventListener('click', (e) => {
-    if (state.get([action, index, disabled])) {
+    if (data[disabled]) {
       return e.preventDefault();
     }
 
@@ -52,8 +52,16 @@ export default function displayManualAction(data, index) {
   });
 
   // update action cooldown timer
-  on([action, index, timer], (value) => {
-    cooldownDiv.style.width = value / data[cooldown] * 100 + '%';
+  on(['timer-tick'], (dt) => {
+    if (data[timer] <= 0) {
+      return;
+    }
+
+    const value = state.set([action, index, timer, -dt]);
+    const width = value <= 0
+      ? 0
+      : value / data[cooldown] * 100 + '%';
+    cooldownDiv.style.width = width;
 
     // re-enable action if timer expires and the resources is not
     // at max
@@ -80,6 +88,6 @@ export default function displayManualAction(data, index) {
     }
   });
 
-  // `actionGroup` is a global HTML id from index.html
-  actionGroup.appendChild(button);
+  // `actG` is a global HTML id from index.html
+  actG.appendChild(button);
 }
