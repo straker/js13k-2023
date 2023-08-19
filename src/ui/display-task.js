@@ -1,14 +1,14 @@
 import state, { resource, task } from '../data/state.js';
 import {
   name,
-  effect,
+  effects,
   prereq,
   assigned,
   assignable,
   visible,
   idle
 } from '../data/tasks.js';
-import { amount, max, skeleton } from '../data/resources.js';
+import { amount, max, skeletons } from '../data/resources.js';
 import { on } from '../events.js';
 import { html, showWhenPrereqMet } from '../utils.js';
 
@@ -24,9 +24,16 @@ export default function displayTask(data, index) {
   // `tskG` is a global HTML id from index.html
   tskG.appendChild(taskName);
 
-  const input = html(`<input type="number" min="0" max="0" value="0">`);
-  input.hidden = data[prereq];
-  showWhenPrereqMet(data, prereq, input, task, index, visible);
+  const div = html(`
+    <div>
+      <input type="number" min="0" max="0" value="0">
+      <div class="max"></div>
+    </div>
+  `);
+  const input = div.querySelector('input');
+  const maxDiv = div.querySelector('.max');
+  div.hidden = data[prereq];
+  showWhenPrereqMet(data, prereq, div, task, index, visible);
 
   // show tasks heading when first task is shown
   if (index === 0) {
@@ -41,6 +48,11 @@ export default function displayTask(data, index) {
     taskName.hidden = !value;
   });
 
+  // bind assignable to max
+  on([task, index, assignable], (value) => {
+    maxDiv.textContent = '/ ' + value;
+  });
+
   // prevent user from typing into the input
   input.addEventListener('keydown', (e) => e.preventDefault());
 
@@ -49,8 +61,8 @@ export default function displayTask(data, index) {
     input.setAttribute('readonly', true);
     input.setAttribute('type', 'text');
 
-    // bind skeleton resource to idle skeleton value
-    on([resource, skeleton, amount], (value, diff) => {
+    // bind skeletons resource to idle skeletons value
+    on([resource, skeletons, amount], (value, diff) => {
       state.set([task, index, assigned, diff])
     });
 
@@ -87,25 +99,50 @@ export default function displayTask(data, index) {
     });
 
     // increase resources every tick
-    const path = [...data[effect]];  // clone
-    const resourceIndex = path[1];
-    const value = path.pop();
     on(['resource-tick'], () => {
-      if (
-        !data[assigned] ||
-        state.get([resource, resourceIndex, amount]) >= state.get([resource, resourceIndex, max])
-      ) {
+      if (!data[assigned]) {
         return;
       }
 
-      state.set(
-        // auto tasks gain resources per assigned skeleton
-        [...path, value * data[assigned]],
-        state.get([resource, resourceIndex, max])
-      );
+      // ensure player has all the costs before fulfilling task
+      const costs = data[effects].filter(([, value]) => value < 0);
+      // if player can only afford to make less than the
+      // assigned number of skeletons then make only as much
+      // as they can afford
+      let canAfford = data[assigned];
+      if (!costs.every(([resourceIndex, value]) => {
+        // tasks use resources per assigned skeleton
+        const perValue = -value * data[assigned];
+        canAfford = Math.min(
+          perValue + (state.get([resource, resourceIndex, amount]) - perValue),
+          perValue,
+          canAfford
+        ) / -value;
+
+        return canAfford > 0;
+      })) {
+        return;
+      }
+
+      data[effects].map(([resourceIndex, value]) => {
+        const resourceMax = state.get([resource, resourceIndex, max]);
+
+        // don't set resource if at max already
+        if (
+          value > 0 &&
+          state.get([resource, resourceIndex, amount]) >= resourceMax
+        ) {
+          return;
+        }
+
+        state.set(
+          [resource, resourceIndex, amount, value * canAfford],
+          resourceMax
+        );
+      });
     });
   }
 
   // `tskInpG` is a global HTML id from index.html
-  tskInpG.appendChild(input);
+  tskInpG.appendChild(div);
 }

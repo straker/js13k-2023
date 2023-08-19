@@ -100,15 +100,40 @@
   }
 
   #tskG > div,
-  #tskInpG > input {
+  #tskInpG input {
     height: 2rem;
-    padding: 0.25rem 0.5rem;
     display: flex;
     align-items: center;
+    border: 0;
+  }
+
+  #tskG > div {
+    padding: 0.25rem 0.5rem;
+  }
+
+  #tskInpG > div {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  input {
+    width: 50%;
+    padding: 0;
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  .max {
+    white-space: nowrap;
   }
 
   #rchT {
     margin-top: 1rem;
+  }
+
+  img {
+    filter: drop-shadow(1px 0 #fdfdfd) drop-shadow(-1px 0 #fdfdfd);
   }
   </style>
 </head>
@@ -119,8 +144,6 @@
     <div id="bldG"><h2 hidden id="bldT">Buildings</h2></div>
     <div id="tskG"><h2 hidden id="tskT">Tasks</h2></div>
     <div id="tskInpG"><h2>&nbsp;</h2></div>
-    <div></div>
-    <div id="rchG"><h2 hidden id="rchT">Research</h2></div>
   </main>
   <script src="./src/index.js" type="module"></script>
 </body>

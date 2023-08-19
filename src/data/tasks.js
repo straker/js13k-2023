@@ -1,10 +1,20 @@
-import { resource, building } from './state.js';
-import { wood, stone, skeleton, amount } from './resources.js';
-import { rituralCircle, woodcuttersCamp, built } from './buildings.js';
+import { building } from './state.js';
+import {
+  wood,
+  stone,
+  skeletons,
+  planks
+} from './resources.js';
+import {
+  rituralCircle,
+  woodcuttersCamp,
+  lumberMill,
+  built
+} from './buildings.js';
 
 // indices
 export const name = 0;
-export const effect = 1;
+export const effects = 1;
 export const prereq = 2;
 export const assignable = 3;
 export const assigned = 4;
@@ -12,6 +22,7 @@ export const visible = 5;
 
 export const idle = 0;
 export const woodcutters = 1;
+export const carpenters = 2;
 
 const tasks = [];
 export default tasks;
@@ -27,12 +38,28 @@ export function initTasks() {
       ]
     ],
 
-    // 2
+    // 1
     [
       'Woodcutters',
-      [resource, wood, amount, 1],
+      [
+        // tasks always take from a resource amount so we
+        // can skip putting that data here
+        [wood, 1]
+      ],
       [
         [building, woodcuttersCamp, built, 1]
+      ]
+    ],
+
+    // 2
+    [
+      'Carpenters',
+      [
+        [wood, -1],
+        [planks, 1]
+      ],
+      [
+        [building, lumberMill, built, 1]
       ]
     ]
   );

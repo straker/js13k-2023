@@ -4,6 +4,10 @@ import {
   digStone,
   stealCorpse
 } from './actions.js';
+import {
+  built,
+  lumberMill
+} from './buildings.js';
 
 // indices
 export const name = 0;
@@ -15,14 +19,14 @@ export const visible = 5;
 
 export const wood = 0;
 export const stone = 1;
-export const skeleton = 2;
-export const woodPlanks = 3;
-export const stoneBricks = 4;
+export const skeletons = 2;
+export const planks = 3;
+export const bricks = 4;
 export const coal = 5;
 export const ironOre = 6;
 export const iron = 7;
 export const steel = 8;
-export const woodBeams = 9;
+export const beams = 9;
 export const tools = 10;
 export const research = 11;
 export const swords = 12;
@@ -53,7 +57,7 @@ export function initResources() {
 
     // 2
     [
-      'Skeletons',
+      'skeletons',
       '💀',
       0,
       [
@@ -63,10 +67,12 @@ export function initResources() {
 
     // 3
     [
-      'Wood Planks',
-      '',
+      'Planks',
+      '<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAA1VBMVEUAAABfRC9mSTN6WD53VjxvUThMNyZnSzVGMyN4VjxhRjFQOiddQy5NNyZNNyVQOShpTDVINSRZQCxGMyNkSTRbQS11VDpqTjZxUjiBXUFUPClUPClZQCxsTzZfRDBMNyVzUzloTDZxUjl5Vz6DX0FYPytwUThGMyNlSTRKNiV1VDpqTjZ7WT55Vz6LZUZxUjhmSjVdQy92VTuDYENhRzJfRDFbQS1pTTZnSzVXPipjSDNdQy9ZQCxlSTRSOihzUzlwUThrTzZOOCZVPCluUDdMNiVINSQdqybDAAAANHRSTlMABhgQ/vvz4NfWv6x9Y0o0KyIL+vn59vLo5ubl187GwLesqZ6WlpKQhXh0aGRZUE1COTYjpoa/KQAAAMhJREFUGNNdkFcWgjAQRVHsghR7770rPZEu+1+SCXgYdP5yz7vJmzCZydVqnJBjfmenqBoe1Hkpw24tBWmm7UcVYPmypSJs2u9mA+D8RWwz8KMtsKNOIQlW5JSJXcNSEA78kpAyeawbFg36e5A3HrERuXEKPa/Fb7AkQZteSIK0Dw/rzVyPBnFQB/nguEmfYT5ljw4NEhvDKmzVCfXYXkObpeN6sT1iU3YuEGiQt9t3CPYLiY04Boa9rKpFQ1En/1/+PC3KYub8AcxzI3LKXt/zAAAAAElFTkSuQmCC"/>',
       200,
-      []
+      [
+        [building, lumberMill, built, 1]
+      ]
     ],
 
     // 4
@@ -111,7 +117,7 @@ export function initResources() {
 
     // 9
     [
-      'Wood Beam',
+      'Beams',
       '',
       200,
       []

@@ -2,13 +2,13 @@ import { resource, building, task } from './state.js';
 import resources, {
   wood,
   stone,
-  skeleton,
-  icon,
+  skeletons,
   amount,
   max
 } from './resources.js';
 import {
   woodcutters,
+  carpenters,
   assignable,
 } from './tasks.js';
 
@@ -24,25 +24,24 @@ export const disabled = 7;
 
 export const rituralCircle = 0;
 export const woodcuttersCamp = 1;
-
+export const lumberMill = 2;
 
 const buildings = [];
 export default buildings;
 
 export function initBuildings() {
-  const woodIcon = resources[wood][icon];
-  const skeletonIcon = resources[skeleton][icon];
-
   buildings.push.call(buildings,
     // 0
     [
       'Ritual Circle',
-      `Increases ${skeletonIcon} capacity by 4`,
+      `Increases skeletons capacity by 4`,
       [
+        // costs are always taken from a resource amount so we
+        // can skip putting that data here
         [wood, 50],
         [stone, 25]
       ],
-      [resource, skeleton, max, 4],
+      [resource, skeletons, max, 4],
       [
         [resource, wood, amount, 50],
         [resource, stone, amount, 25]
@@ -52,7 +51,7 @@ export function initBuildings() {
     // 1
     [
       'Woodcutters Camp',
-      `Allows up to 3 ${skeletonIcon} to chop down trees into ${woodIcon}`,
+      `Allows up to 3 skeletons to gather Wood`,
       [
         [wood, 50]
       ],
@@ -60,20 +59,20 @@ export function initBuildings() {
       [
         [building, rituralCircle, built, 1]
       ]
-    ]
+    ],
 
     // 2
-    // [
-    //   'Lumber Mill',
-    //   'Allows 3 Skeletons to cut Wood into Planks',
-    //   [
-    //     [wood, 50],
-    //     [stone, 25]
-    //   ],
-    //   [],
-    //   [
-    //     [action, digStone, actionClicked, 3]
-    //   ]
-    // ]
+    [
+      'Lumber Mill',
+      'Allows up to 3 skeletons to cut Wood into Planks',
+      [
+        [wood, 50],
+        [stone, 25]
+      ],
+      [task, carpenters, assignable, 3],
+      [
+        [building, woodcuttersCamp, built, 1]
+      ]
+    ]
   );
 }
