@@ -35,7 +35,7 @@ export default function displayAction(data, index) {
 
   // bind disabled state to the aria-disabled attribute
   on([action, index, disabled], (value) => {
-    button.setAttribute('aria-disabled', value);
+    button.setAttribute('aria-disabled', !!value);
   });
 
   // perform action

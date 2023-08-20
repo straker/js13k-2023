@@ -9,7 +9,7 @@ import {
   visible,
   disabled
 } from '../data/buildings.js';
-import resources, { name as resourceName, icon, amount } from '../data/resources.js';
+import resources, { research, name as resourceName, icon, amount } from '../data/resources.js';
 import { on } from '../events.js';
 import { html, showWhenPrereqMet } from '../utils.js';
 
@@ -20,11 +20,22 @@ import { html, showWhenPrereqMet } from '../utils.js';
  * @param {Number} index - The current item of the data.
  */
 export default function displayBuilding(data, index) {
+  const buildingName = data[name];
+  let researchCost = data[cost].find(([resourceIndex]) => resourceIndex === research);
+
   const button = html(`
-    <button title="${data[description]}">
-      <span>${data[name]}</span>
+    <button class="${researchCost ? 'locked' : ''}" title="${data[description]}">
+      ${researchCost
+        ? '<span class="lock" title="Building requires Research to unlock">🔒</span>' + displayCost(resources[research], researchCost[1])
+        : ''
+      }
+      <span>${buildingName}</span>
       <span class="cost">${data[cost].map(([resourceIndex, value]) => {
-        return `<span title="${resources[resourceIndex][resourceName]}">${resources[resourceIndex][icon]}${value}</span>`
+        if (resourceIndex === research) {
+          return '';
+        }
+
+        return displayCost(resources[resourceIndex], value);
       }).join('')}</span>
     </button>
   `);
@@ -41,11 +52,32 @@ export default function displayBuilding(data, index) {
 
   // bind disabled state to the aria-disabled attribute
   on([building, index, disabled], (value) => {
-    button.setAttribute('aria-disabled', value);
+    button.setAttribute('aria-disabled', !!value);
   });
 
   // subtract resources when built
   button.addEventListener('click', (e) => {
+    // unlock building through research first before allowing
+    // player to build it
+    if (researchCost) {
+      if (state.get([resource, research, amount], 0) < researchCost[1]) {
+        window.alert('Not enough Research to unlock ' + buildingName);
+      }
+      else if (window.confirm(`Unlock ${buildingName} for ${researchCost[1]} Research?`)) {
+        state.set([resource, research, amount, -researchCost[1]]);
+        researchCost = null;
+        button.querySelector('.lock').remove();
+        button.querySelector('.Research').remove();
+        button.classList.remove('locked');
+
+        data[cost].splice(data[cost].indexOf(researchCost));
+        state.set([building, index, disabled, !canAfford(data[cost])]);
+        enableWhenCanAfford(index, data[cost]);
+      }
+
+      return;
+    }
+
     if (data[disabled]) {
       return e.preventDefault();
     }
@@ -58,22 +90,38 @@ export default function displayBuilding(data, index) {
     });
   });
 
-  // enable building when player has enough resources
-  data[cost].map(([resourceIndex]) => {
+  if (researchCost) {
+    // player can always click a building that needs research
+    state.set([building, index, disabled, false]);
+  }
+  else {
+    // enable building when player has enough resources
+    enableWhenCanAfford(index, data[cost]);
+  }
+
+  // `bldG` is a global HTML id from index.html
+  bldG.appendChild(button);
+}
+
+function enableWhenCanAfford(index, costs) {
+  costs.map(([resourceIndex]) => {
     on([resource, resourceIndex, amount], () => {
       let isDisabled = true;
-      if (
-        data[cost].every(([i, value]) => {
-          return state.get([resource, i, amount]) >= value
-        })
-      ) {
+      if (canAfford(costs)) {
         isDisabled = false;
       }
 
       state.set([building, index, disabled, isDisabled]);
     });
   });
+}
 
-  // `bldG` is a global HTML id from index.html
-  bldG.appendChild(button);
+function canAfford(costs) {
+  return costs.every(([i, value]) => {
+    return state.get([resource, i, amount]) >= value
+  });
+}
+
+function displayCost(resourceData, value) {
+  return `<span class="${resourceData[resourceName]}" title="${resourceData[resourceName]}">${resourceData[icon]}${value}</span>`;
 }

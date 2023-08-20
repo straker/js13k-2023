@@ -4,6 +4,7 @@ import resources, {
   stone,
   skeletons,
   planks,
+  research,
   amount,
   max
 } from './resources.js';
@@ -11,6 +12,7 @@ import {
   woodcutters,
   carpenters,
   researchers,
+  stonecutters,
   assignable,
 } from './tasks.js';
 
@@ -28,6 +30,7 @@ export const rituralCircle = 0;
 export const woodcuttersCamp = 1;
 export const lumberMill = 2;
 export const laboratory = 3;
+export const quarry = 4;
 
 const buildings = [];
 export default buildings;
@@ -89,6 +92,20 @@ export function initBuildings() {
       [task, researchers, assignable, 1],
       [
         [building, lumberMill, built, 1]
+      ]
+    ],
+
+    // 4
+    [
+      'Quarry',
+      'Allows up to 5 Skeletons to gather Stone',
+      [
+        [wood, 50],
+        [research, 50]
+      ],
+      [task, stonecutters, assignable, 5],
+      [
+        [building, laboratory, built, 1]
       ]
     ]
   );

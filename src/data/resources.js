@@ -77,7 +77,7 @@ export function initResources() {
       ]
     ],
 
-    // 11
+    // 4
     [
       'Research',
       '📜',

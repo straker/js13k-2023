@@ -156,7 +156,7 @@ export default function displayTask(data, index) {
 
 function generateTitle(data, value, taskName, div) {
   const title = data[effects].map(([resourceIndex, resourceValue]) => {
-    const padName = resources[resourceIndex][name].padEnd(10, ' ');
+    const padName = resources[resourceIndex][name].padEnd(15, ' ');
     return `${padName}${resourceValue > 0 ? '+' : ''}${value * resourceValue} per ${RESOURCE_TICK / 60}s`;
   }).join('\n');
 

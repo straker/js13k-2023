@@ -11,6 +11,7 @@ import {
   woodcuttersCamp,
   lumberMill,
   laboratory,
+  quarry,
   built
 } from './buildings.js';
 
@@ -26,6 +27,7 @@ export const idle = 0;
 export const woodcutters = 1;
 export const carpenters = 2;
 export const researchers = 3;
+export const stonecutters = 4;
 
 const tasks = [];
 export default tasks;
@@ -74,6 +76,17 @@ export function initTasks() {
       ],
       [
         [building, laboratory, built, 1]
+      ]
+    ],
+
+    // 4
+    [
+      'Stonecutters',
+      [
+        [stone, 1]
+      ],
+      [
+        [building, quarry, built, 1]
       ]
     ]
   );
