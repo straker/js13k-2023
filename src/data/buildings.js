@@ -1,18 +1,18 @@
 import { resource, building, task } from './state.js';
 import resources, {
+  amount,
+  max,
   wood,
   stone,
   skeletons,
   planks,
-  research,
-  amount,
-  max
+  research
 } from './resources.js';
 import {
   woodcutters,
   carpenters,
   researchers,
-  stonecutters,
+  quarriers,
   assignable,
 } from './tasks.js';
 
@@ -31,6 +31,12 @@ export const woodcuttersCamp = 1;
 export const lumberMill = 2;
 export const laboratory = 3;
 export const quarry = 4;
+export const masonWorkshop = 5;
+export const burnersCamp = 6;
+export const mine = 7;
+export const furnace = 8;
+export const smithy = 9;
+export const bowWorkshop = 10;
 
 const buildings = [];
 export default buildings;
@@ -103,7 +109,91 @@ export function initBuildings() {
         [wood, 50],
         [research, 50]
       ],
-      [task, stonecutters, assignable, 5],
+      [task, quarriers, assignable, 5],
+      [
+        [building, laboratory, built, 1]
+      ]
+    ],
+
+    // 5
+    [
+      'Mason Workshop',
+      'Allows up to 5 Skeletons to gather Stone',
+      [
+        [wood, 50],
+        [research, 50]
+      ],
+      [task, quarriers, assignable, 5],
+      [
+        [building, laboratory, built, 1]
+      ]
+    ],
+
+    // 6
+    [
+      'Burners Camp',
+      'Allows up to 5 Skeletons to gather Stone',
+      [
+        [wood, 50],
+        [research, 50]
+      ],
+      [task, quarriers, assignable, 5],
+      [
+        [building, laboratory, built, 1]
+      ]
+    ],
+
+    // 7
+    [
+      'Mine',
+      'Allows up to 5 Skeletons to gather Stone',
+      [
+        [wood, 50],
+        [research, 50]
+      ],
+      [task, quarriers, assignable, 5],
+      [
+        [building, laboratory, built, 1]
+      ]
+    ],
+
+    // 8
+    [
+      'Furnace',
+      'Allows up to 5 Skeletons to gather Stone',
+      [
+        [wood, 50],
+        [research, 50]
+      ],
+      [task, quarriers, assignable, 5],
+      [
+        [building, laboratory, built, 1]
+      ]
+    ],
+
+    // 9
+    [
+      'Smithy',
+      'Allows up to 5 Skeletons to gather Stone',
+      [
+        [wood, 50],
+        [research, 50]
+      ],
+      [task, quarriers, assignable, 5],
+      [
+        [building, laboratory, built, 1]
+      ]
+    ],
+
+    // 10
+    [
+      'Bow Workshop',
+      'Allows up to 5 Skeletons to gather Stone',
+      [
+        [wood, 50],
+        [research, 50]
+      ],
+      [task, quarriers, assignable, 5],
       [
         [building, laboratory, built, 1]
       ]
