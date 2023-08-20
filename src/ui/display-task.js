@@ -8,8 +8,9 @@ import {
   visible,
   idle
 } from '../data/tasks.js';
-import { amount, max, skeletons } from '../data/resources.js';
+import resources, { amount, max, skeletons } from '../data/resources.js';
 import { on } from '../events.js';
+import { RESOURCE_TICK } from '../constants.js';
 import { html, showWhenPrereqMet } from '../utils.js';
 
 /**
@@ -34,6 +35,7 @@ export default function displayTask(data, index) {
   const maxDiv = div.querySelector('.max');
   div.hidden = data[prereq];
   showWhenPrereqMet(data, prereq, div, task, index, visible);
+  generateTitle(data, 0, taskName, div);
 
   // show tasks heading when first task is shown
   if (index === 0) {
@@ -86,6 +88,11 @@ export default function displayTask(data, index) {
         state.get([task, idle, assigned], 0) + (data[assigned] ?? 0),
         value
       ));
+    });
+
+    // bind assigned value to the title
+    on([task, index, assigned], (value) => {
+      generateTitle(data, value, taskName, div);
     });
 
     // add or subtract assigned skeletons
@@ -145,4 +152,14 @@ export default function displayTask(data, index) {
 
   // `tskInpG` is a global HTML id from index.html
   tskInpG.appendChild(div);
+}
+
+function generateTitle(data, value, taskName, div) {
+  const title = data[effects].map(([resourceIndex, resourceValue]) => {
+    const padName = resources[resourceIndex][name].padEnd(10, ' ');
+    return `${padName}${resourceValue > 0 ? '+' : ''}${value * resourceValue} per ${RESOURCE_TICK / 60}s`;
+  }).join('\n');
+
+  taskName.setAttribute('title', title);
+  div.setAttribute('title', title);
 }

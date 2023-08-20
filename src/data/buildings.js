@@ -3,12 +3,14 @@ import resources, {
   wood,
   stone,
   skeletons,
+  planks,
   amount,
   max
 } from './resources.js';
 import {
   woodcutters,
   carpenters,
+  researchers,
   assignable,
 } from './tasks.js';
 
@@ -25,6 +27,7 @@ export const disabled = 7;
 export const rituralCircle = 0;
 export const woodcuttersCamp = 1;
 export const lumberMill = 2;
+export const laboratory = 3;
 
 const buildings = [];
 export default buildings;
@@ -34,7 +37,7 @@ export function initBuildings() {
     // 0
     [
       'Ritual Circle',
-      `Increases skeletons capacity by 4`,
+      `Increases max Skeletons by 4`,
       [
         // costs are always taken from a resource amount so we
         // can skip putting that data here
@@ -51,7 +54,7 @@ export function initBuildings() {
     // 1
     [
       'Woodcutters Camp',
-      `Allows up to 3 skeletons to gather Wood`,
+      `Allows up to 3 Skeletons to gather Wood`,
       [
         [wood, 50]
       ],
@@ -64,14 +67,28 @@ export function initBuildings() {
     // 2
     [
       'Lumber Mill',
-      'Allows up to 3 skeletons to cut Wood into Planks',
+      'Allows up to 3 Skeletons to cut Wood into Planks',
       [
-        [wood, 50],
-        [stone, 25]
+        [wood, 100],
+        [stone, 10]
       ],
       [task, carpenters, assignable, 3],
       [
         [building, woodcuttersCamp, built, 1]
+      ]
+    ],
+
+    // 3
+    [
+      'Laboratory',
+      'Allows a single Skeleton to generate Research',
+      [
+        [stone, 50],
+        [planks, 25]
+      ],
+      [task, researchers, assignable, 1],
+      [
+        [building, lumberMill, built, 1]
       ]
     ]
   );

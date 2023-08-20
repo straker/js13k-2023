@@ -23,7 +23,7 @@ export default function displayBuilding(data, index) {
   const button = html(`
     <button title="${data[description]}">
       <span>${data[name]}</span>
-      <span>${data[cost].map(([resourceIndex, value]) => {
+      <span class="cost">${data[cost].map(([resourceIndex, value]) => {
         return `<span title="${resources[resourceIndex][resourceName]}">${resources[resourceIndex][icon]}${value}</span>`
       }).join('')}</span>
     </button>

@@ -35,5 +35,5 @@ export default function displayResource(data, index) {
 }
 
 function setText(div, data) {
-  div.innerHTML = `<span class="icon">${data[icon]}</span>: ${data[amount] ?? 0}/${data[max]}`;
+  div.innerHTML = `<span class="icon">${data[icon]}</span>: ${data[amount] ?? 0}${data[max] == Infinity ? '' : `/${data[max]}`}`;
 }

@@ -3,12 +3,14 @@ import {
   wood,
   stone,
   skeletons,
-  planks
+  planks,
+  research
 } from './resources.js';
 import {
   rituralCircle,
   woodcuttersCamp,
   lumberMill,
+  laboratory,
   built
 } from './buildings.js';
 
@@ -23,6 +25,7 @@ export const visible = 5;
 export const idle = 0;
 export const woodcutters = 1;
 export const carpenters = 2;
+export const researchers = 3;
 
 const tasks = [];
 export default tasks;
@@ -60,6 +63,17 @@ export function initTasks() {
       ],
       [
         [building, lumberMill, built, 1]
+      ]
+    ],
+
+    // 3
+    [
+      'Researchers',
+      [
+        [research, 1]
+      ],
+      [
+        [building, laboratory, built, 1]
       ]
     ]
   );
