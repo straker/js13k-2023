@@ -27,7 +27,8 @@ export default function displayAction(data, index) {
     </button>
   `);
   const cooldownDiv = button.querySelector('span');
-  button.hidden = data[prereq];
+  button.hidden = !data[visible];
+  button.setAttribute('aria-disabled', !!data[disabled]);
   showWhenPrereqMet(data, prereq, button, action, index, visible);
 
   // manual actions will always increase a resource property
@@ -52,16 +53,14 @@ export default function displayAction(data, index) {
   });
 
   // update action cooldown timer
+  setCooldown(data, cooldownDiv);
   on(['timer-tick'], (dt) => {
     if (data[timer] <= 0) {
       return;
     }
 
     const value = state.set([action, index, timer, -dt]);
-    const width = value <= 0
-      ? 0
-      : value / data[cooldown] * 100 + '%';
-    cooldownDiv.style.width = width;
+    setCooldown(data, cooldownDiv);
 
     // re-enable action if timer expires and the resources is not
     // at max
@@ -90,4 +89,11 @@ export default function displayAction(data, index) {
 
   // `actG` is a global HTML id from index.html
   actG.appendChild(button);
+}
+
+function setCooldown(data, cooldownDiv) {
+  const width = data[timer] <= 0
+    ? 0
+    : data[timer] / data[cooldown] * 100 + '%';
+  cooldownDiv.style.width = width;
 }

@@ -22,8 +22,8 @@ export const name = 0;
 export const icon = 1;
 export const max = 2;
 export const prereq = 3;
-export const amount = 4;
-export const visible = 5;
+export const visible = 4;
+export const amount = 5;
 
 export const wood = 0;
 export const stone = 1;
@@ -47,7 +47,9 @@ export function initResources() {
     [
       'Wood',
       '🪵',
-      200
+      200,
+      ,
+      true
     ],
 
     // 1
@@ -84,7 +86,7 @@ export function initResources() {
     [
       'Research',
       '📜',
-      Infinity,
+      , // no limit
       [
         [building, laboratory, built, 1]
       ]

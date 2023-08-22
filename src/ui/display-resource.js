@@ -20,15 +20,15 @@ import { html, showWhenPrereqMet } from '../utils.js';
 export default function displayResource(data, index) {
   const div = html(`<div title="${data[name]}"></div>`);
   setText(div, data);
-  div.hidden = data[prereq];
+  div.hidden = !data[visible];
   showWhenPrereqMet(data, prereq, div, resource, index, visible);
 
   // bind resource state to the display value
-  on([resource, index, amount], (value) => {
-    setText(div, data, value);
+  on([resource, index, amount], () => {
+    setText(div, data);
   });
-  on([resource, index, max], (value) => {
-    setText(div, data, value);
+  on([resource, index, max], () => {
+    setText(div, data);
   });
 
   // `pop` and `resG` are global HTML ids from index.html
@@ -36,5 +36,5 @@ export default function displayResource(data, index) {
 }
 
 function setText(div, data) {
-  div.innerHTML = `<span class="icon">${data[icon]}</span>${data[amount] ?? 0}${data[max] == Infinity ? '' : `/${data[max]}`}`;
+  div.innerHTML = `<span class="icon">${data[icon]}</span>${data[amount] ?? 0}${!data[max] ? '' : `/${data[max]}`}`;
 }

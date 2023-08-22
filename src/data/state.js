@@ -1,5 +1,7 @@
+import { setStoreItem, getStoreItem } from '../libs/kontra.js';
 import { traversePath } from '../utils.js';
 import { emit } from '../events.js';
+import { SAVE_KEY } from '../constants.js';
 import actions from './actions.js';
 import buildings from './buildings.js';
 import resources from './resources.js';
@@ -37,10 +39,12 @@ export default state;
 window.state = state;
 
 export function initState() {
-  state._state = [
+  let initialState = getStoreItem('straker-2023-state') ?? [
     resources,
     buildings,
     actions,
     tasks
   ];
+
+  state._state = initialState;
 }

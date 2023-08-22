@@ -20,25 +20,28 @@ import { html, showWhenPrereqMet } from '../utils.js';
  * @param {Number} index - The current item of the data.
  */
 export default function displayTask(data, index) {
-  const taskName = html(`<div hidden>${data[name]}</div>`);
+  const taskName = html(`<div ${!data[visible] ? 'hidden' : ''}>${data[name]}</div>`);
 
   // `tskG` is a global HTML id from index.html
   tskG.appendChild(taskName);
 
   const div = html(`
     <div>
-      <input type="number" min="0" max="0" value="0">
+      <input type="number" min="0" max="0" value="${data[assigned] ?? 0}">
       <div class="max"></div>
     </div>
   `);
   const input = div.querySelector('input');
   const maxDiv = div.querySelector('.max');
-  div.hidden = data[prereq];
+  div.hidden = !data[visible];
   showWhenPrereqMet(data, prereq, div, task, index, visible);
   generateTitle(data, 0, taskName, div);
 
   // show tasks heading when first task is shown
   if (index === 0) {
+    tskT.hidden = !data[visible];
+    tskInpT.hidden = !data[visible]
+
     on([task, 0, visible], (value) => {
       // `tskT` and `tskInpT` are global HTML ids from index.html
       tskT.hidden = !value;
@@ -49,11 +52,6 @@ export default function displayTask(data, index) {
   // bind hidden state to the task name
   on([task, index, visible], (value) => {
     taskName.hidden = !value;
-  });
-
-  // bind assignable to max
-  on([task, index, assignable], (value) => {
-    maxDiv.textContent = '/ ' + value;
   });
 
   // prevent user from typing into the input
@@ -76,19 +74,18 @@ export default function displayTask(data, index) {
   }
   else {
     // bind the max assignable value to the max attribute
-    on([task, idle, assigned], (value) => {
-      input.setAttribute('max', Math.min(
-        // total assignable includes both idle and already
-        // assigned skeletons
-        value + (data[assigned] ?? 0),
-        (data[assignable] ?? 0)
-      ));
+    setMaxAssignable(data, input);
+    on([task, idle, assigned], () => {
+      setMaxAssignable(data, input);
     });
     on([task, index, assignable], (value) => {
-      input.setAttribute('max', Math.min(
-        state.get([task, idle, assigned], 0) + (data[assigned] ?? 0),
-        value
-      ));
+      setMaxAssignable(data, input);
+    });
+
+    // bind assignable to max
+    maxDiv.textContent = '/ ' + data[assignable];
+    on([task, index, assignable], (value) => {
+      maxDiv.textContent = '/ ' + value;
     });
 
     // bind assigned value to the title
@@ -163,4 +160,11 @@ function generateTitle(data, value, taskName, div) {
 
   taskName.setAttribute('title', title);
   div.setAttribute('title', title);
+}
+
+function setMaxAssignable(data, input) {
+  input.setAttribute('max', Math.min(
+    state.get([task, idle, assigned], 0) + (data[assigned] ?? 0),
+    (data[assignable] ?? 0)
+  ));
 }

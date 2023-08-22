@@ -31,7 +31,9 @@ export function initActions() {
     [
       'Chop Wood',
       SHORT_COOLDOWN,
-      [resource, wood, amount, 15]
+      [resource, wood, amount, 15],
+      [],
+      true
     ],
 
     // 1
