@@ -68,6 +68,7 @@
   }
 
   .icon {
+    margin-right: 0.25rem;
     display: inline-flex;
     align-items: center;
     text-shadow: 1px 0px 1px #fdfdfd, 0px 1px 1px #fdfdfd, 0px -1px 1px #fdfdfd, -1px 0px 1px #fdfdfd
@@ -133,6 +134,14 @@
     gap: 0.75rem;
   }
 
+  #tskInpT {
+    align-items: end;
+  }
+
+  #tskInpT .icon {
+    display: none;
+  }
+
   input {
     width: 50%;
     padding: 0;
@@ -185,7 +194,7 @@
     <div id="actG"><h2>Actions</h2></div>
     <div id="bldG"><h2 hidden id="bldT">Buildings</h2></div>
     <div id="tskG"><h2 hidden id="tskT">Tasks</h2></div>
-    <div id="tskInpG"><h2>&nbsp;</h2></div>
+    <div id="tskInpG"><div hidden id="tskInpT"><h2>&nbsp;</h2>Skeletons <div id="pop"></div></div></div>
   </main>
   <script src="./src/index.js" type="module"></script>
 </body>

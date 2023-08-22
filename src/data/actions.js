@@ -4,8 +4,9 @@ import {
   LONG_COOLDOWN,
 } from '../constants.js';
 import { resource, action, building } from './state.js';
-import { wood, stone, skeletons, amount } from './resources.js';
-import { rituralCircle, woodcuttersCamp, built } from './buildings.js';
+import { amount, wood, stone, skeletons } from './resources.js';
+import { built, rituralCircle, woodcuttersCamp } from './buildings.js';
+import { assigned, idle } from './tasks.js';
 
 // indices
 export const name = 0;
@@ -45,7 +46,7 @@ export function initActions() {
 
     // 2
     [
-      'Steal Corpse',
+      'Steal Corpse & Raise Skeleton',
       LONG_COOLDOWN,
       [resource, skeletons, amount, 1],
       [

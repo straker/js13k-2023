@@ -5,7 +5,8 @@ import {
   prereq,
   amount,
   max,
-  visible
+  visible,
+  skeletons
 } from '../data/resources.js';
 import { on } from '../events.js';
 import { html, showWhenPrereqMet } from '../utils.js';
@@ -30,10 +31,10 @@ export default function displayResource(data, index) {
     setText(div, data, value);
   });
 
-  // `resG` is a global HTML id from index.html
-  resG.appendChild(div);
+  // `pop` and `resG` are global HTML ids from index.html
+  (index === skeletons ? pop : resG).appendChild(div);
 }
 
 function setText(div, data) {
-  div.innerHTML = `<span class="icon">${data[icon]}</span>: ${data[amount] ?? 0}${data[max] == Infinity ? '' : `/${data[max]}`}`;
+  div.innerHTML = `<span class="icon">${data[icon]}</span>${data[amount] ?? 0}${data[max] == Infinity ? '' : `/${data[max]}`}`;
 }

@@ -40,8 +40,9 @@ export default function displayTask(data, index) {
   // show tasks heading when first task is shown
   if (index === 0) {
     on([task, 0, visible], (value) => {
-      // `tskT` is a global HTML id from index.html
+      // `tskT` and `tskInpT` are global HTML ids from index.html
       tskT.hidden = !value;
+      tskInpT.hidden = !value
     });
   }
 

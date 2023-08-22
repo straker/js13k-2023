@@ -9,12 +9,12 @@ import {
   lumberMill,
   laboratory,
   quarry,
-  masonWorkshop,
+  masonsWorkshop,
   burnersCamp,
   mine,
   furnace,
   smithy,
-  bowWorkshop
+  bowyersWorkshop
 } from './buildings.js';
 
 // indices
@@ -63,7 +63,7 @@ export function initResources() {
     // 2
     [
       'skeletons',
-      '💀',
+      '',
       0,
       [
         [building, rituralCircle, built, 1]
@@ -96,7 +96,7 @@ export function initResources() {
       '<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAABC1BMVEUAAABQUFBVVVVaWlpfX19ycnJLS0t3d3dCQkJoaGhtbW09PT1HR0dkZGR8fHxOTk5kZGR8fHw4ODhubm5HR0dVVVVnZ2dhYWF6enpjY2NXV1dbW1s4ODhHR0dCQkJHR0c9PT1oaGg2NjZHR0dtbW1ubm4/Pz9/f388PDxlZWU6Ojo9PT1MTEw9PT1CQkJjY2M0NDRtbW1fX193d3dfX19DQ0OAgIA+Pj5ycnJjY2N8fHxMTExsbGx3d3djY2OAgIBpaWlxcXFnZ2c0NDR7e3t7e3s5OTlISEhaWlpzc3M4ODgzMzNLS0tHR0d7e3tkZGQ1NTVwcHBNTU1kZGRERERISEg1NTVubm5ERETvjnbTAAAAWXRSTlMA4NvX0r/luu7IxPPqzbUtKRz4JGJYU0MvLQ4H8ebk2NewqaNsY1FGQDYK69XOycXCt7a0s7Kxr6ynpqGgnZ2VkIqFgn57e3Z1cm1kW1NOSkVAQD8nJR4YE1wr3S4AAADRSURBVBjTfckFc8JAEAXgV0tLuDQhLlCKS93dBXf9/7+EC3dkwjDwzey83bfYKIYV9se9XSgsPWK/h8zzX5s/vNzNfsibX/ce98Jq9pcG18leidyrNtGyoqhBiXyXzFRkLvWZM2koUCRJerccSxmYndKTdEFPWu4uXFssbz04OwGDRRWQtwMGTxnyVsDgSUuBeum7+qnQFBhaEkKSCZLU3Uork0kQaoTp0QFznofu73dDAMWHk+hZ1HfsTx5csZyOq6paV+P/ZYR43Z/LRnqM9WYTABfQPE+RQQAAAABJRU5ErkJggg=="/>',
       200,
       [
-        [building, masonWorkshop, built, 1]
+        [building, masonsWorkshop, built, 1]
       ]
     ],
 
@@ -156,16 +156,8 @@ export function initResources() {
       '🏹',
       50,
       [
-        [building, bowWorkshop, built, 1]
+        [building, bowyersWorkshop, built, 1]
       ]
-    ],
-
-    // // 14
-    // [
-    //   'Magic Crystal',
-    //   '💎',
-    //   25,
-    //   []
-    // ]
+    ]
   );
 }

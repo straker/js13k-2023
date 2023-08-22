@@ -2,7 +2,6 @@ import { building } from './state.js';
 import {
   wood,
   stone,
-  skeletons,
   planks,
   research,
   blocks,
@@ -20,12 +19,15 @@ import {
   lumberMill,
   laboratory,
   quarry,
-  masonWorkshop,
+  masonsWorkshop,
   burnersCamp,
   mine,
   furnace,
   smithy,
-  bowWorkshop
+  weaponsWorkshop,
+  bowyersWorkshop,
+  barrack,
+  archeryRange
 } from './buildings.js';
 
 // indices
@@ -42,12 +44,14 @@ export const carpenters = 2;
 export const researchers = 3;
 export const quarriers = 4;
 export const masons = 5;
-export const charcoalBurners = 6;
+export const burners = 6;
 export const miners = 7;
 export const smelters = 8;
-export const toolmakers = 9;
-export const blacksmiths = 10;
+export const blacksmiths = 9;
+export const weaponsmiths = 10;
 export const bowyers = 11;
+export const soldiers = 12;
+export const archers = 13;
 
 const tasks = [];
 export default tasks;
@@ -92,7 +96,7 @@ export function initTasks() {
     [
       'Researchers',
       [
-        [research, 1]
+        [research, 2]
       ],
       [
         [building, laboratory, built, 1]
@@ -114,10 +118,11 @@ export function initTasks() {
     [
       'Masons',
       [
+        [stone, -1],
         [blocks, 1]
       ],
       [
-        [building, masonWorkshop, built, 1]
+        [building, masonsWorkshop, built, 1]
       ]
     ],
 
@@ -125,7 +130,8 @@ export function initTasks() {
     [
       'Burners',
       [
-        [charcoal, 1]
+        [wood, -1],
+        [charcoal, 2]
       ],
       [
         [building, burnersCamp, built, 1]
@@ -147,6 +153,8 @@ export function initTasks() {
     [
       'Smelters',
       [
+        [charcoal, -1],
+        [ironOre, -2],
         [iron, 1]
       ],
       [
@@ -156,8 +164,10 @@ export function initTasks() {
 
     // 9
     [
-      'Toolmakers',
+      'Blacksmiths',
       [
+        [iron, -1],
+        [charcoal, -1],
         [tools, 1]
       ],
       [
@@ -167,12 +177,14 @@ export function initTasks() {
 
     // 10
     [
-      'Blacksmiths',
+      'Weaponsmiths',
       [
+        [iron, -1],
+        [charcoal, -1],
         [swords, 1]
       ],
       [
-        [building, smithy, built, 1]
+        [building, weaponsWorkshop, built, 1]
       ]
     ],
 
@@ -180,10 +192,34 @@ export function initTasks() {
     [
       'Bowyers',
       [
+        [wood, -2],
+        [planks, -1],
         [bows, 1]
       ],
       [
-        [building, bowWorkshop, built, 1]
+        [building, bowyersWorkshop, built, 1]
+      ]
+    ],
+
+    // 12
+    [
+      'Soldiers',
+      [
+        [swords, -1]
+      ],
+      [
+        [building, barrack, built, 1]
+      ]
+    ],
+
+    // 12
+    [
+      'Archers',
+      [
+        [bows, -1]
+      ],
+      [
+        [building, archeryRange, built, 1]
       ]
     ]
   );
