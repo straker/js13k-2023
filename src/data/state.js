@@ -33,13 +33,16 @@ const state = {
     }
     emit([...p, index], obj[index], value);
     return obj[index];
+  },
+  save() {
+    setStoreItem(SAVE_KEY, this._state);
   }
 };
 export default state;
 window.state = state;
 
 export function initState() {
-  let initialState = getStoreItem('straker-2023-state') ?? [
+  let initialState = getStoreItem(SAVE_KEY) ?? [
     resources,
     buildings,
     actions,

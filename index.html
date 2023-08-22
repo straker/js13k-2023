@@ -186,15 +186,32 @@
   .locked .cost {
     opacity: 0.5;
   }
+
+  #saved {
+    position: absolute;
+    right: 2rem;
+    opacity: 1;
+  }
+
+  #saved.hide {
+    opacity: 0;
+    transition: opacity 2s linear;
+  }
   </style>
 </head>
 <body>
   <main>
-    <div id="resG"></div>
+    <div id="resG">
+      <div id="saved" class="hide">Game Saved</div>
+    </div>
     <div id="actG"><h2>Actions</h2></div>
     <div id="bldG"><h2 hidden id="bldT">Buildings</h2></div>
     <div id="tskG"><h2 hidden id="tskT">Tasks</h2></div>
-    <div id="tskInpG"><div hidden id="tskInpT"><h2>&nbsp;</h2>Skeletons <div id="pop"></div></div></div>
+    <div id="tskInpG">
+      <div hidden id="tskInpT">
+        <h2>&nbsp;</h2>Skeletons <div id="pop"></div>
+      </div>
+    </div>
   </main>
   <script src="./src/index.js" type="module"></script>
 </body>
