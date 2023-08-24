@@ -117,6 +117,7 @@ export default function displayTask(data, index) {
 
       // ensure player has all the costs before fulfilling task
       const costs = data[effects].filter(([, value]) => value < 0);
+      const gains = data[effects].filter(([, value]) => value > 0);
       // if player can only afford to make less than the
       // assigned number of skeletons then make only as much
       // as they can afford
@@ -137,6 +138,16 @@ export default function displayTask(data, index) {
       })) {
         return;
       }
+
+      // don't spend resources making more than player has room
+      // for
+      gains.map(([resourceIndex, value]) => {
+        const perValue = value * canAfford;
+        canAfford = Math.min(
+          (state.get([resource, resourceIndex, max]) ?? Infinity) - (state.get([resource, resourceIndex, amount]) ?? 0),
+          canAfford
+        );
+      });
 
       data[effects].map(([resourceIndex, value]) => {
         const resourceMax = state.get([resource, resourceIndex, max]);

@@ -4,6 +4,7 @@ import resources, {
   max,
   wood,
   stone,
+  corpses,
   skeletons,
   planks,
   research,
@@ -29,7 +30,9 @@ import {
   weaponsmiths,
   bowyers,
   soldiers,
-  archers
+  archers,
+  alchemists,
+  snatchers
 } from './tasks.js';
 
 // indices
@@ -58,8 +61,11 @@ export const weaponsWorkshop = 10;
 export const bowyersWorkshop = 11;
 export const barrack = 12;
 export const archeryRange = 13;
-export const warehouse = 14;
-export const armory = 15;
+export const alchemyLab = 14;
+export const outpost = 15;
+export const freezer = 16;
+export const warehouse = 17;
+export const armory = 18;
 
 const buildings = [];
 export default buildings;
@@ -80,8 +86,7 @@ export function initBuildings() {
         [resource, skeletons, max, 4]
       ],
       [
-        [resource, wood, amount, 50],
-        [resource, stone, amount, 25]
+        [resource, corpses, amount, 1],
       ]
     ],
 
@@ -145,7 +150,7 @@ export function initBuildings() {
       [
         [building, laboratory, built, 1]
       ],
-      50
+      60
     ],
 
     // 5
@@ -161,7 +166,7 @@ export function initBuildings() {
       [
         [building, laboratory, built, 1]
       ],
-      50
+      100
     ],
 
     // 6
@@ -177,7 +182,7 @@ export function initBuildings() {
       [
         [building, laboratory, built, 1]
       ],
-      50
+      150
     ],
 
     // 7
@@ -193,7 +198,7 @@ export function initBuildings() {
       [
         [building, laboratory, built, 1]
       ],
-      50
+      200
     ],
 
     // 8
@@ -209,7 +214,7 @@ export function initBuildings() {
       [
         [building, laboratory, built, 1]
       ],
-      50
+      300
     ],
 
     // 9
@@ -225,7 +230,7 @@ export function initBuildings() {
       [
         [building, laboratory, built, 1]
       ],
-      50
+      450
     ],
 
     // 10
@@ -241,7 +246,7 @@ export function initBuildings() {
       [
         [building, laboratory, built, 1]
       ],
-      50
+      600
     ],
 
     // 11
@@ -257,7 +262,7 @@ export function initBuildings() {
       [
         [building, laboratory, built, 1]
       ],
-      50
+      800
     ],
 
     // 12
@@ -273,7 +278,7 @@ export function initBuildings() {
       [
         [building, laboratory, built, 1]
       ],
-      50
+      500
     ],
 
     // 13
@@ -289,10 +294,60 @@ export function initBuildings() {
       [
         [building, laboratory, built, 1]
       ],
-      50
+      700
     ],
 
     // 14
+    [
+      'Alchemy Lab',
+      'Allows 4 Skeleton to generate greater Research',
+      [
+        [planks, 80],
+        [iron, 30],
+        [tools, 10]
+      ],
+      [
+        [task, alchemists, assignable, 4]
+      ],
+      [
+        [building, laboratory, built, 1]
+      ],
+      1000
+    ],
+
+    // 15
+    [
+      'Outpost',
+      'Allows 2 Skeletons to gather Corpses',
+      [
+        [wood, 50]
+      ],
+      [
+        [task, snatchers, assignable, 2],
+      ],
+      [
+        [building, laboratory, built, 1]
+      ],
+      250
+    ],
+
+    // 15
+    [
+      'Freezer',
+      'Increases max Corpses by 10',
+      [
+        [wood, 50]
+      ],
+      [
+        [resource, corpses, max, 10],
+      ],
+      [
+        [building, laboratory, built, 1]
+      ],
+      60
+    ],
+
+    // 16
     [
       'Warehouse',
       'Increases max Wood, Stone, and Iron products by 50',
@@ -311,10 +366,10 @@ export function initBuildings() {
       [
         [building, laboratory, built, 1]
       ],
-      50
+      80
     ],
 
-    // 15
+    // 17
     [
       'Armory',
       'Increases max Tools, Swords, and Bows by 10',
@@ -329,7 +384,7 @@ export function initBuildings() {
       [
         [building, laboratory, built, 1]
       ],
-      50
+      120
     ]
   );
 }

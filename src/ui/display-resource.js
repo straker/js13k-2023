@@ -46,7 +46,7 @@ export default function displayResource(data, index) {
     setText(div, data, index);
   });
 
-  // `wG`, `sG`, `iG`, `tG`, `pop`, and `resG` are global HTML
+  // `wG`, `sG`, `iG`, `tG`, `pop`, and `mG` are global HTML
   // ids from index.html
   (
     [wood, planks].includes(index)
@@ -59,7 +59,7 @@ export default function displayResource(data, index) {
       ? tG
       : index == skeletons
       ? pop
-      : resG
+      : mG
   ).appendChild(div);
 }
 
@@ -84,6 +84,6 @@ function getTextNumber(value) {
   return value < 1e3
     ? value
     : value < 1e6
-    ? (value / 1e3 | 0) + 'K'
-    : (value / 1e6 | 0) + 'M'
+    ? (value / 1e3).toFixed(1) + 'K'
+    : (value / 1e6).toFixed(1) + 'M'
 }

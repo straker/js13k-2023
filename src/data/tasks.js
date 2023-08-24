@@ -2,6 +2,7 @@ import { building } from './state.js';
 import {
   wood,
   stone,
+  corpses,
   planks,
   research,
   blocks,
@@ -27,7 +28,9 @@ import {
   weaponsWorkshop,
   bowyersWorkshop,
   barrack,
-  archeryRange
+  archeryRange,
+  alchemyLab,
+  outpost
 } from './buildings.js';
 
 // indices
@@ -52,6 +55,8 @@ export const weaponsmiths = 10;
 export const bowyers = 11;
 export const soldiers = 12;
 export const archers = 13;
+export const alchemists = 14;
+export const snatchers = 15;
 
 const tasks = [];
 export default tasks;
@@ -96,7 +101,7 @@ export function initTasks() {
     [
       'Researchers',
       [
-        [research, 2]
+        [research, 1]
       ],
       [
         [building, laboratory, built, 1]
@@ -212,7 +217,7 @@ export function initTasks() {
       ]
     ],
 
-    // 12
+    // 13
     [
       'Archers',
       [
@@ -221,6 +226,28 @@ export function initTasks() {
       [
         [building, archeryRange, built, 1]
       ]
-    ]
+    ],
+
+    // 14
+    [
+      'Alchemists',
+      [
+        [research, 10]
+      ],
+      [
+        [building, alchemyLab, built, 1]
+      ]
+    ],
+
+    // 15
+    [
+      'Snatchers',
+      [
+        [corpses, 0.5]
+      ],
+      [
+        [building, outpost, built, 1]
+      ]
+    ],
   );
 }

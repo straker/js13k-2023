@@ -1,7 +1,7 @@
 import state, { resource, action } from '../data/state.js';
 import {
   name,
-  effect,
+  effects,
   prereq,
   timer,
   cooldown,
@@ -31,9 +31,6 @@ export default function displayAction(data, index) {
   button.setAttribute('aria-disabled', !!data[disabled]);
   showWhenPrereqMet(data, prereq, button, action, index, visible);
 
-  // manual actions will always increase a resource property
-  const resourceIndex = data[effect][1];
-
   // bind disabled state to the aria-disabled attribute
   on([action, index, disabled], (value) => {
     button.setAttribute('aria-disabled', !!value);
@@ -46,7 +43,12 @@ export default function displayAction(data, index) {
     }
 
     state.set([action, index, clicked, 1]);
-    state.set(data[effect], state.get([resource, resourceIndex, max]));
+    data[effects].map(([resourceIndex, value]) => {
+      state.set(
+        [resource, resourceIndex, amount, value],
+        state.get([resource, resourceIndex, max])
+      );
+    });
     state.set([action, index, disabled, true]);
     state.set([action, index, timer, data[cooldown]]);
   });
@@ -61,29 +63,28 @@ export default function displayAction(data, index) {
     const value = state.set([action, index, timer, -dt]);
     setCooldown(data, cooldownDiv);
 
-    // re-enable action if timer expires and the resources is not
-    // at max
+    // re-enable action if timer expires and player can perform action
     if (
       value <= 0 &&
-      state.get([resource, resourceIndex, amount]) < state.get([resource, resourceIndex, max])
+      canPeform(data[effects])
     ) {
       state.set([action, index, disabled, false]);
     }
   });
 
-  // re-enable action if max resource increases (but only if
-  // timer isn't going)
-  on([resource, resourceIndex, max], (value) => {
-    if (data[timer] <= 0) {
-      state.set([action, index, disabled, false]);
-    }
-  });
+  // re-enable action if resource amount or max changes (but only if timer isn't going)
+  data[effects].map(([resourceIndex]) => {
+    on([resource, resourceIndex, amount], () => {
+      if (data[timer] <= 0 && canPeform(data[effects])) {
+        state.set([action, index, disabled, false]);
+      }
+    });
 
-  // re-enable action if resources are below max (but only if timer isn't going)
-  on([resource, resourceIndex, amount], (value) => {
-    if (data[timer] <= 0 && amount < state.get([resource, resourceIndex, max])) {
-      state.set([action, index, disabled, false]);
-    }
+    on([resource, resourceIndex, max], () => {
+      if (data[timer] <= 0 && canPeform(data[effects])) {
+        state.set([action, index, disabled, false]);
+      }
+    });
   });
 
   // `actG` is a global HTML id from index.html
@@ -95,4 +96,16 @@ function setCooldown(data, cooldownDiv) {
     ? 0
     : data[timer] / data[cooldown] * 100 + '%';
   cooldownDiv.style.width = width;
+}
+
+function canPeform(effects) {
+  return effects.every(([resourceIndex, value]) => {
+    const curAmount = state.get([resource, resourceIndex, amount]);
+
+    if (value > 0) {
+      return curAmount < state.get([resource, resourceIndex, max])
+    }
+
+    return curAmount > 0;
+  });
 }
