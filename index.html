@@ -46,13 +46,23 @@
   #resG {
     grid-area: resources;
     display: flex;
-    gap: 1rem;
+    gap: 2rem;
     background: #222;
     color: #fdfdfd;
     padding: 1rem;
+    align-items: start;
   }
 
-  #resG > div {
+  .g {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 0.75rem;
+    width: 6rem;
+  }
+
+  .g .res {
+    width: 100%;
     display: flex;
     align-items: center;
   }
@@ -68,7 +78,9 @@
   }
 
   .icon {
-    margin-right: 0.25rem;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-right: 0.35rem;
     display: inline-flex;
     align-items: center;
     text-shadow: 1px 0px 1px #fdfdfd, 0px 1px 1px #fdfdfd, 0px -1px 1px #fdfdfd, -1px 0px 1px #fdfdfd
@@ -159,6 +171,7 @@
 
   img {
     filter: drop-shadow(1px 0 #fdfdfd) drop-shadow(-1px 0 #fdfdfd) drop-shadow(0 1px #fdfdfd) drop-shadow(0 -1px #fdfdfd);
+    width: 1rem;
   }
 
   .lock {
@@ -189,7 +202,7 @@
 
   #saved {
     position: absolute;
-    right: 2rem;
+    right: 1.5rem;
     opacity: 1;
   }
 
@@ -197,12 +210,33 @@
     opacity: 0;
     transition: opacity 2s linear;
   }
+
+  .trend {
+    display: none;
+    margin-left: auto;
+  }
+
+  .trend:not(:is(.up,.down)) {
+    visibility: hidden;
+  }
+
+  .up {
+    color: #5da23a;
+  }
+
+  .down {
+    color: #E1605B;
+  }
   </style>
 </head>
 <body>
   <main>
     <div id="resG">
       <div id="saved" class="hide">Game Saved</div>
+      <div class="g" id="wG"></div>
+      <div class="g" id="sG"></div>
+      <div class="g" id="iG"></div>
+      <div class="g" id="tG"></div>
     </div>
     <div id="actG"><h2>Actions</h2></div>
     <div id="bldG"><h2 hidden id="bldT">Buildings</h2></div>

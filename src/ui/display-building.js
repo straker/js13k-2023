@@ -3,8 +3,10 @@ import {
   name,
   description,
   cost,
-  effect,
+  effects,
   prereq,
+  researchCost,
+  unlocked,
   built,
   visible,
   disabled
@@ -21,20 +23,16 @@ import { html, showWhenPrereqMet } from '../utils.js';
  */
 export default function displayBuilding(data, index) {
   const buildingName = data[name];
-  let researchCost = data[cost].find(([resourceIndex]) => resourceIndex === research);
+  let locked = data[researchCost] && !data[unlocked];
 
   const button = html(`
-    <button class="${researchCost ? 'locked' : ''}" title="${data[description]}">
-      ${researchCost
-        ? '<span class="lock" title="Building requires Research to unlock">🔒</span>' + displayCost(resources[research], researchCost[1])
+    <button class="${locked ? 'locked' : ''}" title="${data[description]}">
+      ${locked
+        ? '<span class="lock" title="Building requires Research to unlock">🔒</span>' + displayCost(resources[research], data[researchCost])
         : ''
       }
       <span>${buildingName}</span>
       <span class="cost">${data[cost].map(([resourceIndex, value]) => {
-        if (resourceIndex === research) {
-          return '';
-        }
-
         return displayCost(resources[resourceIndex], value);
       }).join('')}</span>
     </button>
@@ -61,18 +59,18 @@ export default function displayBuilding(data, index) {
   button.addEventListener('click', (e) => {
     // unlock building through research first before allowing
     // player to build it
-    if (researchCost) {
-      if (state.get([resource, research, amount], 0) < researchCost[1]) {
+    if (locked) {
+      if (state.get([resource, research, amount], 0) < data[researchCost]) {
         window.alert('Not enough Research to unlock ' + buildingName);
       }
-      else if (window.confirm(`Unlock ${buildingName} for ${researchCost[1]} Research?`)) {
-        state.set([resource, research, amount, -researchCost[1]]);
-        researchCost = null;
+      else if (window.confirm(`Unlock ${buildingName} for ${data[researchCost]} Research?`)) {
+        locked = false;
         button.querySelector('.lock').remove();
         button.querySelector('.Research').remove();
         button.classList.remove('locked');
 
-        data[cost].splice(data[cost].indexOf(researchCost));
+        state.set([resource, research, amount, -data[researchCost]]);
+        state.set([building, index, unlocked, true]);
         state.set([building, index, disabled, !canAfford(data[cost])]);
         enableWhenCanAfford(index, data[cost]);
       }
@@ -84,15 +82,14 @@ export default function displayBuilding(data, index) {
       return e.preventDefault();
     }
 
-    const buildCount = (data[built] ?? 0) + 1;
-    state.set([building, index, built, buildCount]);
-    state.set(data[effect]);
+    state.set([building, index, built, 1]);
+    data[effects].map(effect => state.set(effect));
     data[cost].map(([resourceIndex, value]) => {
       state.set([resource, resourceIndex, amount, -value]);
     });
   });
 
-  if (researchCost) {
+  if (locked) {
     // player can always click a building that needs research
     state.set([building, index, disabled, false]);
   }

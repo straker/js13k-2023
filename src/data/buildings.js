@@ -6,7 +6,14 @@ import resources, {
   stone,
   skeletons,
   planks,
-  research
+  research,
+  blocks,
+  charcoal,
+  ironOre,
+  iron,
+  tools,
+  swords,
+  bows
 } from './resources.js';
 import {
   assignable,
@@ -29,11 +36,13 @@ import {
 export const name = 0;
 export const description = 1;
 export const cost = 2;
-export const effect = 3;
+export const effects = 3;
 export const prereq = 4;
-export const built = 5;
-export const visible = 6;
-export const disabled = 7;
+export const researchCost = 5;
+export const unlocked = 6;
+export const built = 7;
+export const visible = 8;
+export const disabled = 9;
 
 export const rituralCircle = 0;
 export const woodcuttersCamp = 1;
@@ -49,6 +58,8 @@ export const weaponsWorkshop = 10;
 export const bowyersWorkshop = 11;
 export const barrack = 12;
 export const archeryRange = 13;
+export const warehouse = 14;
+export const armory = 15;
 
 const buildings = [];
 export default buildings;
@@ -65,7 +76,9 @@ export function initBuildings() {
         [wood, 50],
         [stone, 25]
       ],
-      [resource, skeletons, max, 4],
+      [
+        [resource, skeletons, max, 4]
+      ],
       [
         [resource, wood, amount, 50],
         [resource, stone, amount, 25]
@@ -77,9 +90,11 @@ export function initBuildings() {
       'Woodcutters Camp',
       `Allows 3 Skeletons to gather Wood`,
       [
-        [wood, 50]
+        [wood, 25]
       ],
-      [task, woodcutters, assignable, 3],
+      [
+        [task, woodcutters, assignable, 3]
+      ],
       [
         [building, rituralCircle, built, 1]
       ]
@@ -93,7 +108,9 @@ export function initBuildings() {
         [wood, 100],
         [stone, 10]
       ],
-      [task, carpenters, assignable, 3],
+      [
+        [task, carpenters, assignable, 3]
+      ],
       [
         [building, woodcuttersCamp, built, 1]
       ]
@@ -107,7 +124,9 @@ export function initBuildings() {
         [stone, 50],
         [planks, 25]
       ],
-      [task, researchers, assignable, 1],
+      [
+        [task, researchers, assignable, 1]
+      ],
       [
         [building, lumberMill, built, 1]
       ]
@@ -118,13 +137,15 @@ export function initBuildings() {
       'Quarry',
       'Allows 5 Skeletons to gather Stone',
       [
-        [wood, 50],
-        [research, 50]
+        [wood, 50]
       ],
-      [task, quarriers, assignable, 5],
+      [
+        [task, quarriers, assignable, 5]
+      ],
       [
         [building, laboratory, built, 1]
-      ]
+      ],
+      50
     ],
 
     // 5
@@ -132,13 +153,15 @@ export function initBuildings() {
       'Masons Workshop',
       'Allows 2 Skeletons to craft Blocks from Stone',
       [
-        [wood, 50],
-        [research, 50]
+        [wood, 50]
       ],
-      [task, masons, assignable, 2],
+      [
+        [task, masons, assignable, 2]
+      ],
       [
         [building, laboratory, built, 1]
-      ]
+      ],
+      50
     ],
 
     // 6
@@ -146,13 +169,15 @@ export function initBuildings() {
       'Burners Camp',
       'Allows 3 Skeletons to craft Coal from Wood',
       [
-        [wood, 50],
-        [research, 50]
+        [wood, 50]
       ],
-      [task, burners, assignable, 3],
+      [
+        [task, burners, assignable, 3]
+      ],
       [
         [building, laboratory, built, 1]
-      ]
+      ],
+      50
     ],
 
     // 7
@@ -160,13 +185,15 @@ export function initBuildings() {
       'Mine',
       'Allows 5 Skeletons to gather Iron Ore',
       [
-        [wood, 50],
-        [research, 50]
+        [wood, 50]
       ],
-      [task, miners, assignable, 5],
+      [
+        [task, miners, assignable, 5]
+      ],
       [
         [building, laboratory, built, 1]
-      ]
+      ],
+      50
     ],
 
     // 8
@@ -174,13 +201,15 @@ export function initBuildings() {
       'Furnace',
       'Allows 2 Skeletons to craft Iron from Iron Ore and Charcoal',
       [
-        [wood, 50],
-        [research, 50]
+        [wood, 50]
       ],
-      [task, smelters, assignable, 2],
+      [
+        [task, smelters, assignable, 2]
+      ],
       [
         [building, laboratory, built, 1]
-      ]
+      ],
+      50
     ],
 
     // 9
@@ -188,13 +217,15 @@ export function initBuildings() {
       'Smithy',
       'Allows 2 Skeletons to craft Tools from Iron Ore and Charcoal',
       [
-        [wood, 50],
-        [research, 50]
+        [wood, 50]
       ],
-      [task, blacksmiths, assignable, 2],
+      [
+        [task, blacksmiths, assignable, 2]
+      ],
       [
         [building, laboratory, built, 1]
-      ]
+      ],
+      50
     ],
 
     // 10
@@ -202,13 +233,15 @@ export function initBuildings() {
       'Weapons Workshop',
       'Allows 2 Skeleton to craft Swords from Iron Ore and Charcoal',
       [
-        [wood, 50],
-        [research, 50]
+        [wood, 50]
       ],
-      [task, weaponsmiths, assignable, 2],
+      [
+        [task, weaponsmiths, assignable, 2]
+      ],
       [
         [building, laboratory, built, 1]
-      ]
+      ],
+      50
     ],
 
     // 11
@@ -216,13 +249,15 @@ export function initBuildings() {
       'Bowyers Workshop',
       'Allows 2 Skeleton to craft Bows from Wood and Planks',
       [
-        [wood, 50],
-        [research, 50]
+        [wood, 50]
       ],
-      [task, bowyers, assignable, 2],
+      [
+        [task, bowyers, assignable, 2]
+      ],
       [
         [building, laboratory, built, 1]
-      ]
+      ],
+      50
     ],
 
     // 12
@@ -230,13 +265,15 @@ export function initBuildings() {
       'Barrack',
       'Allows 8 Skeletons to become Soldiers',
       [
-        [wood, 50],
-        [research, 50]
+        [wood, 50]
       ],
-      [task, soldiers, assignable, 8],
+      [
+        [task, soldiers, assignable, 8]
+      ],
       [
         [building, laboratory, built, 1]
-      ]
+      ],
+      50
     ],
 
     // 13
@@ -244,13 +281,55 @@ export function initBuildings() {
       'Archery Range',
       'Allows 8 Skeletons to become Archers',
       [
-        [wood, 50],
-        [research, 50]
+        [wood, 50]
       ],
-      [task, archers, assignable, 8],
+      [
+        [task, archers, assignable, 8]
+      ],
       [
         [building, laboratory, built, 1]
-      ]
+      ],
+      50
+    ],
+
+    // 14
+    [
+      'Warehouse',
+      'Increases max Wood, Stone, and Iron products by 50',
+      [
+        [wood, 50]
+      ],
+      [
+        [resource, wood, max, 50],
+        [resource, planks, max, 50],
+        [resource, stone, max, 50],
+        [resource, blocks, max, 50],
+        [resource, charcoal, max, 50],
+        [resource, ironOre, max, 50],
+        [resource, iron, max, 50]
+      ],
+      [
+        [building, laboratory, built, 1]
+      ],
+      50
+    ],
+
+    // 15
+    [
+      'Armory',
+      'Increases max Tools, Swords, and Bows by 10',
+      [
+        [wood, 50]
+      ],
+      [
+        [resource, tools, max, 10],
+        [resource, swords, max, 10],
+        [resource, bows, max, 10]
+      ],
+      [
+        [building, laboratory, built, 1]
+      ],
+      50
     ]
   );
 }

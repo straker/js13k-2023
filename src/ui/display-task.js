@@ -8,7 +8,7 @@ import {
   visible,
   idle
 } from '../data/tasks.js';
-import resources, { amount, max, skeletons } from '../data/resources.js';
+import resources, { amount, max, change, skeletons } from '../data/resources.js';
 import { on } from '../events.js';
 import { RESOURCE_TICK } from '../constants.js';
 import { html, showWhenPrereqMet } from '../utils.js';
@@ -35,7 +35,7 @@ export default function displayTask(data, index) {
   const maxDiv = div.querySelector('.max');
   div.hidden = !data[visible];
   showWhenPrereqMet(data, prereq, div, task, index, visible);
-  generateTitle(data, 0, taskName, div);
+  generateTitle(data, data[assigned] ?? 0, taskName, div);
 
   // show tasks heading when first task is shown
   if (index === 0) {
@@ -89,8 +89,14 @@ export default function displayTask(data, index) {
     });
 
     // bind assigned value to the title
-    on([task, index, assigned], (value) => {
+    on([task, index, assigned], (value, diff) => {
       generateTitle(data, value, taskName, div);
+
+      // keep track of the change in resource state to display
+      // either a positive or negative change in the resource
+      data[effects].map(([resourceIndex, resourceValue]) => {
+        state.set([resource, resourceIndex, change, diff * resourceValue]);
+      });
     });
 
     // add or subtract assigned skeletons
@@ -118,11 +124,14 @@ export default function displayTask(data, index) {
       if (!costs.every(([resourceIndex, value]) => {
         // tasks use resources per assigned skeleton
         const perValue = -value * data[assigned];
-        canAfford = Math.min(
-          perValue + (state.get([resource, resourceIndex, amount]) - perValue),
-          perValue,
-          canAfford
-        ) / -value;
+        canAfford = (
+          Math.min(
+            perValue + (state.get([resource, resourceIndex, amount]) - perValue),
+            perValue,
+            canAfford
+          )
+          / -value
+        ) | 0;
 
         return canAfford > 0;
       })) {
@@ -155,7 +164,14 @@ export default function displayTask(data, index) {
 function generateTitle(data, value, taskName, div) {
   const title = data[effects].map(([resourceIndex, resourceValue]) => {
     const padName = resources[resourceIndex][name].padEnd(15, ' ');
-    return `${padName}${resourceValue > 0 ? '+' : ''}${value * resourceValue} per ${RESOURCE_TICK / 60}s`;
+    return `${padName}${
+      resourceValue > 0
+        ? '+'
+        // show -0
+        : value === 0
+          ? '-'
+          : ''
+      }${value * resourceValue} per ${RESOURCE_TICK / 60}s`;
   }).join('\n');
 
   taskName.setAttribute('title', title);
@@ -167,4 +183,10 @@ function setMaxAssignable(data, input) {
     state.get([task, idle, assigned], 0) + (data[assigned] ?? 0),
     (data[assignable] ?? 0)
   ));
+}
+
+function setResourceChange(data, value) {
+  data[effects].map(([resourceIndex, resourceValue]) => {
+    state.set([resource, resourceIndex, change, value * resourceValue]);
+  });
 }

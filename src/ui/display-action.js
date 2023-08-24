@@ -45,8 +45,7 @@ export default function displayAction(data, index) {
       return e.preventDefault();
     }
 
-    const clickCount = (data[clicked] ?? 0) + 1;
-    state.set([action, index, clicked, clickCount]);
+    state.set([action, index, clicked, 1]);
     state.set(data[effect], state.get([resource, resourceIndex, max]));
     state.set([action, index, disabled, true]);
     state.set([action, index, timer, data[cooldown]]);

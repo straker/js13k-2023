@@ -2,15 +2,33 @@ import { setStoreItem, getStoreItem } from '../libs/kontra.js';
 import { traversePath } from '../utils.js';
 import { emit } from '../events.js';
 import { SAVE_KEY } from '../constants.js';
-import actions from './actions.js';
-import buildings from './buildings.js';
-import resources from './resources.js';
-import tasks from './tasks.js';
+import resources, {
+  max,
+  visible as resourceVisible,
+  amount
+} from './resources.js';
+import actions, {
+  visible as actionVisible,
+  clicked,
+  disabled as actionDisabled,
+  timer
+} from './actions.js';
+import buildings, {
+  unlocked,
+  built,
+  visible as buildingVisible,
+  disabled as buildingDisabled
+} from './buildings.js';
+import tasks, {
+  assignable,
+  assigned,
+  visible as taskVisible
+} from './tasks.js';
 
 // indices
 export const resource = 0;
-export const building = 1;
-export const action = 2;
+export const action = 1;
+export const building = 2;
 export const task = 3;
 
 const state = {
@@ -35,19 +53,56 @@ const state = {
     return obj[index];
   },
   save() {
-    setStoreItem(SAVE_KEY, this._state);
+    // limit what props are saved to those only changed by the
+    // user
+    const saveState = [
+      getSaveState(resources, [max, resourceVisible, amount]),
+      getSaveState(actions, [actionVisible, clicked, actionDisabled, timer]),
+      getSaveState(buildings, [unlocked, built, buildingVisible, buildingDisabled]),
+      getSaveState(tasks, [assignable, assigned, taskVisible])
+    ];
+
+    setStoreItem(SAVE_KEY, saveState);
+  },
+  load(initialState) {
+    const saveState = getStoreItem(SAVE_KEY);
+    if (!saveState) {
+      return initialState;
+    }
+
+    saveState.map((stateItem, stateIndex) => {
+      stateItem.map((obj, objIndex) => {
+        Object.entries(obj).map(([key, value]) => {
+          initialState[stateIndex][objIndex][key] = value;
+        });
+      });
+    });
+
+    return initialState;
   }
 };
 export default state;
 window.state = state;
 
 export function initState() {
-  let initialState = getStoreItem(SAVE_KEY) ?? [
+  const initialState = [
     resources,
-    buildings,
     actions,
+    buildings,
     tasks
   ];
 
-  state._state = initialState;
+  state._state = state.load(initialState);
+}
+
+function getSaveState(data, filterIndices) {
+  return data.map(item => {
+    return item.reduce((obj, value, index) => {
+      if (filterIndices.includes(index)) {
+        obj[index] = value;
+      }
+
+      return obj;
+    }, {})
+  });
 }
