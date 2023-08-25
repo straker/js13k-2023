@@ -8,7 +8,7 @@ import {
   visible,
   idle
 } from '../data/tasks.js';
-import resources, { amount, max, change, skeletons } from '../data/resources.js';
+import resources, { icon, amount, max, change, skeletons } from '../data/resources.js';
 import { on } from '../events.js';
 import { RESOURCE_TICK } from '../constants.js';
 import { html, showWhenPrereqMet } from '../utils.js';
@@ -20,22 +20,28 @@ import { html, showWhenPrereqMet } from '../utils.js';
  * @param {Number} index - The current item of the data.
  */
 export default function displayTask(data, index) {
-  const taskName = html(`<div ${!data[visible] ? 'hidden' : ''}>${data[name]}</div>`);
+  const taskName = html(`
+    <div class="tipC" ${!data[visible] ? 'hidden' : ''}>
+      ${data[name]}
+      ${index !== idle ? `<span class="tip">${getTip(data, data[assigned] ?? 0)}</span>` : ``}
+    </div>
+  `);
 
   // `tskG` is a global HTML id from index.html
   tskG.appendChild(taskName);
 
   const div = html(`
-    <div>
+    <div class="tipC">
       <input type="number" min="0" max="0" value="${data[assigned] ?? 0}">
       <div class="max"></div>
+      ${index !== idle ? `<span class="tip">${getTip(data, data[assigned] ?? 0)}</span>` : ``}
     </div>
   `);
   const input = div.querySelector('input');
   const maxDiv = div.querySelector('.max');
   div.hidden = !data[visible];
   showWhenPrereqMet(data, prereq, div, task, index, visible);
-  generateTitle(data, data[assigned] ?? 0, taskName, div);
+  ;
 
   // show tasks heading when first task is shown
   if (index === 0) {
@@ -90,7 +96,11 @@ export default function displayTask(data, index) {
 
     // bind assigned value to the title
     on([task, index, assigned], (value, diff) => {
-      generateTitle(data, value, taskName, div);
+      if (index !== idle) {
+        const tip = getTip(data, value);
+        taskName.querySelector('.tip').innerHTML = tip;
+        div.querySelector('.tip').innerHTML = tip;
+      }
 
       // keep track of the change in resource state to display
       // either a positive or negative change in the resource
@@ -172,21 +182,23 @@ export default function displayTask(data, index) {
   tskInpG.appendChild(div);
 }
 
-function generateTitle(data, value, taskName, div) {
-  const title = data[effects].map(([resourceIndex, resourceValue]) => {
-    const padName = resources[resourceIndex][name].padEnd(15, ' ');
-    return `${padName}${
-      resourceValue > 0
-        ? '+'
-        // show -0
-        : value === 0
-          ? '-'
-          : ''
-      }${value * resourceValue} per ${RESOURCE_TICK / 60}s`;
-  }).join('\n');
-
-  taskName.setAttribute('title', title);
-  div.setAttribute('title', title);
+function getTip(data, value) {
+  return data[effects].map(([resourceIndex, resourceValue]) => {
+    return `
+      <div>
+        <span>${resources[resourceIndex][icon]}</span>
+        <span>
+          ${
+            resourceValue > 0
+              ? '+'
+              // show -0
+              : value === 0
+                ? '-'
+                : ''
+          }${value * resourceValue} per ${RESOURCE_TICK / 60}s
+        </span>
+      </div>`;
+  }).join('');
 }
 
 function setMaxAssignable(data, input) {

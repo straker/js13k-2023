@@ -13,7 +13,7 @@ import {
 } from '../data/buildings.js';
 import resources, { research, name as resourceName, icon, amount } from '../data/resources.js';
 import { on } from '../events.js';
-import { html, showWhenPrereqMet } from '../utils.js';
+import { html, showWhenPrereqMet, trucnateNumber } from '../utils.js';
 
 /**
  * Display a building the player can build.
@@ -26,15 +26,23 @@ export default function displayBuilding(data, index) {
   let locked = data[researchCost] && !data[unlocked];
 
   const button = html(`
-    <button class="${locked ? 'locked' : ''}" title="${data[description]}">
+    <button class="tipC ${locked ? 'locked' : ''}">
       ${locked
-        ? '<span class="lock" title="Building requires Research to unlock">🔒</span>' + displayCost(resources[research], data[researchCost])
+        ? '<span class="lock">🔒</span>' + displayCost(resources[research], data[researchCost])
         : ''
       }
       <span>${buildingName}</span>
-      <span class="cost">${data[cost].map(([resourceIndex, value]) => {
-        return displayCost(resources[resourceIndex], value);
-      }).join('')}</span>
+      <span class="tip">
+        <strong>${buildingName}</strong>
+        <span class="cost">${data[cost].map(([resourceIndex, value]) => {
+          return displayCost(resources[resourceIndex], value);
+        }).join('')}</span>
+        <p>${data[description]}.</p>
+        ${locked
+          ? `<em>Requires ${data[researchCost]} Research to unlock.</em>`
+          : ''
+        }
+      </span>
     </button>
   `);
   button.hidden = !data[visible];
@@ -116,11 +124,11 @@ function enableWhenCanAfford(index, costs) {
 }
 
 function canAfford(costs) {
-  return costs.every(([i, value]) => {
-    return state.get([resource, i, amount]) >= value
+  return costs.every(([resourceIndex, value]) => {
+    return state.get([resource, resourceIndex, amount]) >= value
   });
 }
 
 function displayCost(resourceData, value) {
-  return `<span class="${resourceData[resourceName]}" title="${resourceData[resourceName]}">${resourceData[icon]}${value}</span>`;
+  return `<span class="${resourceData[resourceName]}" title="${resourceData[resourceName]}">${resourceData[icon]} ${trucnateNumber(value)}</span>`;
 }

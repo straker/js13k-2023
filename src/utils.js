@@ -60,3 +60,16 @@ export function html(str) {
   div.innerHTML = str;
   return div.children[0];
 }
+
+/**
+ * Truncate a number to show 1K when over 1000 and 1M when over 1_000_000.
+ * @param {Number} value - Value to truncate.
+ * @return {Number|String}
+ */
+export function trucnateNumber(value) {
+  return value < 1e3
+    ? value | 0
+    : value < 1e6
+    ? (value / 1e3).toFixed(1) + 'K'
+    : (value / 1e6).toFixed(1) + 'M'
+}

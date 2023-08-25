@@ -174,7 +174,7 @@ export function initBuildings() {
       'Burners Camp',
       'Allows 3 Skeletons to craft Coal from Wood',
       [
-        [wood, 50]
+        [wood, 25]
       ],
       [
         [task, burners, assignable, 3]
@@ -190,7 +190,8 @@ export function initBuildings() {
       'Mine',
       'Allows 5 Skeletons to gather Iron Ore',
       [
-        [wood, 50]
+        [stone, 25],
+        [planks, 50],
       ],
       [
         [task, miners, assignable, 5]
@@ -206,7 +207,8 @@ export function initBuildings() {
       'Furnace',
       'Allows 2 Skeletons to craft Iron from Iron Ore and Charcoal',
       [
-        [wood, 50]
+        [wood, 25],
+        [blocks, 75]
       ],
       [
         [task, smelters, assignable, 2]
@@ -222,7 +224,8 @@ export function initBuildings() {
       'Smithy',
       'Allows 2 Skeletons to craft Tools from Iron Ore and Charcoal',
       [
-        [wood, 50]
+        [planks, 100],
+        [blocks, 80]
       ],
       [
         [task, blacksmiths, assignable, 2]
@@ -238,7 +241,9 @@ export function initBuildings() {
       'Weapons Workshop',
       'Allows 2 Skeleton to craft Swords from Iron Ore and Charcoal',
       [
-        [wood, 50]
+        [planks, 120],
+        [iron, 50],
+        [tools, 20]
       ],
       [
         [task, weaponsmiths, assignable, 2]
@@ -254,7 +259,8 @@ export function initBuildings() {
       'Bowyers Workshop',
       'Allows 2 Skeleton to craft Bows from Wood and Planks',
       [
-        [wood, 50]
+        [planks, 200],
+        [tools, 40]
       ],
       [
         [task, bowyers, assignable, 2]
@@ -270,7 +276,10 @@ export function initBuildings() {
       'Barrack',
       'Allows 8 Skeletons to become Soldiers',
       [
-        [wood, 50]
+        [planks, 150],
+        [blocks, 120],
+        [iron, 75],
+        [swords, 10]
       ],
       [
         [task, soldiers, assignable, 8]
@@ -284,12 +293,13 @@ export function initBuildings() {
     // 13
     [
       'Archery Range',
-      'Allows 8 Skeletons to become Archers',
+      'Allows 5 Skeletons to become Archers',
       [
-        [wood, 50]
+        [planks, 300],
+        [bows, 40]
       ],
       [
-        [task, archers, assignable, 8]
+        [task, archers, assignable, 5]
       ],
       [
         [building, laboratory, built, 1]
@@ -336,7 +346,7 @@ export function initBuildings() {
       'Freezer',
       'Increases max Corpses by 10',
       [
-        [wood, 50]
+        [wood, 50],
       ],
       [
         [resource, corpses, max, 10],
@@ -350,18 +360,20 @@ export function initBuildings() {
     // 16
     [
       'Warehouse',
-      'Increases max Wood, Stone, and Iron products by 50',
+      'Increases max Wood, Stone, and Iron products by 25',
       [
-        [wood, 50]
+        [wood, 60],
+        [planks, 25],
+        [blocks, 25]
       ],
       [
-        [resource, wood, max, 50],
-        [resource, planks, max, 50],
-        [resource, stone, max, 50],
-        [resource, blocks, max, 50],
-        [resource, charcoal, max, 50],
-        [resource, ironOre, max, 50],
-        [resource, iron, max, 50]
+        [resource, wood, max, 25],
+        [resource, planks, max, 25],
+        [resource, stone, max, 25],
+        [resource, blocks, max, 25],
+        [resource, charcoal, max, 25],
+        [resource, ironOre, max, 25],
+        [resource, iron, max, 25]
       ],
       [
         [building, laboratory, built, 1]

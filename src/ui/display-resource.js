@@ -21,7 +21,7 @@ import {
   bows
 } from '../data/resources.js';
 import { on } from '../events.js';
-import { html, showWhenPrereqMet } from '../utils.js';
+import { html, showWhenPrereqMet, trucnateNumber } from '../utils.js';
 
 /**
  * Display the amount of a resource the player has.
@@ -64,7 +64,7 @@ export default function displayResource(data, index) {
 }
 
 function setText(div, data, index) {
-  let text = `<span class="icon">${data[icon]}</span><span class="amount">${getTextNumber(data[amount] ?? 0)}${!data[max] ? '' : `/${getTextNumber(data[max])}`}</span>`;
+  let text = `<span class="icon">${data[icon]}</span><span class="amount">${trucnateNumber(data[amount] ?? 0)}${!data[max] ? '' : `/${trucnateNumber(data[max])}`}</span>`;
 
   // research can only ever increase
   if (index !== research) {
@@ -78,12 +78,4 @@ function setText(div, data, index) {
   }
 
   div.innerHTML = text;
-}
-
-function getTextNumber(value) {
-  return value < 1e3
-    ? value
-    : value < 1e6
-    ? (value / 1e3).toFixed(1) + 'K'
-    : (value / 1e6).toFixed(1) + 'M'
 }

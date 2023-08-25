@@ -22,6 +22,7 @@
 
   body {
     font-size: 18px;
+    color: #222;
   }
 
   main {
@@ -101,8 +102,9 @@
   button[aria-disabled="true"],
   button[aria-disabled="true"]:focus,
   button[aria-disabled="true"]:hover {
-    background: rgb(233, 233, 237);
-    opacity: 0.5;
+    background: rgba(233, 233, 237, 0.5);
+    color: rgba(0, 0, 0, 0.5);
+    border-color: rgba(0, 0, 0, 0.5);
   }
 
   input:focus {
@@ -114,7 +116,6 @@
   }
 
   .cost {
-    margin-left: auto;
     display: inline-flex;
     gap: 0.75rem;
   }
@@ -122,6 +123,7 @@
   .cost > span {
     display: inline-flex;
     align-items: center;
+    gap: 0.25rem;
   }
 
   .cost img {
@@ -196,10 +198,10 @@
     background: #fdfdfd;
   }
 
-  .locked .cost {
+/*  .locked .cost {
     opacity: 0.5;
   }
-
+*/
   #saved {
     position: absolute;
     right: 1.5rem;
@@ -226,6 +228,45 @@
 
   .down {
     color: #E1605B;
+  }
+
+  :is(.tipC:hover, .tipC:focus-visible) .tip {
+    visibility: visible;
+  }
+
+  .tipC {
+    position: relative;
+  }
+
+  .tip {
+    position: absolute;
+    z-index: 5;
+    left: 0;
+    background: #fdfdfd;
+    box-shadow: -3px 5px 6px #222;
+    border: 1px solid #222;
+    border-radius: 4px;
+    padding: 0.5rem 0.5rem;
+    width: 100%;
+    bottom: 120%;
+    display: inline-flex;
+    align-items: start;
+    flex-direction: column;
+    gap: 0.5rem;
+    visibility: hidden;
+    font-size: 0.9rem;
+    opacity: 1;
+    color: #222;
+  }
+
+  p {
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    text-align: left;
+  }
+
+  strong {
+    font-size: 1rem;
   }
   </style>
 </head>
