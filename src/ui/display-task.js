@@ -41,7 +41,6 @@ export default function displayTask(data, index) {
   const maxDiv = div.querySelector('.max');
   div.hidden = !data[visible];
   showWhenPrereqMet(data, prereq, div, task, index, visible);
-  ;
 
   // show tasks heading when first task is shown
   if (index === 0) {

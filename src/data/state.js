@@ -5,7 +5,8 @@ import { SAVE_KEY } from '../constants.js';
 import resources, {
   max,
   visible as resourceVisible,
-  amount
+  amount,
+  change
 } from './resources.js';
 import actions, {
   visible as actionVisible,
@@ -56,7 +57,7 @@ const state = {
     // limit what props are saved to those only changed by the
     // user
     const saveState = [
-      getSaveState(resources, [max, resourceVisible, amount]),
+      getSaveState(resources, [max, resourceVisible, amount, change]),
       getSaveState(actions, [actionVisible, clicked, actionDisabled, timer]),
       getSaveState(buildings, [unlocked, built, buildingVisible, buildingDisabled]),
       getSaveState(tasks, [assignable, assigned, taskVisible])

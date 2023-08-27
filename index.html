@@ -16,7 +16,6 @@
   html,
   body {
     height: 100%;
-    overflow: hidden;
     font-family: arial;
   }
 
@@ -213,23 +212,6 @@
     transition: opacity 2s linear;
   }
 
-  .trend {
-    display: none;
-    margin-left: auto;
-  }
-
-  .trend:not(:is(.up,.down)) {
-    visibility: hidden;
-  }
-
-  .up {
-    color: #5da23a;
-  }
-
-  .down {
-    color: #E1605B;
-  }
-
   :is(.tipC:hover, .tipC:focus-visible) .tip {
     visibility: visible;
   }
@@ -257,6 +239,17 @@
     font-size: 0.9rem;
     opacity: 1;
     color: #222;
+  }
+
+  .tip.b {
+    top: 120%;
+    bottom: unset;
+  }
+
+  #resG .tip {
+    display: block;
+    width: auto;
+    white-space: nowrap;
   }
 
   p {

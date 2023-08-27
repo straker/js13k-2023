@@ -1,4 +1,5 @@
 import { on } from './events.js';
+import { randInt } from './libs/kontra.js';
 
 /**
  * Traverse a nested array and return the value at the desired path. Each index of the `path` is the index of the array to traverse down at each level.
@@ -72,4 +73,50 @@ export function trucnateNumber(value) {
     : value < 1e6
     ? (value / 1e3).toFixed(1) + 'K'
     : (value / 1e6).toFixed(1) + 'M'
+}
+
+const soldiers = 0;
+const archers = 1;
+const soldierHp = 5;
+const soldierMinDmg = 1;
+const soldierMaxDmg = 4;
+const archerHp = 3;
+const archerMinDmg = 1;
+const archerMaxDmg = 2;
+
+window.attack = attack;
+export function attack(attackers, defenders) {
+  // defenders archers attack first
+  subAttack(archerMinDmg, archerMaxDmg, defenders[archers], attackers);
+
+  // attackers archers attack next
+  subAttack(archerMinDmg, archerMaxDmg, attackers[archers], defenders);
+
+  // soldiers attack each other at the same time
+  const defenderDmg = getDamage(soldierMinDmg, soldierMaxDmg, defenders[soldiers]);
+  const attackerDmg = getDamage(soldierMinDmg, soldierMaxDmg, attackers[soldiers]);
+
+  applyDamage(defenderDmg, attackers);
+  applyDamage(attackerDmg, defenders);
+}
+
+function getDamage(min, max, armyAmount) {
+  return randInt(min * armyAmount, max * armyAmount);
+}
+
+function subAttack(min, max, armyAmount, def) {
+  applyDamage(getDamage(min, max, armyAmount), def);
+}
+
+function applyDamage(dmg, def) {
+  // soldiers always take hits first
+  def[soldiers] = Math.ceil((soldierHp * def[soldiers] - dmg) / soldierHp);
+
+  // only rollover damage to archers if there are no more
+  // soldiers
+  if (def[soldiers] < 0) {
+    dmg = Math.abs(def[soldiers]) * soldierHp;
+    def[soldiers] = 0;
+    def[archers] = Math.ceil((archerHp * def[archers] - dmg) / archerHp);
+  }
 }

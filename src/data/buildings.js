@@ -66,6 +66,7 @@ export const outpost = 15;
 export const freezer = 16;
 export const warehouse = 17;
 export const armory = 18;
+export const necropolis = 19;
 
 const buildings = [];
 export default buildings;
@@ -341,7 +342,7 @@ export function initBuildings() {
       250
     ],
 
-    // 15
+    // 16
     [
       'Freezer',
       'Increases max Corpses by 10',
@@ -357,7 +358,7 @@ export function initBuildings() {
       60
     ],
 
-    // 16
+    // 17
     [
       'Warehouse',
       'Increases max Wood, Stone, and Iron products by 25',
@@ -381,7 +382,7 @@ export function initBuildings() {
       80
     ],
 
-    // 17
+    // 18
     [
       'Armory',
       'Increases max Tools, Swords, and Bows by 10',
@@ -397,6 +398,24 @@ export function initBuildings() {
         [building, laboratory, built, 1]
       ],
       120
+    ],
+
+    // 19
+    [
+      'Necropolis',
+      'The ultimate Necromancer structure. Build to reign supreme and win the game',
+      [
+        [planks, 1000],
+        [stone, 1500],
+        [iron, 500]
+      ],
+      [
+        ['win-game']
+      ],
+      [
+        [building, laboratory, built, 1]
+      ],
+      5000
     ]
   );
 }

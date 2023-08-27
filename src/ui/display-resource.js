@@ -21,6 +21,7 @@ import {
   bows
 } from '../data/resources.js';
 import { on } from '../events.js';
+import { RESOURCE_TICK } from '../constants.js';
 import { html, showWhenPrereqMet, trucnateNumber } from '../utils.js';
 
 /**
@@ -30,7 +31,7 @@ import { html, showWhenPrereqMet, trucnateNumber } from '../utils.js';
  * @param {Number} index - The current item of the data.
  */
 export default function displayResource(data, index) {
-  const div = html(`<div class="res" title="${data[name]}"></div>`);
+  const div = html(`<div class="tipC"></div>`);
   setText(div, data, index);
   div.hidden = !data[visible];
   showWhenPrereqMet(data, prereq, div, resource, index, visible);
@@ -64,18 +65,15 @@ export default function displayResource(data, index) {
 }
 
 function setText(div, data, index) {
-  let text = `<span class="icon">${data[icon]}</span><span class="amount">${trucnateNumber(data[amount] ?? 0)}${!data[max] ? '' : `/${trucnateNumber(data[max])}`}</span>`;
-
-  // research can only ever increase
-  if (index !== research) {
-    const trend = data[change] ?? 0;
-    text += `<span class="trend ${trend > 0
-      ? 'up'
-      : trend < 0
-      ? 'down'
-      : ''
-    }">${trend > 0 ? '&#9650;' : '&#9660;'}</span>`;
-  }
+  let text = `
+    <span class="icon">${data[icon]}</span>
+    <span class="amount">
+      ${trucnateNumber(data[amount] ?? 0)}${!data[max] ? '' : `/${trucnateNumber(data[max])}`}
+    </span>
+    <span class="tip b">
+      <b>${data[name]}</b>: ${data[change] > 0 ? '+' : ''}${data[change]} per ${RESOURCE_TICK / 60}s
+    </span>
+  `;
 
   div.innerHTML = text;
 }
