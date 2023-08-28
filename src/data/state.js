@@ -25,12 +25,16 @@ import tasks, {
   assigned,
   visible as taskVisible
 } from './tasks.js';
+import armies, {
+  trained
+} from './armies.js';
 
 // indices
 export const resource = 0;
 export const action = 1;
 export const building = 2;
 export const task = 3;
+export const army = 4;
 
 const state = {
   get(path, defaultValue) {
@@ -60,7 +64,9 @@ const state = {
       getSaveState(resources, [max, resourceVisible, amount, change]),
       getSaveState(actions, [actionVisible, clicked, actionDisabled, timer]),
       getSaveState(buildings, [unlocked, built, buildingVisible, buildingDisabled]),
-      getSaveState(tasks, [assignable, assigned, taskVisible])
+      getSaveState(tasks, [assignable, assigned, taskVisible]),
+      // TODO: may need to save upgrades
+      getSaveState(armies, [trained])
     ];
 
     setStoreItem(SAVE_KEY, saveState);
@@ -90,7 +96,8 @@ export function initState() {
     resources,
     actions,
     buildings,
-    tasks
+    tasks,
+    armies
   ];
 
   state._state = state.load(initialState);

@@ -39,7 +39,8 @@ export const ironOre = 8;
 export const iron = 9;
 export const tools = 10;
 export const swords = 11;
-export const bows = 12;
+export const armor = 12;
+export const bows = 13;
 
 let resources = [];
 export default resources;
@@ -170,6 +171,16 @@ export function initResources() {
     ],
 
     // 12
+    [
+      'Armor',
+      '🛡️',
+      10,
+      [
+        [building, armor, built, 1]
+      ]
+    ],
+
+    // 13
     [
       'Bows',
       '🏹',
