@@ -1,6 +1,7 @@
 import state, { resource, action } from '../data/state.js';
 import {
   name,
+  description,
   effects,
   prereq,
   timer,
@@ -9,7 +10,7 @@ import {
   disabled,
   clicked
 } from '../data/actions.js';
-import { amount, max } from '../data/resources.js';
+import resources, { name as resourceName, amount, max, icon } from '../data/resources.js';
 import { on } from '../events.js';
 import { html, showWhenPrereqMet } from '../utils.js';
 
@@ -20,10 +21,31 @@ import { html, showWhenPrereqMet } from '../utils.js';
  * @param {Number} index - The current item of the data.
  */
 export default function displayAction(data, index) {
+  const positiveEffect = data[effects].find(effect => effect[1] > 0);
+  const positiveResource = resources[ positiveEffect[0] ];
   const button = html(`
-    <button>
+    <button class="tipC">
       ${data[name]}
       <span class="cooldown"></span>
+      <span class="res"><span class="${positiveResource[resourceName]}">${positiveResource[icon]}</span> +${positiveEffect[1]}</span>
+      <span class="tip">
+        <strong>${data[name]}</strong>
+        <span class="cost">
+          ${
+            data[effects].map(([resourceIndex, value]) => {
+              return `
+                <span>
+                  ${value < 0
+                    ? `<span class="${resources[resourceIndex][resourceName]}">${resources[resourceIndex][icon]}</span> ${-value}`
+                    : ``
+                  }
+                </span>
+              `
+            }).join('')
+          }
+        </span>
+        <p>${data[description]}.</p>
+      </span>
     </button>
   `);
   const cooldownDiv = button.querySelector('span');

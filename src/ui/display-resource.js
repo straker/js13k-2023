@@ -17,9 +17,23 @@ import {
   ironOre,
   iron,
   tools,
-  swords,
-  bows
+  armaments,
+  armor,
+  bows,
+  militia,
+  infantry,
+  archers,
+  calvary
 } from '../data/resources.js';
+import armies, {
+  militia as militiaIndex,
+  infantry as infantryIndex,
+  archers as archersIndex,
+  calvary as calvaryIndex,
+  health,
+  defense,
+  attack
+} from '../data/armies.js';
 import { on } from '../events.js';
 import { RESOURCE_TICK } from '../constants.js';
 import { html, showWhenPrereqMet, trucnateNumber } from '../utils.js';
@@ -47,8 +61,8 @@ export default function displayResource(data, index) {
     setText(div, data, index);
   });
 
-  // `wG`, `sG`, `iG`, `tG`, `pop`, and `mG` are global HTML
-  // ids from index.html
+  // `wG`, `sG`, `iG`, `tG`, `aG`, `pop`, and `mG` are global
+  // HTML ids from index.html
   (
     [wood, planks].includes(index)
       ? wG
@@ -56,8 +70,10 @@ export default function displayResource(data, index) {
       ? sG
       : [charcoal, ironOre, iron].includes(index)
       ? iG
-      : [tools, swords, bows].includes(index)
+      : [tools, armaments, armor, bows].includes(index)
       ? tG
+      : [militia, infantry, archers, calvary].includes(index)
+      ? aG
       : index == skeletons
       ? pop
       : mG
@@ -65,15 +81,44 @@ export default function displayResource(data, index) {
 }
 
 function setText(div, data, index) {
+  const armyMap = {
+    [militia]: armies[militiaIndex],
+    [infantry]: armies[infantryIndex],
+    [archers]: armies[archersIndex],
+    [calvary]: armies[calvaryIndex],
+  };
+  const isUnit = [militia, infantry, archers, calvary].includes(index);
+
   let text = `
-    <span class="icon">${data[icon]}</span>
+    <span class="icon ${data[name]}">${data[icon]}</span>
     <span class="amount">
       ${trucnateNumber(data[amount] ?? 0)}${!data[max] ? '' : `/${trucnateNumber(data[max])}`}
     </span>
-    <span class="tip b">
-      <b>${data[name]}</b>: ${data[change] > 0 ? '+' : ''}${data[change]} per ${RESOURCE_TICK / 60}s
-    </span>
+    ${index !== skeletons
+      ? `
+        <span class="tip res b${isUnit ? '  unit' : ''}${index == skeletons ? ' r' : ''}">
+          <b>${data[name]}</b>${
+            !isUnit
+              ? `: ${data[change] > 0 ? '+' : ''}${data[change] ?? 0} per ${RESOURCE_TICK / 60}s`
+              : ''
+          }
+          ${
+            [militia, infantry, archers, calvary].includes(index)
+              ? displayArmyStats(armyMap[index])
+              : ''
+          }
+        </span>`
+      : ''
+    }
   `;
 
   div.innerHTML = text;
+}
+
+function displayArmyStats(unit) {
+  return `
+    <span>${unit[health]} HP</span>
+    <span>${unit[defense]} DEF</span>
+    <span>${unit[attack]} ATK</span>
+  `;
 }

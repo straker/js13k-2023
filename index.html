@@ -17,6 +17,7 @@
   body {
     height: 100%;
     font-family: arial;
+    margin: 0;
   }
 
   body {
@@ -30,6 +31,7 @@
     grid-template-rows: auto;
     grid-template-areas:
       "resources resources resources resources"
+      "actP bldP tskP tskP"
   }
 
   h2 {
@@ -61,13 +63,14 @@
     width: 6rem;
   }
 
-  .g .res {
+  /*.g .res {
     width: 100%;
     display: flex;
     align-items: center;
-  }
+  }*/
 
   button {
+    display: flex;
     padding: 0.25rem 0.5rem;
     background: rgb(233, 233, 237);
     border: 1px solid;
@@ -110,10 +113,6 @@
     outline: 0;
   }
 
-  #bldG button {
-    display: flex;
-  }
-
   .cost {
     display: inline-flex;
     gap: 0.75rem;
@@ -127,6 +126,13 @@
 
   .cost img {
     height: 75%;
+  }
+
+  #actG .res {
+    margin-left: auto;
+    display: inline-flex;
+    gap: 0.25rem;
+    align-items: center;
   }
 
   #tskG > div,
@@ -152,7 +158,8 @@
   }
 
   #tskInpT .icon {
-    display: none;
+    width: auto;
+    height: auto;
   }
 
   input {
@@ -187,7 +194,7 @@
     aspect-ratio: 1 / 1;
   }
 
-  .Research {
+  .Research:not(.icon) {
     position: relative;
     margin-left: -0.65rem;
     border: 1px solid black;
@@ -197,10 +204,10 @@
     background: #fdfdfd;
   }
 
-/*  .locked .cost {
-    opacity: 0.5;
+  .icon.Archers {
+    text-shadow: none;
   }
-*/
+
   #saved {
     position: absolute;
     right: 1.5rem;
@@ -229,7 +236,7 @@
     border: 1px solid #222;
     border-radius: 4px;
     padding: 0.5rem 0.5rem;
-    width: 100%;
+    min-width: 100%;
     bottom: 120%;
     display: inline-flex;
     align-items: start;
@@ -246,7 +253,12 @@
     bottom: unset;
   }
 
-  #resG .tip {
+  .tip.r {
+    right: 120%;
+    left: unset;
+  }
+
+  .tip.res {
     display: block;
     width: auto;
     white-space: nowrap;
@@ -261,24 +273,78 @@
   strong {
     font-size: 1rem;
   }
+
+  .tip.unit {
+    display: inline-grid;
+    grid-template-columns: 2;
+    grid-template-rows: auto;
+    gap: 0.5rem 1.5rem;
+    grid-template-areas:
+      'header header'
+  }
+
+  .tip.unit > b {
+    grid-area: header;
+  }
+
+  .Mana:not(.icon) {
+    text-shadow: 1px 0px 1px #AB6626, 0px 1px 1px #AB6626, 0px -1px 1px #AB6626, -1px 0px 1px #AB6626;
+  }
+
+  pre {
+    font-size: 0.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 1rem 0 0;
+  }
+
+  #tskP {
+    grid-area: tskP;
+  }
   </style>
 </head>
 <body>
   <main>
     <div id="resG">
       <div id="saved" class="hide">Game Saved</div>
-      <div class="g" id="wG"></div>
-      <div class="g" id="sG"></div>
-      <div class="g" id="iG"></div>
-      <div class="g" id="tG"></div>
-      <div class="g" id="mG"></div>
+      <div class="g" id="wG"></div> <!-- wood group -->
+      <div class="g" id="sG"></div> <!-- stone group -->
+      <div class="g" id="iG"></div> <!-- iron group -->
+      <div class="g" id="tG"></div> <!-- tools group -->
+      <div class="g" id="mG"></div> <!-- misc group -->
+      <div class="g" id="aG"></div> <!-- army group -->
     </div>
+    <pre id="actP"><span>     __/\__
+. _  \\''//
+-( )-/_||_\
+ .'. \_()_/
+  |   | . \
+  |mrf| .  \
+ .'. ,\_____'.
+</span></pre>
+    <pre hidden id="bldP"><span>       _
+     _|=|__________
+    /              \
+   /                \
+  /__________________\
+   ||  || /--\ ||  ||
+   ||[]|| | .| ||[]||
+   ||__||_|__|_||__||</span></pre>
+    <pre hidden id="tskP"><span>               .---.
+     |________/     \________
+()===|_______( () () )_______>
+     | VK     \  M  /
+               |HHH|
+               `---'
+</span></pre>
     <div id="actG"><h2>Actions</h2></div>
     <div id="bldG"><h2 hidden id="bldT">Buildings</h2></div>
     <div id="tskG"><h2 hidden id="tskT">Tasks</h2></div>
     <div id="tskInpG">
       <div hidden id="tskInpT">
-        <h2>&nbsp;</h2>Skeletons <div id="pop"></div>
+        <h2>&nbsp;</h2><div id="pop"></div>
       </div>
     </div>
   </main>

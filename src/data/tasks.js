@@ -10,7 +10,7 @@ import {
   ironOre,
   iron,
   tools,
-  swords,
+  armaments,
   bows
 } from './resources.js';
 import {
@@ -26,9 +26,8 @@ import {
   furnace,
   smithy,
   weaponsWorkshop,
+  armorersWorkshop,
   bowyersWorkshop,
-  barrack,
-  archeryRange,
   alchemyLab,
   outpost
 } from './buildings.js';
@@ -52,11 +51,10 @@ export const miners = 7;
 export const smelters = 8;
 export const blacksmiths = 9;
 export const weaponsmiths = 10;
-export const bowyers = 11;
-export const soldiers = 12;
-export const archers = 13;
-export const alchemists = 14;
-export const snatchers = 15;
+export const armorsmiths = 11;
+export const bowyers = 12;
+export const alchemists = 13;
+export const snatchers = 14;
 
 const tasks = [];
 export default tasks;
@@ -186,7 +184,7 @@ export function initTasks() {
       [
         [iron, -1],
         [charcoal, -1],
-        [swords, 1]
+        [armaments, 1]
       ],
       [
         [building, weaponsWorkshop, built, 1]
@@ -194,6 +192,19 @@ export function initTasks() {
     ],
 
     // 11
+    [
+      'Armorsmiths',
+      [
+        [iron, -1],
+        [charcoal, -1],
+        [armaments, 1]
+      ],
+      [
+        [building, armorersWorkshop, built, 1]
+      ]
+    ],
+
+    // 12
     [
       'Bowyers',
       [
@@ -206,29 +217,7 @@ export function initTasks() {
       ]
     ],
 
-    // 12
-    [
-      'Soldiers',
-      [
-        [swords, -1]
-      ],
-      [
-        [building, barrack, built, 1]
-      ]
-    ],
-
     // 13
-    [
-      'Archers',
-      [
-        [bows, -1]
-      ],
-      [
-        [building, archeryRange, built, 1]
-      ]
-    ],
-
-    // 14
     [
       'Alchemists',
       [
@@ -239,7 +228,7 @@ export function initTasks() {
       ]
     ],
 
-    // 15
+    // 14
     [
       'Snatchers',
       [

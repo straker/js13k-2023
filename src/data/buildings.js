@@ -5,6 +5,7 @@ import resources, {
   wood,
   stone,
   corpses,
+  mana,
   skeletons,
   planks,
   research,
@@ -13,7 +14,7 @@ import resources, {
   ironOre,
   iron,
   tools,
-  swords,
+  armaments,
   bows
 } from './resources.js';
 import {
@@ -28,9 +29,8 @@ import {
   smelters,
   blacksmiths,
   weaponsmiths,
+  armorsmiths,
   bowyers,
-  soldiers,
-  archers,
   alchemists,
   snatchers
 } from './tasks.js';
@@ -58,12 +58,12 @@ export const mine = 7;
 export const furnace = 8;
 export const smithy = 9;
 export const weaponsWorkshop = 10;
-export const bowyersWorkshop = 11;
-export const barrack = 12;
-export const archeryRange = 13;
-export const alchemyLab = 14;
-export const outpost = 15;
-export const freezer = 16;
+export const armorersWorkshop = 11;
+export const bowyersWorkshop = 12;
+export const alchemyLab = 13;
+export const outpost = 14;
+export const morgue = 15;
+export const manaPillar = 16;
 export const warehouse = 17;
 export const armory = 18;
 export const necropolis = 19;
@@ -76,7 +76,7 @@ export function initBuildings() {
     // 0
     [
       'Ritual Circle',
-      `Increases max Skeletons by 4`,
+      `Allows raising Skeletons and Increases max Skeletons by 4`,
       [
         // costs are always taken from a resource amount so we
         // can skip putting that data here
@@ -240,7 +240,7 @@ export function initBuildings() {
     // 10
     [
       'Weapons Workshop',
-      'Allows 2 Skeleton to craft Swords from Iron Ore and Charcoal',
+      'Allows 2 Skeleton to craft Armaments from Iron Ore and Charcoal',
       [
         [planks, 120],
         [iron, 50],
@@ -257,6 +257,24 @@ export function initBuildings() {
 
     // 11
     [
+      'Armorers Workshop',
+      'Allows 2 Skeleton to craft Armor from Iron Ore and Charcoal',
+      [
+        [planks, 120],
+        [iron, 50],
+        [tools, 20]
+      ],
+      [
+        [task, armorsmiths, assignable, 2]
+      ],
+      [
+        [building, laboratory, built, 1]
+      ],
+      700
+    ],
+
+    // 12
+    [
       'Bowyers Workshop',
       'Allows 2 Skeleton to craft Bows from Wood and Planks',
       [
@@ -272,43 +290,7 @@ export function initBuildings() {
       800
     ],
 
-    // 12
-    [
-      'Barrack',
-      'Allows 8 Skeletons to become Soldiers',
-      [
-        [planks, 150],
-        [blocks, 120],
-        [iron, 75],
-        [swords, 10]
-      ],
-      [
-        [task, soldiers, assignable, 8]
-      ],
-      [
-        [building, laboratory, built, 1]
-      ],
-      500
-    ],
-
     // 13
-    [
-      'Archery Range',
-      'Allows 5 Skeletons to become Archers',
-      [
-        [planks, 300],
-        [bows, 40]
-      ],
-      [
-        [task, archers, assignable, 5]
-      ],
-      [
-        [building, laboratory, built, 1]
-      ],
-      700
-    ],
-
-    // 14
     [
       'Alchemy Lab',
       'Allows 4 Skeleton to generate greater Research',
@@ -326,7 +308,7 @@ export function initBuildings() {
       1000
     ],
 
-    // 15
+    // 14
     [
       'Outpost',
       'Allows 2 Skeletons to gather Corpses',
@@ -342,20 +324,38 @@ export function initBuildings() {
       250
     ],
 
-    // 16
+    // 15
     [
-      'Freezer',
-      'Increases max Corpses by 10',
+      'Morgue',
+      'Increases max Corpses by 3',
       [
-        [wood, 50],
+        [wood, 150],
+        [stone, 150],
       ],
       [
-        [resource, corpses, max, 10],
+        [resource, corpses, max, 3],
       ],
       [
         [building, laboratory, built, 1]
       ],
       60
+    ],
+
+    // 16
+    [
+      'Mana Pillar',
+      'Increases max Mana by 10',
+      [
+        [stone, 100],
+        [iron, 25]
+      ],
+      [
+        [resource, mana, max, 10],
+      ],
+      [
+        [building, laboratory, built, 1]
+      ],
+      100
     ],
 
     // 17
@@ -385,13 +385,13 @@ export function initBuildings() {
     // 18
     [
       'Armory',
-      'Increases max Tools, Swords, and Bows by 10',
+      'Increases max Tools, Armaments, and Bows by 10',
       [
         [wood, 50]
       ],
       [
         [resource, tools, max, 10],
-        [resource, swords, max, 10],
+        [resource, armaments, max, 10],
         [resource, bows, max, 10]
       ],
       [

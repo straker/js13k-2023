@@ -176,6 +176,10 @@ export function battle(attackers, defenders) {
     // upgrades). The Health (with value H) has the value of
     // previous round (initial value of the unit if it is the
     // first round).
+
+    // this "simulates" battles where there are breaks or that
+    // would last multiple days and give time for armies to
+    // regroup, recover, and rearm
     attackers.map(unit => {
       unit[def] = armies[ unit[unitType] ][defense];
       unit[atk] = armies[ unit[unitType] ][attack];
@@ -251,7 +255,18 @@ export function battle(attackers, defenders) {
     defenders = defenders.filter(unit => unit[hp] > 0);
   }
 
-  return { attackers, defenders };
+  // undo conversion back into amount of each type
+  const endAttackers = [0,0,0,0];
+  const endDefenders = [0,0,0,0];
+
+  attackers.map(([unitType]) => {
+    endAttackers[unitType]++;
+  });
+  defenders.map(([unitType]) => {
+    endDefenders[unitType]++;
+  });
+
+  return { attackers: endAttackers, defenders: endDefenders };
 }
 
 function attackUnit(attacker, defender, atkI, defI) {

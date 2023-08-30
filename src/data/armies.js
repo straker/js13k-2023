@@ -1,23 +1,13 @@
-import { resource } from './state.js';
-import {
-  amount,
-  skeletons,
-  swords,
-  bows,
-  armor
-} from './resources.js';
-
 // indices
 export const name = 0;
 export const description = 1;
-export const cost = 2;
-export const health = 3;
-export const defense = 4;
-export const attack = 5;
-export const advantage = 6;
-export const prereq = 7;
-export const trained = 8;
-export const visible = 9;
+export const health = 2;
+export const defense = 3;
+export const attack = 4;
+export const advantage = 5;
+export const prereq = 6;
+export const trained = 7;
+export const visible = 8;
 
 export const militia = 0;
 export const infantry = 1;
@@ -33,24 +23,15 @@ export function initArmies() {
     [
       'Militia',
       'Unarmed and unarmored Skeletons. Weak vs everything.',
-      [
-        [resource, skeletons, amount, -1]
-      ],
       40,
       0,
-      5,
-      []
+      5
     ],
 
     // 1
     [
       'Infantry',
       'Armed and armored Skeletons. Good vs Calvary.',
-      [
-        [resource, skeletons, amount, -1],
-        [resource, swords, amount, -1],
-        [resource, armor, amount, -1]
-      ],
       100,
       25,
       15,
@@ -61,11 +42,6 @@ export function initArmies() {
     [
       'Archers',
       'Skeletons with Bows. Good vs Infantry.',
-      [
-        [resource, skeletons, amount, -1],
-        [resource, bows, amount, -1],
-        [resource, armor, amount, -1]
-      ],
       75,
       14,
       9,
@@ -76,12 +52,6 @@ export function initArmies() {
     [
       'Calvary',
       'Skeletons on horses. Good vs Archers.',
-      [
-        [resource, skeletons, amount, -1],
-        [resource, swords, amount, -1],
-        [resource, armor, amount, -1],
-        // [resource, horses, amount, -1],
-      ],
       150,
       40,
       25,

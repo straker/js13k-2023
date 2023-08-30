@@ -34,9 +34,11 @@ export default function displayBuilding(data, index) {
       <span>${buildingName}</span>
       <span class="tip">
         <strong>${buildingName}</strong>
-        <span class="cost">${data[cost].map(([resourceIndex, value]) => {
-          return displayCost(resources[resourceIndex], value);
-        }).join('')}</span>
+        <span class="cost">
+          ${data[cost].map(([resourceIndex, value]) => {
+            return displayCost(resources[resourceIndex], value);
+          }).join('')}
+        </span>
         <p>${data[description]}.</p>
         ${locked
           ? `<em>Requires ${data[researchCost]} Research to unlock.</em>`
@@ -51,10 +53,11 @@ export default function displayBuilding(data, index) {
 
   // show building heading when first building is shown
   if (index === 0) {
-    bldT.hidden = !data[visible];
+    // `bldP` and `bltT` are global HTML ids from index.html
+    bldP.hidden = bldT.hidden = !data[visible];
+
     on([building, 0, visible], (value) => {
-      // `bldT` is a global HTML id from index.html
-      bldT.hidden = !value;
+      bldP.hidden = bldT.hidden = !value;
     });
   }
 
@@ -130,5 +133,5 @@ function canAfford(costs) {
 }
 
 function displayCost(resourceData, value) {
-  return `<span class="${resourceData[resourceName]}" title="${resourceData[resourceName]}">${resourceData[icon]} ${trucnateNumber(value)}</span>`;
+  return `<span class="${resourceData[resourceName]}">${resourceData[icon]} ${trucnateNumber(value)}</span>`;
 }
