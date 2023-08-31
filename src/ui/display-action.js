@@ -48,7 +48,7 @@ export default function displayAction(data, index) {
   );
   const cooldownSpan = html('<span class="cooldown"></span>');
   const benefitSpan = html(`
-    <span class="res">
+    <span class="btn-r">
       ${
         data[effects].map(([resourceIndex, value]) => {
           return displayCost(resources[resourceIndex], value, '+');
@@ -149,7 +149,7 @@ function canPerform(data) {
     data[timer] <= 0 &&
     canAfford(data[cost]) &&
     data[effects].some(([resourceIndex]) => {
-      return state.get([resource, resourceIndex, amount]) < state.get([resource, resourceIndex, max]);
+      return (state.get([resource, resourceIndex, amount]) ?? 0) < (state.get([resource, resourceIndex, max]) ?? Infinity);
     })
   );
 }

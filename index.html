@@ -86,7 +86,7 @@
     margin-right: 0.35rem;
     display: inline-flex;
     align-items: center;
-    text-shadow: 1px 0px 1px #fdfdfd, 0px 1px 1px #fdfdfd, 0px -1px 1px #fdfdfd, -1px 0px 1px #fdfdfd
+    text-shadow: 1px 0px 0 #fdfdfd, 0px 1px 0 #fdfdfd, 0px -1px 0 #fdfdfd, -1px 0px 0 #fdfdfd
   }
 
   .cooldown {
@@ -128,7 +128,7 @@
     height: 75%;
   }
 
-  #actG .res {
+  .btn-r {
     margin-left: auto;
     display: inline-flex;
     gap: 0.25rem;
@@ -184,6 +184,8 @@
   img {
     filter: drop-shadow(1px 0 #fdfdfd) drop-shadow(-1px 0 #fdfdfd) drop-shadow(0 1px #fdfdfd) drop-shadow(0 -1px #fdfdfd);
     width: 1rem;
+    height: auto;
+    vertical-align: text-bottom;
   }
 
   .lock {
@@ -196,6 +198,10 @@
     position: relative;
     z-index: 2;
     aspect-ratio: 1 / 1;
+  }
+
+  #bldG .locked .btn-r {
+    display: none;
   }
 
   .Research:not(.icon) {
@@ -286,8 +292,13 @@
     grid-area: header;
   }
 
-  .Mana .cost-icon {
-    text-shadow: 1px 0px 1px #AB6626, 0px 1px 1px #AB6626, 0px -1px 1px #AB6626, -1px 0px 1px #AB6626;
+  .cost-icon,
+  p span,
+  .lock {
+    text-shadow: 1px 0px 0 #222, 0px 1px 0 #222, 0px -1px 0 #222, -1px 0px 0 #222;
+  }
+  :is(.skeletons, .Archers) .cost-icon {
+    text-shadow: none;
   }
 
   pre {
@@ -301,6 +312,10 @@
 
   #tskP {
     grid-area: tskP;
+  }
+
+  p span {
+    margin: 0 0.15rem;
   }
   </style>
 </head>

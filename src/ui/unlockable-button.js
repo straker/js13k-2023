@@ -46,9 +46,9 @@ export default class UnlockableButton {
               return displayCost(resources[resourceIndex], value);
             }).join('')}
           </span>
-          <p>${data[description]}.</p>
+          <p>${data[description]}</p>
           ${locked
-            ? `<em>Requires ${data[researchCost]} Research to unlock.</em>`
+            ? `<em>Requires ${data[researchCost]} Research to unlock</em>`
             : ''
           }
         </span>

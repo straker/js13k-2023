@@ -9,13 +9,14 @@ import resources, {
   change
 } from './resources.js';
 import actions, {
+  unlocked as actionUnlocked,
   visible as actionVisible,
   clicked,
   disabled as actionDisabled,
   timer
 } from './actions.js';
 import buildings, {
-  unlocked,
+  unlocked as buildingUnlocked,
   built,
   visible as buildingVisible,
   disabled as buildingDisabled
@@ -62,8 +63,8 @@ const state = {
     // user
     const saveState = [
       getSaveState(resources, [max, resourceVisible, amount, change]),
-      getSaveState(actions, [actionVisible, clicked, actionDisabled, timer]),
-      getSaveState(buildings, [unlocked, built, buildingVisible, buildingDisabled]),
+      getSaveState(actions, [actionUnlocked, actionVisible, clicked, actionDisabled, timer]),
+      getSaveState(buildings, [buildingUnlocked, built, buildingVisible, buildingDisabled]),
       getSaveState(tasks, [assignable, assigned, taskVisible]),
       // TODO: may need to save upgrades
       getSaveState(armies, [trained])

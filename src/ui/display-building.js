@@ -47,6 +47,9 @@ export default function displayBuilding(data, index) {
     visible,
     disabled
   );
+  const builtDiv = html(`<span class="btn-r">${data[built] ?? 0}</span>`);
+
+  button.appendChild(builtDiv);
 
   // show building heading when first building is shown
   if (index === 0) {
@@ -57,6 +60,11 @@ export default function displayBuilding(data, index) {
       bldP.hidden = bldT.hidden = !value;
     });
   }
+
+  // bind built state to built number
+  on([building, index, built], (value) => {
+    builtDiv.textContent = value;
+  });
 
   // `bldG` is a global HTML id from index.html
   bldG.appendChild(button);

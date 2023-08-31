@@ -11,7 +11,7 @@ import {
   corpses,
   mana,
   skeletons,
-  armaments,
+  weapons,
   armor,
   bows,
   militia,
@@ -151,7 +151,7 @@ export function initActions() {
       [
         [mana, 150],
         [corpses, 8],
-        [armaments, 8],
+        [weapons, 8],
         [armor, 8],
       ],
       700
@@ -191,7 +191,7 @@ export function initActions() {
       [
         [mana, 250],
         [corpses, 8],
-        [armaments, 4],
+        [weapons, 4],
         [armor, 8]
       ],
       1100

@@ -17,7 +17,7 @@ import {
   ironOre,
   iron,
   tools,
-  armaments,
+  weapons,
   armor,
   bows,
   militia,
@@ -70,7 +70,7 @@ export default function displayResource(data, index) {
       ? sG
       : [charcoal, ironOre, iron].includes(index)
       ? iG
-      : [tools, armaments, armor, bows].includes(index)
+      : [tools, weapons, armor, bows].includes(index)
       ? tG
       : [militia, infantry, archers, calvary].includes(index)
       ? aG
