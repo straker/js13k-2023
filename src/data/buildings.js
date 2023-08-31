@@ -43,8 +43,8 @@ export const effects = 3;
 export const prereq = 4;
 export const researchCost = 5;
 export const unlocked = 6;
-export const built = 7;
-export const visible = 8;
+export const visible = 7;
+export const built = 8;
 export const disabled = 9;
 
 export const rituralCircle = 0;
@@ -76,7 +76,7 @@ export function initBuildings() {
     // 0
     [
       'Ritual Circle',
-      `Allows raising Skeletons and Increases max Skeletons by 4`,
+      `Allows reanimating Skeletons and increases max Skeletons by 4`,
       [
         // costs are always taken from a resource amount so we
         // can skip putting that data here
@@ -270,7 +270,7 @@ export function initBuildings() {
       [
         [building, laboratory, built, 1]
       ],
-      700
+      600
     ],
 
     // 12

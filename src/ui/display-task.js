@@ -122,6 +122,10 @@ export default function displayTask(data, index) {
         return;
       }
 
+      // TODO: figure out way to have a total change from all tasks so if a user
+      // is at 300/300 wood, has 10 cutters and 10 carpenters, the end result is
+      // 300/300 wood and +10 planks (instead of 290/300 wood)
+
       // ensure player has all the costs before fulfilling task
       const costs = data[effects].filter(([, value]) => value < 0);
       const gains = data[effects].filter(([, value]) => value > 0);
@@ -136,9 +140,8 @@ export default function displayTask(data, index) {
           Math.min(
             perValue + (state.get([resource, resourceIndex, amount]) - perValue),
             perValue,
-            canAfford
-          )
-          / -value
+            canAfford * -value
+          ) / -value
         ) | 0;
 
         return canAfford > 0;
@@ -150,11 +153,19 @@ export default function displayTask(data, index) {
       // for
       gains.map(([resourceIndex, value]) => {
         const perValue = value * canAfford;
-        canAfford = Math.min(
-          (state.get([resource, resourceIndex, max]) ?? Infinity) - (state.get([resource, resourceIndex, amount]) ?? 0),
-          canAfford
-        );
+        canAfford = Math.ceil(
+          Math.min(
+            (state.get([resource, resourceIndex, max]) ?? Infinity) - (state.get([resource, resourceIndex, amount]) ?? 0),
+            canAfford
+          ) / value
+        )
       });
+
+      // console.log({
+      //   name: data[name],
+      //   assigned: data[assigned],
+      //   canAfford
+      // })
 
       data[effects].map(([resourceIndex, value]) => {
         const resourceMax = state.get([resource, resourceIndex, max]);

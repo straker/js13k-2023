@@ -2,17 +2,28 @@ import state, { resource, action } from '../data/state.js';
 import {
   name,
   description,
+  cooldown,
   effects,
   prereq,
-  timer,
-  cooldown,
+  cost,
+  researchCost,
+  unlocked,
   visible,
+  clicked,
   disabled,
-  clicked
+  timer
 } from '../data/actions.js';
-import resources, { name as resourceName, amount, max, icon } from '../data/resources.js';
+import resources, {
+  max,
+  amount
+} from '../data/resources.js';
 import { on } from '../events.js';
-import { html, showWhenPrereqMet } from '../utils.js';
+import {
+  html,
+  displayCost,
+  canAfford
+} from '../utils.js';
+import UnlockableButton from './unlockable-button.js';
 
 /**
  * Display a manual action the player can perform.
@@ -21,49 +32,60 @@ import { html, showWhenPrereqMet } from '../utils.js';
  * @param {Number} index - The current item of the data.
  */
 export default function displayAction(data, index) {
-  const positiveEffect = data[effects].find(effect => effect[1] > 0);
-  const positiveResource = resources[ positiveEffect[0] ];
-  const button = html(`
-    <button class="tipC">
-      ${data[name]}
-      <span class="cooldown"></span>
-      <span class="res"><span class="${positiveResource[resourceName]}">${positiveResource[icon]}</span> +${positiveEffect[1]}</span>
-      <span class="tip">
-        <strong>${data[name]}</strong>
-        <span class="cost">
-          ${
-            data[effects].map(([resourceIndex, value]) => {
-              return `
-                <span>
-                  ${value < 0
-                    ? `<span class="${resources[resourceIndex][resourceName]}">${resources[resourceIndex][icon]}</span> ${-value}`
-                    : ``
-                  }
-                </span>
-              `
-            }).join('')
-          }
-        </span>
-        <p>${data[description]}.</p>
-      </span>
-    </button>
+  const button = new ActionButton(
+    data,
+    index,
+    action,
+    name,
+    description,
+    cost,
+    effects,
+    prereq,
+    researchCost,
+    unlocked,
+    visible,
+    disabled
+  );
+  const cooldownSpan = html('<span class="cooldown"></span>');
+  const benefitSpan = html(`
+    <span class="res">
+      ${
+        data[effects].map(([resourceIndex, value]) => {
+          return displayCost(resources[resourceIndex], value, '+');
+        }).join('')
+      }
+    </span>
   `);
-  const cooldownDiv = button.querySelector('span');
-  button.hidden = !data[visible];
-  button.setAttribute('aria-disabled', !!data[disabled]);
-  showWhenPrereqMet(data, prereq, button, action, index, visible);
 
-  // bind disabled state to the aria-disabled attribute
-  on([action, index, disabled], (value) => {
-    button.setAttribute('aria-disabled', !!value);
-  });
+  button.appendChild(cooldownSpan);
+  button.appendChild(benefitSpan);
 
-  // perform action
-  button.addEventListener('click', (e) => {
-    if (data[disabled]) {
-      return e.preventDefault();
+  // update action cooldown timer
+  setCooldown(data, cooldownSpan);
+  on(['timer-tick'], (dt) => {
+    if (data[timer] <= 0) {
+      return;
     }
 
+    const value = state.set([action, index, timer, -dt]);
+    setCooldown(data, cooldownSpan);
+
+    // re-enable action if timer expires and player can perform action
+    if (canPerform(data)) {
+      state.set([action, index, disabled, false]);
+    }
+  });
+
+  // `actG` is a global HTML id from index.html
+  actG.appendChild(button);
+}
+
+class ActionButton extends UnlockableButton {
+  constructor(...args) {
+    super(...args);
+  }
+
+  whenClicked(data, index) {
     state.set([action, index, clicked, 1]);
     data[effects].map(([resourceIndex, value]) => {
       state.set(
@@ -73,61 +95,61 @@ export default function displayAction(data, index) {
     });
     state.set([action, index, disabled, true]);
     state.set([action, index, timer, data[cooldown]]);
-  });
+  }
 
-  // update action cooldown timer
-  setCooldown(data, cooldownDiv);
-  on(['timer-tick'], (dt) => {
-    if (data[timer] <= 0) {
-      return;
-    }
+  canAfford(data) {
+    return canPerform(data);
+  }
 
-    const value = state.set([action, index, timer, -dt]);
-    setCooldown(data, cooldownDiv);
+  // re-enable action if resource amount or max changes (but
+  // only if timer isn't going)
+  enableWhenCanAfford(data, index) {
+    data[effects].map(([resourceIndex]) => {
+      on([resource, resourceIndex, amount], () => {
+        if (!data[visible]) return;
 
-    // re-enable action if timer expires and player can perform action
-    if (
-      value <= 0 &&
-      canPeform(data[effects])
-    ) {
-      state.set([action, index, disabled, false]);
-    }
-  });
+        if (canPerform(data)) {
+          state.set([action, index, disabled, false]);
+        }
+      });
 
-  // re-enable action if resource amount or max changes (but only if timer isn't going)
-  data[effects].map(([resourceIndex]) => {
-    on([resource, resourceIndex, amount], () => {
-      if (data[timer] <= 0 && canPeform(data[effects])) {
-        state.set([action, index, disabled, false]);
-      }
+      on([resource, resourceIndex, max], () => {
+        if (!data[visible]) return;
+
+        if (canPerform(data)) {
+          state.set([action, index, disabled, false]);
+        }
+      });
     });
 
-    on([resource, resourceIndex, max], () => {
-      if (data[timer] <= 0 && canPeform(data[effects])) {
-        state.set([action, index, disabled, false]);
-      }
-    });
-  });
+    data[cost].map(([resourceIndex]) => {
+      on([resource, resourceIndex, amount], () => {
+        if (!data[visible]) return;
 
-  // `actG` is a global HTML id from index.html
-  actG.appendChild(button);
+        let isDisabled = true;
+        if (canPerform(data)) {
+          isDisabled = false;
+        }
+
+        state.set([action, index, disabled, isDisabled]);
+      });
+    });
+  }
 }
 
-function setCooldown(data, cooldownDiv) {
+function setCooldown(data, cooldownSpan) {
   const width = data[timer] <= 0
     ? 0
     : data[timer] / data[cooldown] * 100 + '%';
-  cooldownDiv.style.width = width;
+  cooldownSpan.style.width = width;
 }
 
-function canPeform(effects) {
-  return effects.every(([resourceIndex, value]) => {
-    const curAmount = state.get([resource, resourceIndex, amount]);
-
-    if (value > 0) {
-      return curAmount < state.get([resource, resourceIndex, max])
-    }
-
-    return curAmount > 0;
-  });
+function canPerform(data) {
+  return (
+    data[timer] <= 0 &&
+    canAfford(data[cost]) &&
+    data[effects].some(([resourceIndex]) => {
+      return state.get([resource, resourceIndex, amount]) < state.get([resource, resourceIndex, max]);
+    })
+  );
 }

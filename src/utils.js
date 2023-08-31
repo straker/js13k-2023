@@ -6,6 +6,12 @@ import armies, {
   attack,
   advantage
 } from './data/armies.js';
+import state, { resource } from './data/state.js';
+import {
+  name as resourceName,
+  icon,
+  amount
+} from './data/resources.js';
 
 /**
  * Traverse a nested array and return the value at the desired path. Each index of the `path` is the index of the array to traverse down at each level.
@@ -35,10 +41,10 @@ export function traversePath(array, path) {
  * @param {Number} prereqIndex - Prereq index of the data array.
  * @param {HTMLElement} domElm - HTML Element to show.
  * @param {Number} stateIndex - Data index of the state array.
- * @param {Number} itemIndex - The current item of the data.
- * @param {Number} visibleIndex - The visible index of the current item data.
+ * @param {Number} index - The current item of the data.
+ * @param {Number} visible - The visible index of the current item data.
  */
-export function showWhenPrereqMet(data, prereqIndex, domElm, stateIndex, itemIndex, visibleIndex) {
+export function showWhenPrereqMet(data, prereqIndex, domElm, stateIndex, index, visible) {
   const prereqs = (data[prereqIndex] ?? [])
   const prereqsMet = prereqs.map(() => 0);
   prereqs.map((prereq, i) => {
@@ -49,7 +55,7 @@ export function showWhenPrereqMet(data, prereqIndex, domElm, stateIndex, itemInd
         prereqsMet[i] = 1;
         if (prereqsMet.every(value => value)) {
           domElm.hidden = false;
-          state.set([stateIndex, itemIndex, visibleIndex, true]);
+          state.set([stateIndex, index, visible, true]);
         }
       }
     });
@@ -79,6 +85,16 @@ export function trucnateNumber(value) {
     : value < 1e6
     ? (value / 1e3).toFixed(1) + 'K'
     : (value / 1e6).toFixed(1) + 'M'
+}
+
+export function displayCost(resourceData, value, prefix = '') {
+  return `<span class="${resourceData[resourceName]}"><span class="cost-icon">${resourceData[icon]}</span> ${prefix}${trucnateNumber(value)}</span>`;
+}
+
+export function canAfford(costs) {
+  return costs.every(([resourceIndex, value]) => {
+    return state.get([resource, resourceIndex, amount]) >= value
+  });
 }
 
 window.battle = battle;

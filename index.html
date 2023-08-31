@@ -154,12 +154,16 @@
   }
 
   #tskInpT {
-    align-items: end;
+    position: relative;
   }
 
   #tskInpT .icon {
     width: auto;
     height: auto;
+  }
+
+  #pop {
+    position: absolute;
   }
 
   input {
@@ -237,7 +241,7 @@
     border-radius: 4px;
     padding: 0.5rem 0.5rem;
     min-width: 100%;
-    bottom: 120%;
+    bottom: 140%;
     display: inline-flex;
     align-items: start;
     flex-direction: column;
@@ -249,13 +253,8 @@
   }
 
   .tip.b {
-    top: 120%;
+    top: 140%;
     bottom: unset;
-  }
-
-  .tip.r {
-    right: 120%;
-    left: unset;
   }
 
   .tip.res {
@@ -287,7 +286,7 @@
     grid-area: header;
   }
 
-  .Mana:not(.icon) {
+  .Mana .cost-icon {
     text-shadow: 1px 0px 1px #AB6626, 0px 1px 1px #AB6626, 0px -1px 1px #AB6626, -1px 0px 1px #AB6626;
   }
 
