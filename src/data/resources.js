@@ -58,10 +58,6 @@ let resources = [];
 export default resources;
 
 export function initResources() {
-  // order here matters so that resources are generated first
-  // before other resources that use them as cost (e.g.
-  // charcoal is listed before iron ore, and iron ore is
-  // listed before iron)
   resources.push.call(resources,
     // 0
     [

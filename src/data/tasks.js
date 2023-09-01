@@ -11,6 +11,7 @@ import {
   iron,
   tools,
   weapons,
+  armor,
   bows
 } from './resources.js';
 import {
@@ -197,7 +198,7 @@ export function initTasks() {
       [
         [iron, -1],
         [charcoal, -1],
-        [weapons, 1]
+        [armor, 1]
       ],
       [
         [building, armorersWorkshop, built, 1]

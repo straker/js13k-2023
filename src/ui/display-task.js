@@ -115,79 +115,6 @@ export default function displayTask(data, index) {
       state.set([task, index, assigned, diff])
       state.set([task, idle, assigned, -diff])
     });
-
-    // increase resources every tick
-    on(['resource-tick'], () => {
-      if (!data[assigned]) {
-        return;
-      }
-
-      // TODO: figure out way to have a total change from all tasks so if a user
-      // is at 300/300 wood, has 10 cutters and 10 carpenters, the end result is
-      // 300/300 wood and +10 planks (instead of 290/300 wood)
-
-      // ensure player has all the costs before fulfilling task
-      const costs = data[effects].filter(([, value]) => value < 0);
-      const gains = data[effects].filter(([, value]) => value > 0);
-      // if player can only afford to make less than the
-      // assigned number of skeletons then make only as much
-      // as they can afford
-      let canAfford = data[assigned];
-      if (!costs.every(([resourceIndex, value]) => {
-        // tasks use resources per assigned skeleton
-        const perValue = -value * data[assigned];
-        canAfford = (
-          Math.min(
-            perValue + (state.get([resource, resourceIndex, amount]) - perValue),
-            perValue,
-            canAfford * -value
-          ) / -value
-        ) | 0;
-
-        return canAfford > 0;
-      })) {
-        return;
-      }
-
-      // don't spend resources making more than player has room
-      // for
-      if (!gains.every(([resourceIndex, value]) => {
-        const perValue = value * canAfford;
-        canAfford = Math.ceil(
-          Math.min(
-            state.get([resource, resourceIndex, max], Infinity) - state.get([resource, resourceIndex, amount], 0),
-            canAfford
-          ) / value
-        )
-
-        return canAfford > 0;
-      })) {
-        return;
-      }
-
-      // console.log({
-      //   name: data[name],
-      //   assigned: data[assigned],
-      //   canAfford
-      // })
-
-      data[effects].map(([resourceIndex, value]) => {
-        const resourceMax = state.get([resource, resourceIndex, max]);
-
-        // don't set resource if at max already
-        if (
-          value > 0 &&
-          state.get([resource, resourceIndex, amount]) >= resourceMax
-        ) {
-          return;
-        }
-
-        state.set(
-          [resource, resourceIndex, amount, value * canAfford],
-          resourceMax
-        );
-      });
-    });
   }
 
   // `tskInpG` is a global HTML id from index.html
@@ -220,8 +147,8 @@ function setMaxAssignable(data, input) {
   ));
 }
 
-function setResourceChange(data, value) {
-  data[effects].map(([resourceIndex, resourceValue]) => {
-    state.set([resource, resourceIndex, change, value * resourceValue]);
-  });
-}
+// function setResourceChange(data, value) {
+//   data[effects].map(([resourceIndex, resourceValue]) => {
+//     state.set([resource, resourceIndex, change, value * resourceValue]);
+//   });
+// }
