@@ -47,7 +47,7 @@ export function shouldAttack(dt) {
     population >= lastAttackPop + 25
   ) {
     timer = 0;
-    state.set([-1, 'last-attack-pop', population]);
+    state.add([-1, 'last-attack-pop', population]);
     return true;
   }
 

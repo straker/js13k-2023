@@ -89,6 +89,7 @@
 
   button {
     display: flex;
+    align-items: center;
     padding: 0.25rem 0.5rem;
     background: rgb(233, 233, 237);
     border: 1px solid;
@@ -172,6 +173,12 @@
 
   input:focus {
     outline: 0;
+  }
+
+  /* always show number arrows in Chrome */
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button {
+     opacity: 1;
   }
 
   #tskG > div,

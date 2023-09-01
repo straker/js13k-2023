@@ -39,8 +39,8 @@ export const timer = 11;
 export const chopWood = 0;
 export const digStone = 1;
 export const stealCorpse = 2;
-export const recoverMana = 3;
-export const reanimateSkeleton = 4;
+export const reanimateSkeleton = 3;
+export const recoverMana = 4;
 export const reanimateMilitia = 5;
 export const reanimateInfantry = 6;
 export const reanimateArchers = 7;
@@ -91,19 +91,6 @@ export function initActions() {
 
     // 3
     [
-      'Recover Mana',
-      'Meditate on your evil acts',
-      LONG_COOLDOWN,
-      [
-        [mana, 10]
-      ],
-      [
-        [building, rituralCircle, built, 1]
-      ]
-    ],
-
-    // 4
-    [
       'Reanimate Skeleton',
       'Reanimate a corpse as a Skeleton to perform various tasks',
       LONG_COOLDOWN,
@@ -116,6 +103,19 @@ export function initActions() {
       [
         [mana, 5],
         [corpses, 1],
+      ]
+    ],
+
+    // 4
+    [
+      'Recover Mana',
+      'Meditate on your evil acts',
+      LONG_COOLDOWN,
+      [
+        [mana, 10]
+      ],
+      [
+        [action, reanimateSkeleton, clicked, 1]
       ]
     ],
 

@@ -38,29 +38,50 @@ export const task = 3;
 export const army = 4;
 
 const state = {
+  /**
+   * Get the state value.
+   * @param {Number[]} path - Path to the state.
+   * @param {*} [defaultValue] - Value to return if the state is not set.
+   * @return {*}
+   */
   get(path, defaultValue) {
     const p = [...path];
     const index = p.pop();
     const obj = traversePath(this._state, p);
     return obj[index] ?? defaultValue;
   },
-  set(path, max) {
+
+  /**
+   * Add the value to the state making sure to never exceed the maximum value.
+   * @param {Number[]} path - Path to the state and the value to add (e.g. [0, 2, 4] will get the state of [0,2] and add 4).
+   * @param {Number} [max] - Maximum value of the state.
+   * @return {Number} New value of the state.
+   */
+  add(path, max) {
     const p = [...path];  // clone
-    const value = p.pop();
-    const index = p.pop();
-    const obj = this.get(p);
-    if (typeof value === 'number') {
-      obj[index] = Math.min((obj[index] ?? 0) + value, max ?? Infinity);
-    }
-    else if (typeof value === 'boolean') {
-      obj[index] = value;
-    }
+    const { obj, value, index } = fromPath(p);
+    obj[index] = Math.min((obj[index] ?? 0) + value, max ?? Infinity);
     emit([...p, index], obj[index], value);
     return obj[index];
   },
+
+  /**
+   * Set the value for the state.
+   * @param {Number[]} path - Path to the state and the value to add (e.g. [0, 2, 4] will get the state of [0,2] and add 4).
+   */
+  set(path) {
+    const p = [...path];  // clone
+    const { obj, value, index } = fromPath(p);
+    obj[index] = value;
+    emit([...p, index], obj[index], value);
+  },
+
+  /**
+   * Save the current game state.
+   */
   save() {
     // limit what props are saved to those only changed by the
-    // user
+    // player during game play
     const saveState = [
       getSaveState(resources, [max, resourceVisible, amount, change]),
       getSaveState(actions, [actionUnlocked, actionVisible, clicked, actionDisabled, timer]),
@@ -72,6 +93,10 @@ const state = {
 
     setStoreItem(SAVE_KEY, saveState);
   },
+
+  /**
+   * Load a saved game state.
+   */
   load(initialState) {
     const saveState = getStoreItem(SAVE_KEY);
     if (!saveState) {
@@ -102,6 +127,13 @@ export function initState() {
   ];
 
   state._state = state.load(initialState);
+}
+
+function fromPath(path) {
+  const value = path.pop();
+  const index = path.pop();
+  const obj = state.get(path);
+  return { obj, value, index };
 }
 
 function getSaveState(data, filterIndices) {

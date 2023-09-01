@@ -83,7 +83,7 @@ export default function taskTick() {
           return;
         }
 
-        state.set(
+        state.add(
           [resource, resourceIndex, amount, value * canAfford],
           resourceMax
         );

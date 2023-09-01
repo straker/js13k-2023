@@ -67,7 +67,7 @@ export default function displayAction(data, index) {
       return;
     }
 
-    const value = state.set([action, index, timer, -dt]);
+    const value = state.add([action, index, timer, -dt]);
     setCooldown(data, cooldownSpan);
 
     // re-enable action if timer expires and player can perform action
@@ -86,15 +86,15 @@ class ActionButton extends UnlockableButton {
   }
 
   whenClicked(data, index) {
-    state.set([action, index, clicked, 1]);
+    state.add([action, index, clicked, 1]);
     data[effects].map(([resourceIndex, value]) => {
-      state.set(
+      state.add(
         [resource, resourceIndex, amount, value],
         state.get([resource, resourceIndex, max])
       );
     });
     state.set([action, index, disabled, true]);
-    state.set([action, index, timer, data[cooldown]]);
+    state.add([action, index, timer, data[cooldown]]);
   }
 
   canAfford(data) {
@@ -146,7 +146,7 @@ function setCooldown(data, cooldownSpan) {
 
 function canPerform(data) {
   return (
-    data[timer] <= 0 &&
+    (data[timer] ?? 0) <= 0 &&
     canAfford(data[cost]) &&
     data[effects].some(([resourceIndex]) => {
       return (

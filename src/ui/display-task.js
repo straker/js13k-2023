@@ -67,7 +67,7 @@ export default function displayTask(data, index) {
 
     // bind skeletons resource to idle skeletons value
     on([resource, skeletons, amount], (value, diff) => {
-      state.set([task, index, assigned, diff])
+      state.add([task, index, assigned, diff])
     });
 
     // bind the assigned idle value to the input value
@@ -102,7 +102,7 @@ export default function displayTask(data, index) {
       // keep track of the change in resource state to display
       // either a positive or negative change in the resource
       data[effects].map(([resourceIndex, resourceValue]) => {
-        state.set([resource, resourceIndex, change, diff * resourceValue]);
+        state.add([resource, resourceIndex, change, diff * resourceValue]);
       });
     });
 
@@ -112,8 +112,8 @@ export default function displayTask(data, index) {
       const value = +input.value;
       const diff = value - numAssigned;
 
-      state.set([task, index, assigned, diff])
-      state.set([task, idle, assigned, -diff])
+      state.add([task, index, assigned, diff])
+      state.add([task, idle, assigned, -diff])
     });
   }
 
@@ -149,6 +149,6 @@ function setMaxAssignable(data, input) {
 
 // function setResourceChange(data, value) {
 //   data[effects].map(([resourceIndex, resourceValue]) => {
-//     state.set([resource, resourceIndex, change, value * resourceValue]);
+//     state.add([resource, resourceIndex, change, value * resourceValue]);
 //   });
 // }

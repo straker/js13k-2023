@@ -56,7 +56,9 @@ export default class UnlockableButton {
     `);
     button.hidden = !data[visible];
     button.setAttribute('aria-disabled', !!data[disabled]);
-    showWhenPrereqMet(data, prereq, button, stateIndex, index, visible);
+    showWhenPrereqMet(data, prereq, button, stateIndex, index, visible, () => {
+      state.set([stateIndex, index, disabled, !this.canAfford(data)]);
+    });
 
     // bind disabled state to the aria-disabled attribute
     on([stateIndex, index, disabled], (value) => {
@@ -76,9 +78,9 @@ export default class UnlockableButton {
           button.querySelector('.Research').remove();
           button.classList.remove('locked');
 
-          state.set([resource, research, amount, -data[researchCost]]);
+          state.add([resource, research, amount, -data[researchCost]]);
           state.set([stateIndex, index, unlocked, true]);
-          state.set([stateIndex, index, disabled, !this.canAfford(data)]);
+          state.add([stateIndex, index, disabled, !this.canAfford(data)]);
           this.enableWhenCanAfford(data, index);
         }
 
@@ -90,7 +92,7 @@ export default class UnlockableButton {
       }
 
       data[cost].map(([resourceIndex, value]) => {
-        state.set([resource, resourceIndex, amount, -value]);
+        state.add([resource, resourceIndex, amount, -value]);
       });
       this.whenClicked(data, index);
     });

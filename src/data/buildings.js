@@ -104,7 +104,7 @@ export function initBuildings() {
         [task, woodcutters, assignable, 3]
       ],
       [
-        [building, rituralCircle, built, 1]
+        [resource, skeletons, amount, 1],
       ]
     ],
 

@@ -37,18 +37,21 @@ export function traversePath(array, path) {
  * @param {Number} index - The current item of the data.
  * @param {Number} visible - The visible index of the current item data.
  */
-export function showWhenPrereqMet(data, prereqIndex, domElm, stateIndex, index, visible) {
+export function showWhenPrereqMet(data, prereqIndex, domElm, stateIndex, index, visible, callback) {
   const prereqs = (data[prereqIndex] ?? [])
   const prereqsMet = prereqs.map(() => 0);
+
   prereqs.map((prereq, i) => {
     const path = [...prereq];  // clone
     const neededValue = path.pop();
+
     on(path, (curValue) => {
       if (curValue >= neededValue) {
         prereqsMet[i] = 1;
         if (prereqsMet.every(value => value)) {
           domElm.hidden = false;
           state.set([stateIndex, index, visible, true]);
+          callback && callback();
         }
       }
     });

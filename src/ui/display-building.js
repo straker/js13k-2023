@@ -33,6 +33,9 @@ import UnlockableButton from './unlockable-button.js';
  * @param {Number} index - The current item of the data.
  */
 export default function displayBuilding(data, index) {
+  // buildings start disabled
+  data[disabled] ??= true;
+
   const button = new BuildingButton(
     data,
     index,
@@ -76,8 +79,8 @@ class BuildingButton extends UnlockableButton {
   }
 
   whenClicked(data, index) {
-    state.set([building, index, built, 1]);
-    data[effects].map(effect => state.set(effect));
+    state.add([building, index, built, 1]);
+    data[effects].map(effect => state.add(effect));
   }
 
   canAfford(data) {
