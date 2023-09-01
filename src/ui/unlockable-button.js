@@ -40,7 +40,7 @@ export default class UnlockableButton {
         }
         <span>${buttonName}</span>
         <span class="tip">
-          <strong>${buttonName}</strong>
+          <b>${buttonName}</b>
           <span class="cost">
             ${data[cost].map(([resourceIndex, value]) => {
               return displayCost(resources[resourceIndex], value);

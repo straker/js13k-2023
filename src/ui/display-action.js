@@ -149,7 +149,10 @@ function canPerform(data) {
     data[timer] <= 0 &&
     canAfford(data[cost]) &&
     data[effects].some(([resourceIndex]) => {
-      return (state.get([resource, resourceIndex, amount]) ?? 0) < (state.get([resource, resourceIndex, max]) ?? Infinity);
+      return (
+        state.get([resource, resourceIndex, amount], 0) <
+        state.get([resource, resourceIndex, max], Infinity)
+      );
     })
   );
 }

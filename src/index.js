@@ -2,6 +2,7 @@ import { GameLoop } from './libs/kontra.js';
 import { RESOURCE_TICK, SAVE_TICK } from './constants.js';
 import { on, emit } from './events.js';
 import state from './data/state.js';
+import { shouldAttack } from './attacks.js';
 
 import init from './init.js';
 init();
@@ -17,6 +18,10 @@ const loop = GameLoop({
     if (++resourceTimer >= RESOURCE_TICK) {
       resourceTimer = 0;
       emit(['resource-tick']);
+
+      if (shouldAttack(dt)) {
+        console.log('attack incoming!');
+      }
     }
 
     if (++saveTimer >= SAVE_TICK) {

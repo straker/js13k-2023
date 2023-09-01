@@ -151,15 +151,19 @@ export default function displayTask(data, index) {
 
       // don't spend resources making more than player has room
       // for
-      gains.map(([resourceIndex, value]) => {
+      if (!gains.every(([resourceIndex, value]) => {
         const perValue = value * canAfford;
         canAfford = Math.ceil(
           Math.min(
-            (state.get([resource, resourceIndex, max]) ?? Infinity) - (state.get([resource, resourceIndex, amount]) ?? 0),
+            state.get([resource, resourceIndex, max], Infinity) - state.get([resource, resourceIndex, amount], 0),
             canAfford
           ) / value
         )
-      });
+
+        return canAfford > 0;
+      })) {
+        return;
+      }
 
       // console.log({
       //   name: data[name],

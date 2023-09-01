@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>JS13k 2023</title>
   <style>
+  /* Global */
   * {
     box-sizing: border-box;
   }
@@ -13,46 +14,30 @@
     visibility: hidden !important;
   }
 
+  /* Root level */
   html,
   body {
-    height: 100%;
-    font-family: arial;
+    font: 18px arial;
     margin: 0;
-  }
-
-  body {
-    font-size: 18px;
     color: #222;
   }
 
   main {
     display: grid;
     grid-template-columns: 1fr 1fr 0.5fr 0.5fr;
-    grid-template-rows: auto;
     grid-template-areas:
       "resources resources resources resources"
       "actP bldP tskP tskP"
   }
 
-  h2 {
-    margin: 0;
-  }
-
-  main > div:not(#resG) {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    padding: 1rem;
-  }
-
+  /* Resource group */
   #resG {
     grid-area: resources;
     display: flex;
-    gap: 2rem;
+    gap: 1.25rem;
     background: #222;
     color: #fdfdfd;
     padding: 1rem;
-    align-items: start;
   }
 
   .g {
@@ -63,11 +48,44 @@
     width: 6rem;
   }
 
-  /*.g .res {
-    width: 100%;
+  .g > div {
     display: flex;
     align-items: center;
-  }*/
+    gap: 0.25rem;
+  }
+
+  #saved {
+    position: absolute;
+    right: 1.5rem;
+    opacity: 1;
+  }
+
+  #saved.hide {
+    opacity: 0;
+    transition: opacity 2s linear;
+  }
+
+
+  h2 {
+    margin: 0;
+  }
+
+  /* Main body */
+  main > div:not(#resG) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+  }
+
+  pre {
+    font-size: 0.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 1rem 0 0;
+  }
 
   button {
     display: flex;
@@ -77,24 +95,6 @@
     border-radius: 4px;
     height: 2rem;
     font-size: 1rem;
-    position: relative;
-  }
-
-  .icon {
-    width: 1.25rem;
-    height: 1.25rem;
-    margin-right: 0.35rem;
-    display: inline-flex;
-    align-items: center;
-    text-shadow: 1px 0px 0 #fdfdfd, 0px 1px 0 #fdfdfd, 0px -1px 0 #fdfdfd, -1px 0px 0 #fdfdfd
-  }
-
-  .cooldown {
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    background: rgba(0,0,0, 0.5);
   }
 
   button:hover {
@@ -109,8 +109,10 @@
     border-color: rgba(0, 0, 0, 0.5);
   }
 
-  input:focus {
-    outline: 0;
+  .btn-r {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
   }
 
   .cost {
@@ -124,15 +126,52 @@
     gap: 0.25rem;
   }
 
-  .cost img {
-    height: 75%;
+  .lock {
+    background: #E62200;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid black;
+    z-index: 2;
+    aspect-ratio: 1 / 1;
   }
 
-  .btn-r {
-    margin-left: auto;
-    display: inline-flex;
-    gap: 0.25rem;
-    align-items: center;
+  .Research:not(.icon) {
+    margin-left: -0.65rem;
+    border: 1px solid black;
+    padding: 0 0.25rem 0 0.75rem;
+    margin-right: 0.5rem;
+    background: #fdfdfd;
+  }
+
+  #tskP {
+    grid-area: tskP;
+  }
+
+  /* Action group */
+  .cooldown {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    background: rgba(0,0,0, 0.5);
+  }
+
+  /* Building group */
+  #bldG .locked .btn-r {
+    display: none;
+  }
+
+  /* Task group */
+  input {
+    width: 50%;
+    padding: 0;
+    font-size: 1rem;
+  }
+
+  input:focus {
+    outline: 0;
   }
 
   #tskG > div,
@@ -144,17 +183,13 @@
   }
 
   #tskG > div {
-    padding: 0.25rem 0.5rem;
+    padding: 0.5rem;
   }
 
   #tskInpG > div {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-  }
-
-  #tskInpT {
-    position: relative;
   }
 
   #tskInpT .icon {
@@ -166,19 +201,37 @@
     position: absolute;
   }
 
-  input {
-    width: 50%;
-    padding: 0;
-    margin: 0;
-    font-size: 1rem;
-  }
-
   .max {
     white-space: nowrap;
   }
 
-  #rchT {
-    margin-top: 1rem;
+  /* Icons */
+  .icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-right: 0.35rem;
+    display: inline-flex;
+    align-items: center;
+    text-shadow:
+      1px 0px 0 #fdfdfd,
+      0px 1px 0 #fdfdfd,
+      0px -1px 0 #fdfdfd,
+      -1px 0px 0 #fdfdfd
+  }
+
+  .cost-icon,
+  p span,
+  .lock {
+    text-shadow:
+      1px 0px 0 #222,
+      0px 1px 0 #222,
+      0px -1px 0 #222,
+      -1px 0px 0 #222;
+  }
+
+  .icon.Archers,
+  :is(.skeletons, .Archers) .cost-icon {
+    text-shadow: none;
   }
 
   img {
@@ -188,51 +241,7 @@
     vertical-align: text-bottom;
   }
 
-  .lock {
-    background: #E62200;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid black;
-    position: relative;
-    z-index: 2;
-    aspect-ratio: 1 / 1;
-  }
-
-  #bldG .locked .btn-r {
-    display: none;
-  }
-
-  .Research:not(.icon) {
-    position: relative;
-    margin-left: -0.65rem;
-    border: 1px solid black;
-    padding: 0 0.25rem 0 0.75rem;
-    z-index: 1;
-    margin-right: 0.5rem;
-    background: #fdfdfd;
-  }
-
-  .icon.Archers {
-    text-shadow: none;
-  }
-
-  #saved {
-    position: absolute;
-    right: 1.5rem;
-    opacity: 1;
-  }
-
-  #saved.hide {
-    opacity: 0;
-    transition: opacity 2s linear;
-  }
-
-  :is(.tipC:hover, .tipC:focus-visible) .tip {
-    visibility: visible;
-  }
-
+  /* Tooltip */
   .tipC {
     position: relative;
   }
@@ -258,6 +267,10 @@
     color: #222;
   }
 
+  :is(.tipC:hover, .tipC:focus-visible) .tip {
+    visibility: visible;
+  }
+
   .tip.b {
     top: 140%;
     bottom: unset;
@@ -267,16 +280,6 @@
     display: block;
     width: auto;
     white-space: nowrap;
-  }
-
-  p {
-    margin: 0.5rem 0;
-    font-size: 0.9rem;
-    text-align: left;
-  }
-
-  strong {
-    font-size: 1rem;
   }
 
   .tip.unit {
@@ -292,26 +295,14 @@
     grid-area: header;
   }
 
-  .cost-icon,
-  p span,
-  .lock {
-    text-shadow: 1px 0px 0 #222, 0px 1px 0 #222, 0px -1px 0 #222, -1px 0px 0 #222;
-  }
-  :is(.skeletons, .Archers) .cost-icon {
-    text-shadow: none;
+  b {
+    font-size: 1rem;
   }
 
-  pre {
-    font-size: 0.6rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0;
-    padding: 1rem 0 0;
-  }
-
-  #tskP {
-    grid-area: tskP;
+  p {
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    text-align: left;
   }
 
   p span {
