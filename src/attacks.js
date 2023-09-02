@@ -8,7 +8,7 @@ import {
   archers,
   calvary
 } from './data/resources.js';
-import { ATTACK_TIMER } from './constants.js';
+import { ATTACK_TICK } from './constants.js';
 import armies, {
   health,
   defense,
@@ -43,7 +43,7 @@ export function shouldAttack(dt) {
   }, 0)
 
   if (
-    timer >= ATTACK_TIMER ||
+    timer >= ATTACK_TICK ||
     population >= lastAttackPop + 25
   ) {
     timer = 0;

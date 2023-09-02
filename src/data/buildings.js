@@ -297,9 +297,9 @@ export function initBuildings() {
       'Alchemy Lab',
       `Allows 4 Skeletons to generate greater amounts of <span>${resources[research][icon]}</span>`,
       [
-        [planks, 80],
-        [iron, 30],
-        [tools, 10]
+        [planks, 125],
+        [iron, 75],
+        [tools, 35]
       ],
       [
         [task, alchemists, assignable, 4]
@@ -315,7 +315,8 @@ export function initBuildings() {
       'Outpost',
       `Allows 2 Skeletons to gather <span>${resources[corpses][icon]}</span>`,
       [
-        [wood, 50]
+        [planks, 75],
+        [blocks, 100],
       ],
       [
         [task, snatchers, assignable, 2],
@@ -389,7 +390,9 @@ export function initBuildings() {
       'Armory',
       'Increases max Tools, Weapons, and Bows by 10',
       [
-        [wood, 50]
+        [planks, 25],
+        [blocks, 75],
+        [iron, 50]
       ],
       [
         [resource, tools, max, 10],

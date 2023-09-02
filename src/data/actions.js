@@ -2,6 +2,7 @@ import {
   SHORT_COOLDOWN,
   MEDIUM_COOLDOWN,
   LONG_COOLDOWN,
+  XLONG_COOLDOWN
 } from '../constants.js';
 import { resource, action, building } from './state.js';
 import {
@@ -67,7 +68,7 @@ export function initActions() {
     [
       'Gather Stones',
       'Gather stones from the ground',
-      MEDIUM_COOLDOWN,
+      SHORT_COOLDOWN,
       [
         [stone, 15]
       ],
@@ -80,7 +81,7 @@ export function initActions() {
     [
       'Steal Corpse',
       'Sneak into a graveyard and snatch a corpse for reanimating as a Skeleton',
-      LONG_COOLDOWN,
+      MEDIUM_COOLDOWN,
       [
         [corpses, 1]
       ],
@@ -110,7 +111,7 @@ export function initActions() {
     [
       'Recover Mana',
       'Meditate on your evil acts',
-      LONG_COOLDOWN,
+      XLONG_COOLDOWN,
       [
         [mana, 10]
       ],

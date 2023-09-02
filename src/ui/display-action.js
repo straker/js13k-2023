@@ -94,7 +94,7 @@ class ActionButton extends UnlockableButton {
       );
     });
     state.set([action, index, disabled, true]);
-    state.add([action, index, timer, data[cooldown]]);
+    state.set([action, index, timer, data[cooldown]]);
   }
 
   canAfford(data) {
