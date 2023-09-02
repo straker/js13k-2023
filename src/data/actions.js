@@ -135,7 +135,7 @@ export function initActions() {
         [mana, 50],
         [corpses, 10]
       ],
-      70
+      30
     ],
 
     // 6
@@ -155,7 +155,7 @@ export function initActions() {
         [weapons, 8],
         [armor, 8],
       ],
-      700
+      300
     ],
 
     // 7
@@ -175,7 +175,7 @@ export function initActions() {
         [bows, 6],
         [armor, 6]
       ],
-      900
+      375
     ],
 
     // 8
@@ -195,7 +195,7 @@ export function initActions() {
         [weapons, 4],
         [armor, 8]
       ],
-      1100
+      450
     ],
   );
 

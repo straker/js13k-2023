@@ -57,7 +57,10 @@ export default class UnlockableButton {
     button.hidden = !data[visible];
     button.setAttribute('aria-disabled', !!data[disabled]);
     showWhenPrereqMet(data, prereq, button, stateIndex, index, visible, () => {
-      state.set([stateIndex, index, disabled, !this.canAfford(data)]);
+      // player can always click a button that needs research
+      if (!locked) {
+        state.set([stateIndex, index, disabled, !this.canAfford(data)]);
+      }
     });
 
     // bind disabled state to the aria-disabled attribute

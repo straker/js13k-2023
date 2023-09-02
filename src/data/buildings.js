@@ -153,7 +153,7 @@ export function initBuildings() {
       [
         [building, laboratory, built, 1]
       ],
-      60
+      25
     ],
 
     // 5
@@ -169,7 +169,7 @@ export function initBuildings() {
       [
         [building, laboratory, built, 1]
       ],
-      100
+      40
     ],
 
     // 6
@@ -185,7 +185,7 @@ export function initBuildings() {
       [
         [building, laboratory, built, 1]
       ],
-      150
+      60
     ],
 
     // 7
@@ -202,7 +202,7 @@ export function initBuildings() {
       [
         [building, laboratory, built, 1]
       ],
-      200
+      80
     ],
 
     // 8
@@ -219,7 +219,7 @@ export function initBuildings() {
       [
         [building, laboratory, built, 1]
       ],
-      300
+      125
     ],
 
     // 9
@@ -236,7 +236,7 @@ export function initBuildings() {
       [
         [building, laboratory, built, 1]
       ],
-      450
+      150
     ],
 
     // 10
@@ -254,7 +254,7 @@ export function initBuildings() {
       [
         [building, laboratory, built, 1]
       ],
-      600
+      250
     ],
 
     // 11
@@ -272,7 +272,7 @@ export function initBuildings() {
       [
         [building, laboratory, built, 1]
       ],
-      600
+      250
     ],
 
     // 12
@@ -289,7 +289,7 @@ export function initBuildings() {
       [
         [building, laboratory, built, 1]
       ],
-      800
+      300
     ],
 
     // 13
@@ -307,7 +307,7 @@ export function initBuildings() {
       [
         [building, laboratory, built, 1]
       ],
-      1000
+      400
     ],
 
     // 14
@@ -324,7 +324,7 @@ export function initBuildings() {
       [
         [building, laboratory, built, 1]
       ],
-      250
+      100
     ],
 
     // 15
@@ -341,7 +341,7 @@ export function initBuildings() {
       [
         [building, laboratory, built, 1]
       ],
-      60
+      25
     ],
 
     // 16
@@ -358,7 +358,7 @@ export function initBuildings() {
       [
         [building, laboratory, built, 1]
       ],
-      100
+      40
     ],
 
     // 17
@@ -382,7 +382,7 @@ export function initBuildings() {
       [
         [building, laboratory, built, 1]
       ],
-      80
+      30
     ],
 
     // 18
@@ -402,7 +402,7 @@ export function initBuildings() {
       [
         [building, laboratory, built, 1]
       ],
-      120
+      50
     ],
 
     // 19
@@ -420,7 +420,7 @@ export function initBuildings() {
       [
         [building, laboratory, built, 1]
       ],
-      5000
+      2000
     ]
   );
 }
