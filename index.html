@@ -20,6 +20,7 @@
     font: 18px arial;
     margin: 0;
     color: #222;
+    background: #fdfdfd;
   }
 
   main {
@@ -117,7 +118,6 @@
   .btn-r {
     margin-left: auto;
     display: inline-flex;
-    align-items: center;
   }
 
   .cost {
@@ -161,6 +161,10 @@
     left: 0;
     bottom: 0;
     background: rgba(0,0,0, 0.5);
+  }
+
+  #actG .btn-r {
+    min-width: 3rem;
   }
 
   /* Building group */
@@ -243,6 +247,12 @@
   .icon.Archers,
   :is(.skeletons, .Archers) .cost-icon {
     text-shadow: none;
+  }
+
+  .Archers {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
   }
 
   img {
