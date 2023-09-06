@@ -150,7 +150,7 @@ export function initActions() {
         [building, laboratory, built, 1]
       ],
       [
-        [mana, 150],
+        [mana, 175],
         [corpses, 8],
         [weapons, 8],
         [armor, 8],
@@ -170,7 +170,7 @@ export function initActions() {
         [building, laboratory, built, 1]
       ],
       [
-        [mana, 175],
+        [mana, 100],
         [corpses, 6],
         [bows, 6],
         [armor, 6]

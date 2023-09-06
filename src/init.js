@@ -3,6 +3,7 @@ import { initBuildings } from './data/buildings.js';
 import { initResources } from './data/resources.js';
 import { initTasks } from './data/tasks.js';
 import { initArmies } from './data/armies.js';
+import { initGameData } from './data/game-data.js';
 import { initState } from './data/state.js';
 import initUI from './ui/index.js';
 
@@ -12,6 +13,7 @@ export default function init() {
   initBuildings();
   initTasks();
   initArmies();
+  initGameData();
   initState();
 
   initUI();

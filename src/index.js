@@ -18,10 +18,9 @@ const loop = GameLoop({
 
     if (++resourceTimer >= RESOURCE_TICK) {
       resourceTimer = 0;
-      emit(['resource-tick']);
       taskTick();
 
-      if (shouldAttack(dt)) {
+      if (shouldAttack(RESOURCE_TICK)) {
         console.log('attack incoming!');
       }
     }

@@ -26,9 +26,8 @@ import tasks, {
   assigned,
   visible as taskVisible
 } from './tasks.js';
-import armies, {
-  trained
-} from './armies.js';
+import armies, { trained } from './armies.js';
+import gameData from './game-data.js';
 
 // indices
 export const resource = 0;
@@ -36,6 +35,7 @@ export const action = 1;
 export const building = 2;
 export const task = 3;
 export const army = 4;
+export const data = 5;
 
 const state = {
   /**
@@ -60,14 +60,17 @@ const state = {
   add(path, max) {
     const p = [...path];  // clone
     const { obj, value, index } = fromPath(p);
-    obj[index] = Math.min((obj[index] ?? 0) + value, max ?? Infinity);
+    obj[index] = Math.min(
+      (obj[index] ?? 0) + value,
+      max ?? Infinity
+    );
     emit([...p, index], obj[index], value);
     return obj[index];
   },
 
   /**
-   * Set the value for the state.
-   * @param {Number[]} path - Path to the state and the value to add (e.g. [0, 2, 4] will get the state of [0,2] and add 4).
+   * Set the value of the state.
+   * @param {Number[]} path - Path to the state and the value to set (e.g. [0, 2, 4] will get the state of [0,2] and set it to 4).
    */
   set(path) {
     const p = [...path];  // clone
@@ -88,7 +91,8 @@ const state = {
       getSaveState(buildings, [buildingUnlocked, built, buildingVisible, buildingDisabled]),
       getSaveState(tasks, [assignable, assigned, taskVisible]),
       // TODO: may need to save upgrades
-      getSaveState(armies, [trained])
+      getSaveState(armies, [trained]),
+      gameData
     ];
 
     setStoreItem(SAVE_KEY, saveState);
@@ -123,7 +127,8 @@ export function initState() {
     actions,
     buildings,
     tasks,
-    armies
+    armies,
+    gameData
   ];
 
   state._state = state.load(initialState);

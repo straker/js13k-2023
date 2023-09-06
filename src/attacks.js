@@ -1,5 +1,5 @@
 import { randInt } from './libs/kontra.js';
-import state, { resource } from './data/state.js';
+import state, { resource, data } from './data/state.js';
 import {
   amount,
   skeletons,
@@ -15,6 +15,7 @@ import armies, {
   attack,
   advantage
 } from './data/armies.js';
+import { lastAttackTimer, lastAttackPop } from './data/game-data.js';
 
 const unitType = 0;
 const hp = 1;
@@ -23,16 +24,16 @@ const atk = 3;
 
 // check for an attack every resource tick.
 // an attack will happen every 25 skeleton pop (including army)
-// or every 5 minute (which ever occurs first)
-let timer = 0;
+// or every 5 minute (which ever occurs first).
 export function shouldAttack(dt) {
-  timer += dt;
+  const timer = state.add([data, 0, lastAttackTimer, dt]);
 
-  // TODO: this works for now but doesn't save state since
-  // we need 3 indices to work with the current state restore
-  // code
-  const lastAttackPop = state.get([-1, 'last-attack-pop'], 0);
-  const population = [
+  // keep track of the last population when the attack occurred
+  // so if population is lost due to the attack the player can
+  // rebuild up to the prior population before another attack
+  // based on population occurs
+  const lastPop = state.get([data, 0, lastAttackPop], 0);
+  const totalPop = [
     skeletons,
     militia,
     infantry,
@@ -43,11 +44,13 @@ export function shouldAttack(dt) {
   }, 0)
 
   if (
+    // use a maximum attack timer so players cannot just sit on
+    // their population and not get attacked
     timer >= ATTACK_TICK ||
-    population >= lastAttackPop + 25
+    totalPop >= lastPop + 25
   ) {
-    timer = 0;
-    state.add([-1, 'last-attack-pop', population]);
+    state.set([data, 0, lastAttackTimer, 0]);
+    state.set([data, 0, lastAttackPop, totalPop]);
     return true;
   }
 
@@ -114,8 +117,9 @@ function convertToArmyStats(army) {
       const stats = [];
       for (let i = 0; i < armyAmount; i++) {
         stats.push([
-          // TODO: this works without upgrades, will need to figure
-          // out how to handle player / ai upgrades if i add that
+          // TODO: this works without upgrades, will need to
+          // figure out how to handle player / ai upgrades if
+          // i add that
           armyIndex,
           armies[armyIndex][health],
           armies[armyIndex][defense],
@@ -156,6 +160,8 @@ function resetStats(army) {
  * @param {number[][]} defenders - Army stats for the defender
  */
 function armyAttack(attackers, defenders) {
+  // TODO: atkI and defI are not needed and only used for
+  // debug purposes, can remove
   attackers.map((attacker, atkI) => {
     // const style = 'font-weight: bold;'
     // console.log('%cnext attack', style);
@@ -170,14 +176,15 @@ function armyAttack(attackers, defenders) {
       choosing another target at random, and repeating the
       above steps for that new target.
     */
-    // console.log('unit has advantage', armies[ attacker[unitType] ][advantage] == defender[unitType]);
+    // console.log('unit has advantage', armies[ attacker[unitType] ][advantage][ defender[unitType] ]);
+    let percent;
     while (
-      armies[ attacker[unitType] ][advantage] == defender[unitType]
+      (percent = armies[ attacker[unitType] ][advantage][ defender[unitType] ])
     ) {
-      // TODO: for simplicity sake all advantage attacks have the same r value of 50%
       const rand = Math.random();
-      // console.log('chance to attack again. needed 0.5 rolled', rand);
-      if (rand >= 0.5) return;
+
+      // console.log(`chance to attack again. needed ${percent} rolled`, rand);
+      if (rand >= percent) return;
 
       // console.log('advantage attack');
       const defI = randInt(0, defenders.length - 1);
