@@ -39,6 +39,7 @@
     background: #222;
     color: #fdfdfd;
     padding: 1rem;
+    position: relative;
   }
 
   .g {
@@ -62,6 +63,7 @@
   #saved {
     position: absolute;
     right: 1.5rem;
+    bottom: 1rem;
     opacity: 1;
   }
 
@@ -70,6 +72,12 @@
     transition: opacity 2s linear;
   }
 
+  #atk {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    color: #FF4242;
+  }
 
   h2 {
     margin: 0;
@@ -290,6 +298,7 @@
     font-size: 0.9rem;
     opacity: 1;
     color: #222;
+    font-weight: normal;
   }
 
   :is(.tipC:hover, .tipC:focus-visible) .tip:not(:hover) {
@@ -333,12 +342,115 @@
   p span {
     margin: 0 0.15rem;
   }
+
+  /* Dialog */
+  dialog {
+    /* dialog has some odd defaults that make it hard to position and animate */
+    all: unset;
+    box-shadow: -3px 5px 6px #222;
+    border-radius: 4px;
+    background: #fdfdfd;
+    border: 0.15rem solid;
+    padding: 1rem;
+    opacity: 0;
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 50%;
+    transform: translate(50%, -50%);
+    max-width: 50vw;
+    visibility: hidden;
+    transition: opacity 0.25s;
+  }
+
+  dialog[open] {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  dialog::backdrop {
+    background-color: rgba(0,0,0, 0.2);
+  }
+
+  dialog.to-tr {
+    animation: fadeout 0.75s ease-out, to-tr 0.5s ease-out forwards;
+    transition: none;
+  }
+
+  dialog button {
+    justify-content: center;
+  }
+
+  .head:not(:empty) {
+    margin-bottom: 1rem;
+  }
+
+  /*.body {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.5rem;
+  }*/
+
+  .body .Research {
+    all: unset;
+    font: 18px arial;
+  }
+
+  .foot {
+    display: flex;
+    justify-content: end;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .ok {
+    background: #0073E6;
+    color: white;
+    border-color: #004A94;
+  }
+
+  .ok:hover {
+    background: #004A94;
+  }
+
+  @keyframes to-tr {
+    0% {
+      top: 50%;
+      right: 50%;
+      transform: translate(50%, -50%);
+      max-width: 50vw;
+      max-height: 50vw;
+    }
+    100% {
+      top: 0;
+      right: 0;
+      transform: translate(0, 0);
+      max-width: 12rem;
+      max-height: 1rem;
+    }
+  }
+
+  @keyframes fadeout {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+  }
   </style>
 </head>
 <body>
   <main>
     <div id="resG">
       <div id="saved" class="hide">Game Saved</div>
+      <div id="atk" class="tipC" hidden>
+        <span>🎯 Attack Incoming</span>
+        <span id="atkTimer">01:20</span>
+        <span class="tip b">
+          20 Militia
+        </span>
+      </div>
       <div class="g" id="wG"></div> <!-- wood group -->
       <div class="g" id="sG"></div> <!-- stone group -->
       <div class="g" id="iG"></div> <!-- iron group -->

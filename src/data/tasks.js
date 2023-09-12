@@ -61,7 +61,7 @@ const tasks = [];
 export default tasks;
 
 export function initTasks() {
-  tasks.push.call(tasks,
+  tasks.push(
     // 0
     [
       'Idle',

@@ -1,10 +1,12 @@
 import { on } from './events.js';
-import state, { resource } from './data/state.js';
+import state, { resource, army, data } from './data/state.js';
 import {
   name as resourceName,
   icon,
   amount
 } from './data/resources.js';
+import { upk } from './data/armies.js';
+import { randSeed } from './data/game-data.js';
 
 /**
  * Traverse a nested array and return the value at the desired path. Each index of the `path` is the index of the array to traverse down at each level.
@@ -104,3 +106,58 @@ export function canAfford(costs) {
     return state.get([resource, resourceIndex, amount]) >= value
   });
 }
+
+/**
+ * Random number generator based on splitmix32
+ * @see https://github.com/bryc/code/blob/master/jshash/PRNGs.md#splitmix32
+ */
+let seed;
+export const random = {
+  rand() {
+    seed |= 0; seed = seed + 0x9e3779b9 | 0;
+    state.set([data, 0, randSeed, seed]);
+
+    let t = seed ^ seed >>> 16; t = Math.imul(t, 0x21f0aaad);
+        t = t ^ t >>> 15; t = Math.imul(t, 0x735a2d97);
+    return ((t = t ^ t >>> 15) >>> 0) / 4294967296;
+  },
+  randInt(min, max, randFn = this.rand) {
+    return ((randFn() * (max - min + 1)) | 0) + min;
+  },
+  getSeed() {
+    return seed;
+  },
+  seed(t = Date.now()) {
+    seed = t;
+    state.set([data, 0, randSeed, seed]);
+  }
+};
+window.random = random;
+
+/**
+ *
+ */
+export function generateArmy(strength, availableUnits) {
+  const armyList = [0,0,0,0];
+  while (strength > 0) {
+    const unitIndex = availableUnits[
+      random.randInt(0, availableUnits.length - 1)
+    ];
+    const unitUpk = state.get([army, unitIndex, upk]);
+    const unitStrength = Math.ceil(strength * unitUpk);
+
+    // use a quadratic curve to generate a random number
+    // whose result is more likely to be close to 0.
+    // this helps give a more interesting distribution to
+    // the armies rather than allowing one high roll to
+    // dominate the army composition
+    // @see https://gamedev.stackexchange.com/a/116875
+    const amount = random.randInt(0, unitStrength, () => random.rand() ** 2);
+
+    armyList[unitIndex] += amount;
+    strength -= amount / unitUpk;
+  }
+
+  return armyList;
+}
+window.generateArmy = generateArmy;

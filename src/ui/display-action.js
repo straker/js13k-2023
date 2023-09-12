@@ -11,7 +11,11 @@ import {
   visible,
   clicked,
   disabled,
-  timer
+  timer,
+  attackHamlet,
+  attackVillage,
+  attackIronMine,
+  attackCity
 } from '../data/actions.js';
 import resources, {
   max,
@@ -24,6 +28,8 @@ import {
   canAfford
 } from '../utils.js';
 import UnlockableButton from './unlockable-button.js';
+import { generateLocations } from '../combat/attack-settlement.js';
+import settlementDialog from './settlement-dialog.js';
 
 /**
  * Display a manual action the player can perform.
@@ -86,6 +92,18 @@ class ActionButton extends UnlockableButton {
   }
 
   whenClicked(data, index) {
+    if ([
+      attackHamlet,
+      attackVillage,
+      attackIronMine,
+      attackCity
+    ].includes(index)) {
+
+
+      return;
+    }
+
+
     state.add([action, index, clicked, 1]);
     data[effects].map(([resourceIndex, value]) => {
       state.add(
@@ -108,17 +126,13 @@ class ActionButton extends UnlockableButton {
       on([resource, resourceIndex, amount], () => {
         if (!data[visible]) return;
 
-        if (canPerform(data)) {
-          state.set([action, index, disabled, false]);
-        }
+        state.set([action, index, disabled, !canPerform(data)]);
       });
 
       on([resource, resourceIndex, max], () => {
         if (!data[visible]) return;
 
-        if (canPerform(data)) {
-          state.set([action, index, disabled, false]);
-        }
+        state.set([action, index, disabled, !canPerform(data)]);
       });
     });
 
@@ -126,12 +140,7 @@ class ActionButton extends UnlockableButton {
       on([resource, resourceIndex, amount], () => {
         if (!data[visible]) return;
 
-        let isDisabled = true;
-        if (canPerform(data)) {
-          isDisabled = false;
-        }
-
-        state.set([action, index, disabled, isDisabled]);
+        state.set([action, index, disabled, !canPerform(data)]);
       });
     });
   }
@@ -148,11 +157,15 @@ function canPerform(data) {
   return (
     (data[timer] ?? 0) <= 0 &&
     canAfford(data[cost]) &&
-    data[effects].some(([resourceIndex]) => {
-      return (
-        state.get([resource, resourceIndex, amount], 0) <
-        state.get([resource, resourceIndex, max], Infinity)
-      );
-    })
+    (
+      (data[effects] ?? []).length
+      ? data[effects].some(([resourceIndex]) => {
+          return (
+            state.get([resource, resourceIndex, amount], 0) <
+            state.get([resource, resourceIndex, max], Infinity)
+          );
+        })
+      : true
+    )
   );
 }

@@ -1,61 +1,15 @@
-import { randInt } from './libs/kontra.js';
-import state, { resource, data } from './data/state.js';
-import {
-  amount,
-  skeletons,
-  militia,
-  infantry,
-  archers,
-  calvary
-} from './data/resources.js';
-import { ATTACK_TICK } from './constants.js';
+import { random } from '../utils.js';
 import armies, {
   health,
   defense,
   attack,
   advantage
-} from './data/armies.js';
-import { lastAttackTimer, lastAttackPop } from './data/game-data.js';
+} from '../data/armies.js';
 
 const unitType = 0;
 const hp = 1;
 const def = 2;
 const atk = 3;
-
-// check for an attack every resource tick.
-// an attack will happen every 25 skeleton pop (including army)
-// or every 5 minute (which ever occurs first).
-export function shouldAttack(dt) {
-  const timer = state.add([data, 0, lastAttackTimer, dt]);
-
-  // keep track of the last population when the attack occurred
-  // so if population is lost due to the attack the player can
-  // rebuild up to the prior population before another attack
-  // based on population occurs
-  const lastPop = state.get([data, 0, lastAttackPop], 0);
-  const totalPop = [
-    skeletons,
-    militia,
-    infantry,
-    archers,
-    calvary
-  ].reduce((total, resourceIndex) => {
-    return total += state.get([resource, resourceIndex, amount], 0);
-  }, 0)
-
-  if (
-    // use a maximum attack timer so players cannot just sit on
-    // their population and not get attacked
-    timer >= ATTACK_TICK ||
-    totalPop >= lastPop + 25
-  ) {
-    state.set([data, 0, lastAttackTimer, 0]);
-    state.set([data, 0, lastAttackPop, totalPop]);
-    return true;
-  }
-
-  return false;
-}
 
 /**
  * Resolve a battle between two armies. Modeled after OGame battle resolution.
@@ -64,7 +18,7 @@ export function shouldAttack(dt) {
  * @param {number[]} defenders - Amount of each unit type for the defenders.
  */
 window.resolveBattle = resolveBattle;
-export function resolveBattle(attackers, defenders) {
+export default function resolveBattle(attackers, defenders) {
   attackers = convertToArmyStats(attackers);
   defenders = convertToArmyStats(defenders);
 
@@ -166,7 +120,7 @@ function armyAttack(attackers, defenders) {
     // const style = 'font-weight: bold;'
     // console.log('%cnext attack', style);
     // each unit picks a random unit to attack
-    const defI = randInt(0, defenders.length - 1);
+    const defI = random.randInt(0, defenders.length - 1);
     let defender = defenders[defI];
     unitAttack(attacker, defender, atkI, defI);
 
@@ -181,13 +135,13 @@ function armyAttack(attackers, defenders) {
     while (
       (percent = armies[ attacker[unitType] ][advantage][ defender[unitType] ])
     ) {
-      const rand = Math.random();
+      const rand = random.rand();
 
       // console.log(`chance to attack again. needed ${percent} rolled`, rand);
       if (rand >= percent) return;
 
       // console.log('advantage attack');
-      const defI = randInt(0, defenders.length - 1);
+      const defI = random.randInt(0, defenders.length - 1);
       defender = defenders[defI];
       unitAttack(attacker, defender, atkI, defI);
     }
@@ -231,7 +185,7 @@ function unitAttack(attacker, defender, atkI, defI) {
   const initialHealth = armies[ defender[unitType] ][health];
   if (defender[hp] / initialHealth < 0.7) {
     const target = 1 - defender[hp] / initialHealth;
-    const rand = Math.random();
+    const rand = random.rand();
     // console.log('chance to die instantly. needed', target, 'rolled', rand);
     if (rand < target) {
       // console.log('died instantly');

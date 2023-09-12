@@ -7,7 +7,7 @@ import {
   reanimateMilitia,
   reanimateInfantry,
   reanimateArchers,
-  reanimateCalvary
+  reanimateCavalry
 } from './actions.js';
 import {
   built,
@@ -52,13 +52,13 @@ export const bows = 14;
 export const militia = 15;
 export const infantry = 16;
 export const archers = 17;
-export const calvary = 18;
+export const cavalry = 18;
 
 let resources = [];
 export default resources;
 
 export function initResources() {
-  resources.push.call(resources,
+  resources.push(
     // 0
     [
       'Wood',
@@ -242,11 +242,11 @@ export function initResources() {
 
     // 18
     [
-      'Calvary',
-      '🏇',
+      'Cavalry',
+      '🐴',
       ,  // no limit
       [
-        [action, reanimateCalvary, actionVisible, true]
+        [action, reanimateCavalry, actionVisible, true]
       ]
     ]
   );

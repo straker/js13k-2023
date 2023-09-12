@@ -5,11 +5,18 @@ import {
   XLONG_COOLDOWN
 } from '../constants.js';
 import { resource, action, building } from './state.js';
-import {
+import resources, {
+  icon,
   amount,
   wood,
   stone,
   corpses,
+  planks,
+  blocks,
+  ironOre,
+  iron,
+  tools,
+  charcoal,
   mana,
   skeletons,
   weapons,
@@ -18,7 +25,7 @@ import {
   militia,
   infantry,
   archers,
-  calvary
+  cavalry
 } from './resources.js';
 import { built, rituralCircle, woodcuttersCamp, laboratory } from './buildings.js';
 import { assigned, idle } from './tasks.js';
@@ -45,13 +52,17 @@ export const recoverMana = 4;
 export const reanimateMilitia = 5;
 export const reanimateInfantry = 6;
 export const reanimateArchers = 7;
-export const reanimateCalvary = 8;
+export const reanimateCavalry = 8;
+export const attackHamlet = 9;
+export const attackVillage = 10;
+export const attackIronMine = 11;
+export const attackCity = 12;
 
 const actions = [];
 export default actions;
 
 export function initActions() {
-  actions.push.call(actions,
+  actions.push(
     // 0
     [
       'Chop Wood',
@@ -123,7 +134,7 @@ export function initActions() {
     // 5
     [
       'Reanimate Militia',
-      'Reanimate a group of corpses to fight for you as unarmed Militia.<br/><br/>Militia are cheap but weak vs Infantry, Archers, and Calvary',
+      'Reanimate a group of corpses to fight for you as unarmed Militia.<br/><br/>Militia are cheap but weak vs Infantry, Archers, and Cavalry',
       LONG_COOLDOWN,
       [
         [militia, 10]
@@ -141,19 +152,19 @@ export function initActions() {
     // 6
     [
       'Reanimate Infantry',
-      'Reanimate a group of corpses to fight for you as armed Infantry.<br/><br/>Infantry are strong vs Calvary',
+      'Reanimate a group of corpses to fight for you as armed Infantry.<br/><br/>Infantry are strong vs Cavalry',
       LONG_COOLDOWN,
       [
-        [infantry, 8]
+        [infantry, 5]
       ],
       [
         [building, laboratory, built, 1]
       ],
       [
         [mana, 175],
-        [corpses, 8],
-        [weapons, 8],
-        [armor, 8],
+        [corpses, 5],
+        [weapons, 5],
+        [armor, 5],
       ],
       300
     ],
@@ -180,11 +191,11 @@ export function initActions() {
 
     // 8
     [
-      'Reanimate Calvary',
-      'Reanimate a group of corpses to fight for you as Calvary.<br/><br/>Calvary are strong vs Archers',
+      'Reanimate Cavalry',
+      'Reanimate a group of corpses to fight for you as Cavalry.<br/><br/>Cavalry are strong vs Archers',
       LONG_COOLDOWN,
       [
-        [calvary, 4]
+        [cavalry, 4]
       ],
       [
         [building, laboratory, built, 1]
@@ -197,6 +208,50 @@ export function initActions() {
       ],
       450
     ],
+
+    // // 9
+    // [
+    //   'Attack Hamlet',
+    //   `Send your army to attack a poorly defended hamlet and pillage <span>${resources[wood][icon]}</span> and <span>${resources[stone][icon]}</span>`,
+    //   LONG_COOLDOWN,
+    //   [],
+    //   [
+    //     [building, laboratory, built, 1]
+    //   ]
+    // ],
+
+    // // 10
+    // [
+    //   'Attack Village',
+    //   `Send your army to attack a decently defended village and pillage <span>${resources[planks][icon]}</span> and <span>${resources[blocks][icon]}</span>`,
+    //   LONG_COOLDOWN,
+    //   [],
+    //   [
+    //     [building, laboratory, built, 1]
+    //   ]
+    // ],
+
+    // // 11
+    // [
+    //   'Attack Iron Mine',
+    //   `Send your army to attack a moderately defended Iron Mine and pillage <span>${resources[charcoal][icon]}</span> and <span>${resources[ironOre][icon]}</span>`,
+    //   LONG_COOLDOWN,
+    //   [],
+    //   [
+    //     [building, laboratory, built, 1]
+    //   ]
+    // ],
+
+    // // 12
+    // [
+    //   'Attack City',
+    //   `Send your army to attack a heavily defended city and pillage <span>${resources[iron][icon]}</span> and <span>${resources[tools][icon]}</span>`,
+    //   LONG_COOLDOWN,
+    //   [],
+    //   [
+    //     [building, laboratory, built, 1]
+    //   ]
+    // ]
   );
 
   // first action is always visible

@@ -74,7 +74,7 @@ const buildings = [];
 export default buildings;
 
 export function initBuildings() {
-  buildings.push.call(buildings,
+  buildings.push(
     // 0
     [
       'Ritual Circle',

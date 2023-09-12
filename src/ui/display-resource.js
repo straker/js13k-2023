@@ -23,13 +23,13 @@ import {
   militia,
   infantry,
   archers,
-  calvary
+  cavalry
 } from '../data/resources.js';
 import armies, {
   militia as militiaIndex,
   infantry as infantryIndex,
   archers as archersIndex,
-  calvary as calvaryIndex,
+  cavalry as cavalryIndex,
   health,
   defense,
   attack
@@ -72,7 +72,7 @@ export default function displayResource(data, index) {
       ? iG
       : [tools, weapons, armor, bows].includes(index)
       ? tG
-      : [militia, infantry, archers, calvary].includes(index)
+      : [militia, infantry, archers, cavalry].includes(index)
       ? aG
       : index == skeletons
       ? pop
@@ -85,9 +85,9 @@ function setText(div, data, index) {
     [militia]: armies[militiaIndex],
     [infantry]: armies[infantryIndex],
     [archers]: armies[archersIndex],
-    [calvary]: armies[calvaryIndex],
+    [cavalry]: armies[cavalryIndex],
   };
-  const isUnit = [militia, infantry, archers, calvary].includes(index);
+  const isUnit = [militia, infantry, archers, cavalry].includes(index);
 
   let text = `
     <span class="icon ${data[name]}">${data[icon]}</span>
@@ -103,7 +103,7 @@ function setText(div, data, index) {
               : ''
           }
           ${
-            [militia, infantry, archers, calvary].includes(index)
+            [militia, infantry, archers, cavalry].includes(index)
               ? displayArmyStats(armyMap[index])
               : ''
           }

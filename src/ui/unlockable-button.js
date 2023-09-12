@@ -11,9 +11,17 @@ import {
   showWhenPrereqMet,
   displayCost
 } from '../utils.js';
+import Dialog from './dialog.js';
+
+const lockedDialog = new Dialog({
+  confirm: 'OK'
+});
+const unlockDialog = new Dialog({
+  confirm: 'OK',
+  cancel: 'Cancel'
+});
 
 export default class UnlockableButton {
-
   constructor(
     data,
     index,
@@ -73,20 +81,24 @@ export default class UnlockableButton {
       // player to click it
       if (locked) {
         if (state.get([resource, research, amount], 0) < data[researchCost]) {
-          window.alert('Not enough Research to unlock ' + buttonName);
-        }
-        else if (window.confirm(`Unlock ${buttonName} for ${data[researchCost]} Research?`)) {
-          locked = false;
-          button.querySelector('.lock').remove();
-          button.querySelector('.Research').remove();
-          button.classList.remove('locked');
-
-          state.add([resource, research, amount, -data[researchCost]]);
-          state.set([stateIndex, index, unlocked, true]);
-          state.add([stateIndex, index, disabled, !this.canAfford(data)]);
-          this.enableWhenCanAfford(data, index);
+          lockedDialog.open(`Not enough <span class="cost-icon">${resources[research][icon]}</span> to unlock ${buttonName}`);
+          return;
         }
 
+        unlockDialog.open(
+          `Unlock ${buttonName} for ${displayCost(resources[research], data[researchCost])}?`,
+          () => {
+            locked = false;
+            button.querySelector('.lock').remove();
+            button.querySelector('.Research').remove();
+            button.classList.remove('locked');
+
+            state.add([resource, research, amount, -data[researchCost]]);
+            state.set([stateIndex, index, unlocked, true]);
+            state.add([stateIndex, index, disabled, !this.canAfford(data)]);
+            this.enableWhenCanAfford(data, index);
+          }
+        );
         return;
       }
 

@@ -1,5 +1,5 @@
 import { setStoreItem, getStoreItem } from '../libs/kontra.js';
-import { traversePath } from '../utils.js';
+import { traversePath, random } from '../utils.js';
 import { emit } from '../events.js';
 import { SAVE_KEY } from '../constants.js';
 import resources, {
@@ -13,7 +13,7 @@ import actions, {
   visible as actionVisible,
   clicked,
   disabled as actionDisabled,
-  timer
+  timer as actionTimer
 } from './actions.js';
 import buildings, {
   unlocked as buildingUnlocked,
@@ -27,7 +27,14 @@ import tasks, {
   visible as taskVisible
 } from './tasks.js';
 import armies, { trained } from './armies.js';
-import gameData from './game-data.js';
+import settlements, {
+  cooldown,
+  locations,
+  playerLocation,
+  playerArmy,
+  timer as settlementTimer
+} from './settlements.js';
+import gameData, { randSeed } from './game-data.js';
 
 // indices
 export const resource = 0;
@@ -36,6 +43,7 @@ export const building = 2;
 export const task = 3;
 export const army = 4;
 export const data = 5;
+export const settlement = 6;
 
 const state = {
   /**
@@ -87,12 +95,13 @@ const state = {
     // player during game play
     const saveState = [
       getSaveState(resources, [max, resourceVisible, amount, change]),
-      getSaveState(actions, [actionUnlocked, actionVisible, clicked, actionDisabled, timer]),
+      getSaveState(actions, [actionUnlocked, actionVisible, clicked, actionDisabled, actionTimer]),
       getSaveState(buildings, [buildingUnlocked, built, buildingVisible, buildingDisabled]),
       getSaveState(tasks, [assignable, assigned, taskVisible]),
       // TODO: may need to save upgrades
       getSaveState(armies, [trained]),
-      gameData
+      gameData,
+      // getSaveState(settlements, [])
     ];
 
     setStoreItem(SAVE_KEY, saveState);
@@ -110,7 +119,12 @@ const state = {
     saveState.map((stateItem, stateIndex) => {
       stateItem.map((obj, objIndex) => {
         Object.entries(obj).map(([key, value]) => {
-          initialState[stateIndex][objIndex][key] = value;
+          if (initialState[stateIndex]?.[objIndex]) {
+            initialState[stateIndex][objIndex][key] = value;
+          }
+          else {
+            console.info('State missing:', stateIndex, objIndex, key)
+          }
         });
       });
     });
@@ -128,10 +142,12 @@ export function initState() {
     buildings,
     tasks,
     armies,
-    gameData
+    gameData,
+    settlements
   ];
 
   state._state = state.load(initialState);
+  random.seed(initialState[data][0][randSeed]);
 }
 
 function fromPath(path) {
