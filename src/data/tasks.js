@@ -12,7 +12,8 @@ import {
   tools,
   weapons,
   armor,
-  bows
+  bows,
+  mana
 } from './resources.js';
 import {
   built,
@@ -30,7 +31,8 @@ import {
   armorersWorkshop,
   bowyersWorkshop,
   alchemyLab,
-  outpost
+  outpost,
+  manaPillar
 } from './buildings.js';
 
 // indices
@@ -56,6 +58,7 @@ export const armorsmiths = 11;
 export const bowyers = 12;
 export const alchemists = 13;
 export const snatchers = 14;
+export const channeler = 15;
 
 const tasks = [];
 export default tasks;
@@ -239,5 +242,16 @@ export function initTasks() {
         [building, outpost, built, 1]
       ]
     ],
+
+    // 15
+    [
+      'Channelers',
+      [
+        [mana, 3],
+      ],
+      [
+        [building, manaPillar, built, 1]
+      ]
+    ]
   );
 }

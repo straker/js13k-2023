@@ -6,12 +6,13 @@ export const defense = 3;
 export const attack = 4;
 export const advantage = 5;
 export const upk = 6;  // upk is a calculated value (see notes)
-export const trained = 7;
-export const visible = 8;
+export const capacity = 7;
+export const trained = 8;
+export const visible = 9;
 
 export const militia = 0;
-export const infantry = 1;
-export const archers = 2;
+export const archers = 1;
+export const infantry = 2;
 export const cavalry = 3;
 
 const armies = [];
@@ -27,30 +28,33 @@ export function initArmies() {
       0,
       5,
       [],
-      22
+      22,
+      1
     ],
 
     // 1
-    [
-      'Infantry',
-      'Armed and armored Skeletons. Good vs Cavalry.',
-      100,
-      25,
-      15,
-      // index = army index
-      [.25,,, .5],
-      11
-    ],
-
-    // 2
     [
       'Archers',
       'Skeletons with Bows. Good vs Infantry.',
       75,
       14,
       9,
+      // index = army index
       [.25, .75],
-      6
+      11,
+      2
+    ],
+
+    // 2
+    [
+      'Infantry',
+      'Armed and armored Skeletons. Good vs Cavalry.',
+      100,
+      25,
+      15,
+      [.25,,, .5],
+      6,
+      4
     ],
 
     // 3
@@ -61,7 +65,8 @@ export function initArmies() {
       40,
       25,
       [.25,, .5],
-      4
+      4,
+      8
     ]
   )
 }

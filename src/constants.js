@@ -1,7 +1,7 @@
 // tick timers are in fps
 export const RESOURCE_TICK = 600;  // 10s
 export const SAVE_TICK = 3600;     // 1min
-export const ATTACK_TICK = 18e3;   // 5min
+export const ATTACK_TICK = 36e3;   // 10min
 
 // cooldown timers are in seconds
 export const LONG_COOLDOWN = 10;

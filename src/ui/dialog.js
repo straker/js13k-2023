@@ -5,7 +5,7 @@ export default class Dialog {
   constructor({
     confirm,
     cancel
-  }) {
+  } = {}) {
     const dialog = this.dialog = html(`
       <dialog>
         <div class="head"></div>

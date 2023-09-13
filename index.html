@@ -79,6 +79,11 @@
     color: #FF4242;
   }
 
+  #atk .cost {
+    color: #fdfdfd;
+    margin-top: 0.5rem;
+  }
+
   h2 {
     margin: 0;
   }
@@ -166,6 +171,11 @@
     grid-area: tskP;
   }
 
+  .win {
+    font-size: 2rem;
+    margin: 2rem;
+  }
+
   /* Action group */
   .cooldown {
     position: absolute;
@@ -233,7 +243,8 @@
   }
 
   /* Icons */
-  .icon {
+  .icon,
+  .atkArmy .cost-icon {
     width: 1.25rem;
     height: 1.25rem;
     margin-right: 0.35rem;
@@ -244,6 +255,10 @@
       0px 1px 0 #fdfdfd,
       0px -1px 0 #fdfdfd,
       -1px 0px 0 #fdfdfd
+  }
+
+  .atkArmy .cost-icon {
+    margin: 0;
   }
 
   .cost-icon,
@@ -361,6 +376,7 @@
     max-width: 50vw;
     visibility: hidden;
     transition: opacity 0.25s;
+    overflow: hidden;
   }
 
   dialog[open] {
@@ -443,20 +459,20 @@
 <body>
   <main>
     <div id="resG">
-      <div id="saved" class="hide">Game Saved</div>
-      <div id="atk" class="tipC" hidden>
-        <span>🎯 Attack Incoming</span>
-        <span id="atkTimer">01:20</span>
-        <span class="tip b">
-          20 Militia
-        </span>
-      </div>
       <div class="g" id="wG"></div> <!-- wood group -->
       <div class="g" id="sG"></div> <!-- stone group -->
       <div class="g" id="iG"></div> <!-- iron group -->
       <div class="g" id="tG"></div> <!-- tools group -->
       <div class="g" id="mG"></div> <!-- misc group -->
       <div class="g" id="aG"></div> <!-- army group -->
+      <div id="atk" hidden>
+        <div>
+          <span>🎯 Attack Incoming</span>
+          <span id="atkTimer">01:20</span>
+        </div>
+        <div id="atkArmy" class="atkArmy"></div>
+      </div>
+      <div id="saved" class="hide">Game Saved</div>
     </div>
     <pre id="actP"><span>     __/\__
 . _  \\''//

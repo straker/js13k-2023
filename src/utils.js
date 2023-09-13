@@ -1,10 +1,20 @@
 import { on } from './events.js';
 import state, { resource, army, data } from './data/state.js';
-import {
+import resources, {
   name as resourceName,
   icon,
-  amount
+  amount,
+  militia,
+  infantry,
+  archers,
+  cavalry
 } from './data/resources.js';
+import {
+  militia as militiaIndex,
+  infantry as infantryIndex,
+  archers as archersIndex,
+  cavalry as cavalryIndex
+} from './data/armies.js';
 import { upk } from './data/armies.js';
 import { randSeed } from './data/game-data.js';
 
@@ -87,13 +97,38 @@ export function trucnateNumber(value) {
 
 /**
  * Get the HTML to display a resource cost of icon and value.
- * @param {Number[]} resourceData - Resource data array
+ * @param {Number[]} resourceData - Resource data array.
  * @param {Number} value - Cost value.
  * @param {String} [prefix=''] - Cost prefix string.
  * @return {String}
  */
 export function displayCost(resourceData, value, prefix = '') {
   return `<span class="${resourceData[resourceName]}"><span class="cost-icon">${resourceData[icon]}</span> ${prefix}${trucnateNumber(value)}</span>`;
+}
+
+/**
+ * Get the HTML to display an army icon and value.
+ * @param {Number[]} armyList - Army array.
+ * @return {String}
+ */
+export function displayArmy(armyList) {
+  const armyMap = {
+    [militiaIndex]: resources[militia],
+    [infantryIndex]: resources[infantry],
+    [archersIndex]: resources[archers],
+    [cavalryIndex]: resources[cavalry],
+  };
+
+  return `
+    <div class="cost">
+      ${
+        armyList.map((value, index) => {
+          const resourceData = armyMap[index];
+          return `<span class="${resourceData[resourceName]}"><span class="cost-icon">${resourceData[icon]}</span> ${trucnateNumber(value)}</span>`;
+        }).join('')
+      }
+    </div>
+  `
 }
 
 /**

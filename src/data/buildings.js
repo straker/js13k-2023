@@ -34,7 +34,8 @@ import {
   armorsmiths,
   bowyers,
   alchemists,
-  snatchers
+  snatchers,
+  channeler
 } from './tasks.js';
 
 // indices
@@ -64,8 +65,8 @@ export const armorersWorkshop = 11;
 export const bowyersWorkshop = 12;
 export const alchemyLab = 13;
 export const outpost = 14;
-export const morgue = 15;
-export const manaPillar = 16;
+export const manaPillar = 15;
+export const morgue = 16;
 export const warehouse = 17;
 export const armory = 18;
 export const necropolis = 19;
@@ -329,6 +330,24 @@ export function initBuildings() {
 
     // 15
     [
+      'Mana Pillar',
+      `Allows 3 Skeletons to gather <span>${resources[mana][icon]}</span> and increases max <span>${resources[mana][icon]}</span> by 25`,
+      [
+        [stone, 100],
+        [iron, 25]
+      ],
+      [
+        [resource, mana, max, 25],
+        [task, channeler, assignable, 3],
+      ],
+      [
+        [building, laboratory, built, 1]
+      ],
+      40
+    ],
+
+    // 16
+    [
       'Morgue',
       `Increases max <span>${resources[corpses][icon]}</span> by 3`,
       [
@@ -344,40 +363,23 @@ export function initBuildings() {
       25
     ],
 
-    // 16
-    [
-      'Mana Pillar',
-      `Increases max <span>${resources[mana][icon]}</span> by 10`,
-      [
-        [stone, 100],
-        [iron, 25]
-      ],
-      [
-        [resource, mana, max, 10],
-      ],
-      [
-        [building, laboratory, built, 1]
-      ],
-      40
-    ],
-
     // 17
     [
       'Warehouse',
-      'Increases max Wood, Stone, and Iron products by 25',
+      'Increases max Wood, Stone, and Iron products by 50',
       [
         [wood, 60],
         [planks, 25],
         [blocks, 25]
       ],
       [
-        [resource, wood, max, 25],
-        [resource, planks, max, 25],
-        [resource, stone, max, 25],
-        [resource, blocks, max, 25],
-        [resource, charcoal, max, 25],
-        [resource, ironOre, max, 25],
-        [resource, iron, max, 25]
+        [resource, wood, max, 50],
+        [resource, planks, max, 50],
+        [resource, stone, max, 50],
+        [resource, blocks, max, 50],
+        [resource, charcoal, max, 50],
+        [resource, ironOre, max, 50],
+        [resource, iron, max, 50]
       ],
       [
         [building, laboratory, built, 1]

@@ -50,8 +50,8 @@ export const stealCorpse = 2;
 export const reanimateSkeleton = 3;
 export const recoverMana = 4;
 export const reanimateMilitia = 5;
-export const reanimateInfantry = 6;
-export const reanimateArchers = 7;
+export const reanimateArchers = 6;
+export const reanimateInfantry = 7;
 export const reanimateCavalry = 8;
 export const attackHamlet = 9;
 export const attackVillage = 10;
@@ -151,6 +151,25 @@ export function initActions() {
 
     // 6
     [
+      'Reanimate Archers',
+      'Reanimate a group of corpses to fight for you as Archers.<br/><br/>Archers are strong vs Infantry',
+      LONG_COOLDOWN,
+      [
+        [archers, 6]
+      ],
+      [
+        [building, laboratory, built, 1]
+      ],
+      [
+        [mana, 100],
+        [corpses, 6],
+        [bows, 6]
+      ],
+      150
+    ],
+
+    // 7
+    [
       'Reanimate Infantry',
       'Reanimate a group of corpses to fight for you as armed Infantry.<br/><br/>Infantry are strong vs Cavalry',
       LONG_COOLDOWN,
@@ -167,26 +186,6 @@ export function initActions() {
         [armor, 5],
       ],
       300
-    ],
-
-    // 7
-    [
-      'Reanimate Archers',
-      'Reanimate a group of corpses to fight for you as Archers.<br/><br/>Archers are strong vs Infantry',
-      LONG_COOLDOWN,
-      [
-        [archers, 6]
-      ],
-      [
-        [building, laboratory, built, 1]
-      ],
-      [
-        [mana, 100],
-        [corpses, 6],
-        [bows, 6],
-        [armor, 6]
-      ],
-      375
     ],
 
     // 8
