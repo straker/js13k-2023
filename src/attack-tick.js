@@ -194,6 +194,8 @@ on(['timer-tick'], dt => {
 
         const resAmount = state.get([resource, i, amount]);
 
+        if (!resAmount) continue;
+
         // can only pillage up to half of the resource
         const lost = Math.min(armyCapacity, resAmount / 2) | 0;
         pillaged.push([i, lost]);
