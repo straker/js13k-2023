@@ -20,41 +20,40 @@ import { html, showWhenPrereqMet } from '../utils.js';
  * @param {Number} index - The current item of the data.
  */
 export default function displayTask(data, index) {
+  const row = html(`
+    <div class="row tipC" ${!data[visible] ? 'hidden' : ''}>
+    </div>
+  `);
   const taskName = html(`
-    <div class="tipC" ${!data[visible] ? 'hidden' : ''}>
+    <div class="col">
       ${data[name]}
       ${index !== idle ? `<span class="tip">${getTip(data, data[assigned] ?? 0)}</span>` : ``}
     </div>
   `);
 
-  // `tskG` is a global HTML id from index.html
-  tskG.appendChild(taskName);
-
   const div = html(`
-    <div class="tipC">
+    <div class="col">
       <input type="number" min="0" max="0" value="${data[assigned] ?? 0}">
-      <div class="max"></div>
-      ${index !== idle ? `<span class="tip">${getTip(data, data[assigned] ?? 0)}</span>` : ``}
     </div>
   `);
+  const maxDiv = html(`<div class="col max"></div>`)
   const input = div.querySelector('input');
-  const maxDiv = div.querySelector('.max');
-  div.hidden = !data[visible];
+  row.hidden = !data[visible];
   showWhenPrereqMet(data, prereq, div, task, index, visible);
 
   // show tasks heading when first task is shown
   if (index === 0) {
-    // tskP`, `tskT`, and `tskInpT` are global HTML ids from index.html
-    tskP.hidden = tskT.hidden = tskInpT.hidden = !data[visible]
+    // tskP` and `tskT` are global HTML ids from index.html
+    tskP.hidden = tskT.hidden = !data[visible]
 
     on([task, 0, visible], (value) => {
-      tskP.hidden = tskT.hidden = tskInpT.hidden = !value;
+      tskP.hidden = tskT.hidden = !value;
     });
   }
 
   // bind hidden state to the task name
   on([task, index, visible], (value) => {
-    taskName.hidden = !value;
+    row.hidden = !value;
   });
 
   // prevent user from typing into the input
@@ -96,7 +95,6 @@ export default function displayTask(data, index) {
       if (index !== idle) {
         const tip = getTip(data, value);
         taskName.querySelector('.tip').innerHTML = tip;
-        div.querySelector('.tip').innerHTML = tip;
       }
 
       // keep track of the change in resource state to display
@@ -117,8 +115,11 @@ export default function displayTask(data, index) {
     });
   }
 
-  // `tskInpG` is a global HTML id from index.html
-  tskInpG.appendChild(div);
+  // `tskG` is a global HTML id from index.html
+  row.appendChild(taskName);
+  row.appendChild(div);
+  row.appendChild(maxDiv);
+  tskG.appendChild(row);
 }
 
 function getTip(data, value) {

@@ -3,30 +3,33 @@ import loop from '../loop.js';
 
 export default class Dialog {
   constructor({
+    id,
+    head = '',
+    body = '',
     confirm,
     cancel
   } = {}) {
     const dialog = this.dialog = html(`
-      <dialog>
-        <div class="head"></div>
-        <div class="body"></div>
+      <dialog ${id ? `id="${id}"` : ''}>
+        <div class="head">${head ? `<h2>${head}</h2>` : ''}</div>
+        <div class="body">${body}</div>
         <div class="foot"></div>
       </dialog>
     `);
-    const footer = dialog.querySelector('.foot');
+    this.foot = dialog.querySelector('.foot');
     this.head = dialog.querySelector('.head');
     this.body = dialog.querySelector('.body');
 
     if (cancel) {
       const cancelButton = html(`<button>${cancel}</button>`);
       cancelButton.addEventListener('click', () => this.onClose(0));
-      footer.appendChild(cancelButton);
+      this.foot.appendChild(cancelButton);
     }
 
     if (confirm) {
       const confirmButton = html(`<button class="ok">${confirm}</button>`);
-      confirmButton.addEventListener('click', () => this.onClose(1));
-      footer.appendChild(confirmButton);
+      confirmButton.addEventListener('click', (e) => this.onClose(1, e));
+      this.foot.appendChild(confirmButton);
     }
 
     document.body.appendChild(dialog);
@@ -36,6 +39,11 @@ export default class Dialog {
     loop.stop();
     this.prevElm = document.activeElement;
 
+    if (typeof text === 'function') {
+      callback = text;
+      text = null;
+    }
+
     if (text) {
       this.body.innerHTML = `<p>${text}</p>`;
     }
@@ -44,7 +52,11 @@ export default class Dialog {
     this._callback = callback;
   }
 
-  close(how) {
+  close(how, event) {
+    if (event?.target.hasAttribute('aria-disabled')) {
+      return;
+    }
+
     loop.start();
     this.dialog.close();
     this.prevElm.focus();
@@ -54,8 +66,7 @@ export default class Dialog {
     }
   }
 
-  onClose(how) {
-    this.close(how);
+  onClose(how, event) {
+    this.close(how, event);
   }
 }
-window.Dialog = Dialog;

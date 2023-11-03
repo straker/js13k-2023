@@ -38,7 +38,7 @@ import settlementDialog from './settlement-dialog.js';
  * @param {Number} index - The current item of the data.
  */
 export default function displayAction(data, index) {
-  const button = new ActionButton(
+  const { container, button } = new ActionButton(
     data,
     index,
     action,
@@ -83,7 +83,7 @@ export default function displayAction(data, index) {
   });
 
   // `actG` is a global HTML id from index.html
-  actG.appendChild(button);
+  actG.appendChild(container);
 }
 
 class ActionButton extends UnlockableButton {
@@ -98,11 +98,8 @@ class ActionButton extends UnlockableButton {
       attackIronMine,
       attackCity
     ].includes(index)) {
-
-
       return;
     }
-
 
     state.add([action, index, clicked, 1]);
     data[effects].map(([resourceIndex, value]) => {

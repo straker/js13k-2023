@@ -36,7 +36,7 @@ export default function displayBuilding(data, index) {
   // buildings start disabled
   data[disabled] ??= true;
 
-  const button = new BuildingButton(
+  const { container, button }  = new BuildingButton(
     data,
     index,
     building,
@@ -70,7 +70,7 @@ export default function displayBuilding(data, index) {
   });
 
   // `bldG` is a global HTML id from index.html
-  bldG.appendChild(button);
+  bldG.appendChild(container);
 }
 
 class BuildingButton extends UnlockableButton {

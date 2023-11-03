@@ -9,8 +9,8 @@ init();
 loop.start();
 
 // game win condition
-on([building, necropolis, built], () => {
-  const winDialog = new Dialog();
-  winDialog.head.innerHTML = '<b class="win">You Win!</b>';
-  winDialog.open();
-});
+// on([building, necropolis, built], () => {
+//   const winDialog = new Dialog();
+//   winDialog.head.innerHTML = '<b class="win">You Win!</b>';
+//   winDialog.open();
+// });

@@ -4,6 +4,7 @@ import { emit } from './events.js';
 import state from './data/state.js';
 import taskTick from './task-tick.js';
 import attackTick from './attack-tick.js';
+import { saveGame } from './utils.js';
 
 let resourceTimer = 0;
 let saveTimer = 0;
@@ -21,11 +22,7 @@ const loop = GameLoop({
 
     if (++saveTimer >= SAVE_TICK) {
       saveTimer = 0;
-      state.save();
-      console.log('saved');
-      // `saved` is a global HTML id from index.html
-      saved.classList.remove('hide');
-      setTimeout(() => saved.classList.add('hide'));
+      saveGame();
     }
   },
   render() {}

@@ -116,6 +116,11 @@ const state = {
       return initialState;
     }
 
+    if (!isValidState(saveState, initialState)) {
+      this.reset();
+      return initialState;
+    }
+
     saveState.map((stateItem, stateIndex) => {
       stateItem.map((obj, objIndex) => {
         Object.entries(obj).map(([key, value]) => {
@@ -130,6 +135,34 @@ const state = {
     });
 
     return initialState;
+  },
+
+  /**
+   * Reset the game state.
+   */
+  reset() {
+    setStoreItem(SAVE_KEY, null);
+  },
+
+  /**
+   * Export the game state.
+   */
+  export() {
+    // don't use getStateItem as that parses the string. use btoa
+    // to base64 encode the output
+    return btoa(localStorage.getItem(SAVE_KEY));
+  },
+
+  /**
+   * Import a game state.
+   */
+  import(base64State) {
+    // don't use setStateItem as the state is already stringified
+    try {
+      localStorage.setItem(SAVE_KEY, atob(base64State));
+    } catch (err) {
+      this.reset();
+    }
   }
 };
 export default state;
@@ -143,7 +176,7 @@ export function initState() {
     tasks,
     armies,
     gameData,
-    settlements
+    // settlements
   ];
 
   state._state = state.load(initialState);
@@ -167,4 +200,33 @@ function getSaveState(data, filterIndices) {
       return obj;
     }, {})
   });
+}
+
+function isValidState(saveState, initialState) {
+  return (
+    Array.isArray(saveState) &&
+    saveState.length === initialState.length &&
+
+    saveState[resource].length === resources.length &&
+    saveState[resource].every(isObject) &&
+
+    saveState[action].length === actions.length &&
+    saveState[action].every(isObject) &&
+
+    saveState[building].length === buildings.length &&
+    saveState[action].every(isObject) &&
+
+    saveState[task].length === tasks.length &&
+    saveState[task].every(isObject) &&
+
+    saveState[army].length === armies.length &&
+    saveState[army].every(isObject) &&
+
+    saveState[data].length === gameData.length &&
+    Array.isArray(saveState[data][0])
+  );
+}
+
+function isObject(value) {
+  return value && typeof value === 'object' && !Array.isArray(value);
 }

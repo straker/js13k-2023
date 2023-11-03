@@ -6,12 +6,14 @@ import displayTask from './display-task.js';
 import { attackTimer, attackArmy } from '../data/game-data.js';
 import { displayArmy } from '../utils.js';
 import { on } from '../events.js';
+import initMenu from './menu.js';
 
 export default function initUI() {
   state.get([resource]).map(displayResource);
   state.get([action]).map(displayAction);
   state.get([building]).map(displayBuilding);
   state.get([task]).map(displayTask);
+  initMenu();
 
   // display attacking army info
   const attackingArmy = state.get([data, 0, attackArmy]);

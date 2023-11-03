@@ -25,10 +25,10 @@
 
   main {
     display: grid;
-    grid-template-columns: 1fr 1fr 0.5fr 0.5fr;
+    grid-template-columns: 1fr 1fr 1fr;
     grid-template-areas:
-      "resources resources resources resources"
-      "actP bldP tskP tskP"
+      "resources resources resources"
+      "actP bldP tskP"
   }
 
   /* Resource group */
@@ -84,16 +84,26 @@
     margin-top: 0.5rem;
   }
 
+  .group {
+    position: relative;
+  }
+
+  .group [hidden] {
+    display: none !important;
+  }
+
   h2 {
-    margin: 0;
+    margin: 0 1rem;
   }
 
   /* Main body */
-  main > div:not(#resG) {
+  .group > div {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
     padding: 1rem;
+    max-height: 59.5vh;
+    overflow-y: auto;
   }
 
   pre {
@@ -105,7 +115,12 @@
     padding: 1rem 0 0;
   }
 
+  a, button {
+    outline-offset: 2px;
+  }
+
   button {
+    width: 100%;
     display: flex;
     align-items: center;
     padding: 0.25rem 0.5rem;
@@ -126,11 +141,22 @@
     background: rgba(233, 233, 237, 0.5);
     color: rgba(0, 0, 0, 0.5);
     border-color: rgba(0, 0, 0, 0.5);
+    cursor: not-allowed;
+  }
+
+  button[aria-disabled="true"] img {
+    opacity: 0.5;
   }
 
   .btn-r {
     margin-left: auto;
     display: inline-flex;
+  }
+
+  .btn-r > span {
+    display: inline-flex;
+    gap: 0.25rem;
+    align-items: center;
   }
 
   .cost {
@@ -144,6 +170,10 @@
     gap: 0.25rem;
   }
 
+  .locked .Research {
+    font-size: 0.95rem;
+  }
+
   .lock {
     background: #E62200;
     border-radius: 50%;
@@ -153,7 +183,11 @@
     border: 1px solid black;
     z-index: 2;
     aspect-ratio: 1 / 1;
-    height: 100%;
+    height: 1.4rem;
+  }
+
+  .lock img {
+    width: 1rem;
   }
 
   .Research:not(.icon) {
@@ -165,10 +199,11 @@
     display: inline-flex;
     align-items: center;
     gap: 0.25rem;
+    height: 1.4rem;
   }
 
-  #tskP {
-    grid-area: tskP;
+  .Research:not(.icon) img {
+    padding: 0.15rem;
   }
 
   .win {
@@ -199,6 +234,9 @@
     width: 50%;
     padding: 0;
     font-size: 1rem;
+    height: 2rem;
+    border: 0;
+    float: right;
   }
 
   input:focus {
@@ -211,22 +249,41 @@
      opacity: 1;
   }
 
-  #tskG > div,
-  #tskInpG input {
+  .tsk {
+    display: grid;
+    grid-auto-rows: min-content;
+    grid-template-areas:
+      "header pop"
+      "body body"
+  }
+
+  .tskC {
+    grid-area: body;
+  }
+
+  #tskG {
+    display: table;
+    padding-right: 1rem;
+  }
+
+  .row {
+    display: table-row !important;
     height: 2rem;
-    display: flex;
-    align-items: center;
-    border: 0;
   }
 
-  #tskG > div {
-    padding: 0.5rem;
+  .col {
+    display: table-cell;
+    vertical-align: middle;
+    height: 2rem;
+    box-sizing: initial;
   }
 
-  #tskInpG > div {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
+  .row + .row > .col {
+    padding-top: 0.5rem;
+  }
+
+  .col + .col {
+    padding-left: 0.75rem;
   }
 
   #tskInpT .icon {
@@ -235,21 +292,57 @@
   }
 
   #pop {
-    position: absolute;
+    padding: 0;
+    overflow: unset;
+    max-height: unset;
   }
 
   .max {
     white-space: nowrap;
   }
 
+  /* Footer */
+  footer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1.5rem;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    margin: 0.75rem 1rem;
+  }
+
+  footer :is(button, a) {
+    background: none;
+    color: #333;
+    text-decoration: underline;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    height: auto;
+    white-space: nowrap;
+  }
+
+  footer :is(button:hover, button:focus) {
+    background: none;
+    cursor: pointer;
+  }
+
+  textarea {
+    width: 100%;
+  }
+
   /* Icons */
   .icon,
   .atkArmy .cost-icon {
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 1.35rem;
+    height: 1.35rem;
     margin-right: 0.35rem;
     display: inline-flex;
     align-items: center;
+    justify-content: end;
     text-shadow:
       1px 0px 0 #fdfdfd,
       0px 1px 0 #fdfdfd,
@@ -258,6 +351,14 @@
   }
 
   .atkArmy .cost-icon {
+    margin: 0;
+  }
+
+  .icon:is(.Weapons, .Bows, .Planks, .Research) img {
+    width: 1.25rem;
+  }
+
+  .cost-icon {
     margin: 0;
   }
 
@@ -283,8 +384,8 @@
   }
 
   img {
-    filter: drop-shadow(1px 0 #fdfdfd) drop-shadow(-1px 0 #fdfdfd) drop-shadow(0 1px #fdfdfd) drop-shadow(0 -1px #fdfdfd);
-    width: 1rem;
+    filter: drop-shadow(0.5px 0 #fdfdfd) drop-shadow(-0.5px 0 #fdfdfd) drop-shadow(0 0.5px #fdfdfd) drop-shadow(0 -0.5px #fdfdfd);
+    width: 1.35rem;
     height: auto;
     vertical-align: text-bottom;
   }
@@ -292,19 +393,18 @@
   /* Tooltip */
   .tipC {
     position: relative;
+    display: inline-flex;
+    align-items: center;
   }
 
   .tip {
     position: absolute;
     z-index: 5;
-    left: 0;
     background: #fdfdfd;
     box-shadow: -3px 5px 6px #222;
     border: 1px solid #222;
     border-radius: 4px;
     padding: 0.5rem 0.5rem;
-    min-width: 100%;
-    bottom: 140%;
     display: inline-flex;
     align-items: start;
     flex-direction: column;
@@ -314,10 +414,25 @@
     opacity: 1;
     color: #222;
     font-weight: normal;
+    transition: 0s opacity;
+    opacity: 0;
+    bottom: 110%;
+    left: 0;
   }
 
+  :is(.tipC:hover, .tipC:focus-visible) + .tip:not(:hover),
   :is(.tipC:hover, .tipC:focus-visible) .tip:not(:hover) {
     visibility: visible;
+    transition-delay: 0.25s;
+    transition-duration: 0.15s;
+    opacity: 1;
+  }
+
+  .tip.t {
+    top: -7.5rem;
+    left: 1rem;
+    bottom: unset;
+    width: calc(100% - 2rem);
   }
 
   .tip.b {
@@ -356,6 +471,7 @@
 
   p span {
     margin: 0 0.15rem;
+    vertical-align: text-bottom;
   }
 
   /* Dialog */
@@ -377,6 +493,11 @@
     visibility: hidden;
     transition: opacity 0.25s;
     overflow: hidden;
+    min-width: 35vw;
+  }
+
+  dialog h2 {
+    margin: 0;
   }
 
   dialog[open] {
@@ -397,15 +518,13 @@
     justify-content: center;
   }
 
+  dialog li {
+    margin: 0.5rem 0;
+  }
+
   .head:not(:empty) {
     margin-bottom: 1rem;
   }
-
-  /*.body {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 0.5rem;
-  }*/
 
   .body .Research {
     all: unset;
@@ -454,6 +573,10 @@
         opacity: 0;
     }
   }
+
+  #menu button {
+    margin: 0.5rem 0;
+  }
   </style>
 </head>
 <body>
@@ -489,7 +612,8 @@
   /__________________\
    ||  || /--\ ||  ||
    ||[]|| | .| ||[]||
-   ||__||_|__|_||__||</span></pre>
+   ||__||_|__|_||__||
+                [nosig]</span></pre>
     <pre hidden id="tskP"><span>               .---.
      |________/     \________
 ()===|_______( () () )_______>
@@ -497,14 +621,22 @@
                |HHH|
                `---'
 </span></pre>
-    <div id="actG"><h2>Actions</h2></div>
-    <div id="bldG"><h2 hidden id="bldT">Buildings</h2></div>
-    <div id="tskG"><h2 hidden id="tskT">Tasks</h2></div>
-    <div id="tskInpG">
-      <div hidden id="tskInpT">
-        <h2>&nbsp;</h2><div id="pop"></div>
-      </div>
+    <div class="group">
+      <h2>Actions</h2>
+      <div id="actG"></div>
     </div>
+    <div class="group">
+      <h2 hidden id="bldT">Buildings</h2>
+      <div id="bldG"></div>
+    </div>
+    <div class="group tsk">
+      <h2 hidden id="tskT">Tasks</h2>
+      <div id="pop"></div>
+      <div class="tskC"><div id="tskG"></div></div>
+    </div>
+    <footer>
+      <button id="menu">Menu</button>
+    </footer>
   </main>
   <script src="./src/index.js" type="module"></script>
 </body>

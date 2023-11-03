@@ -95,6 +95,10 @@ export function trucnateNumber(value) {
     : (value / 1e6).toFixed(1) + 'M'
 }
 
+export function displayIcon(resourceData) {
+  return `<span class="icon ${resourceData[resourceName]}">${resourceData[icon]}</span>`
+}
+
 /**
  * Get the HTML to display a resource cost of icon and value.
  * @param {Number[]} resourceData - Resource data array.
@@ -103,7 +107,7 @@ export function trucnateNumber(value) {
  * @return {String}
  */
 export function displayCost(resourceData, value, prefix = '') {
-  return `<span class="${resourceData[resourceName]}"><span class="cost-icon">${resourceData[icon]}</span> ${prefix}${trucnateNumber(value)}</span>`;
+  return `<span class="${resourceData[resourceName]}"><span class="cost-icon icon ${resourceData[resourceName]}">${resourceData[icon]}</span> ${prefix}${trucnateNumber(value)}</span>`;
 }
 
 /**
@@ -167,7 +171,6 @@ export const random = {
     state.set([data, 0, randSeed, seed]);
   }
 };
-window.random = random;
 
 /**
  *
@@ -195,4 +198,11 @@ export function generateArmy(strength, availableUnits) {
 
   return armyList;
 }
-window.generateArmy = generateArmy;
+
+export function saveGame() {
+  state.save();
+  console.log('saved');
+  // `saved` is a global HTML id from index.html
+  saved.classList.remove('hide');
+  setTimeout(() => saved.classList.add('hide'));
+}

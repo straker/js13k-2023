@@ -94,22 +94,18 @@ function setText(div, data, index) {
     <span class="amount">
       ${trucnateNumber(data[amount] ?? 0)}${!data[max] ? '' : `/${trucnateNumber(data[max])}`}
     </span>
-    ${index !== skeletons
-      ? `
-        <span class="tip res b${isUnit ? '  unit' : ''}${index == skeletons ? ' r' : ''}">
-          <b>${data[name]}</b>${
-            !isUnit
-              ? `: ${data[change] > 0 ? '+' : ''}${data[change] ?? 0} per ${RESOURCE_TICK / 60}s`
-              : ''
-          }
-          ${
-            [militia, infantry, archers, cavalry].includes(index)
-              ? displayArmyStats(armyMap[index])
-              : ''
-          }
-        </span>`
-      : ''
-    }
+    <span class="tip res b${isUnit ? '  unit' : ''}${index == skeletons ? ' r' : ''}">
+      <b>${data[name]}</b>${
+        !isUnit && index !== skeletons
+          ? `: ${data[change] > 0 ? '+' : ''}${data[change] ?? 0} per ${RESOURCE_TICK / 60}s`
+          : ''
+      }
+      ${
+        [militia, infantry, archers, cavalry].includes(index)
+          ? displayArmyStats(armyMap[index])
+          : ''
+      }
+    </span>
   `;
 
   div.innerHTML = text;

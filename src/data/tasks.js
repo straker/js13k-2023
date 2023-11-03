@@ -53,9 +53,9 @@ export const burners = 6;
 export const miners = 7;
 export const smelters = 8;
 export const blacksmiths = 9;
-export const weaponsmiths = 10;
-export const armorsmiths = 11;
-export const bowyers = 12;
+export const bowyers = 10;
+export const weaponsmiths = 11;
+export const armorsmiths = 12;
 export const alchemists = 13;
 export const snatchers = 14;
 export const channeler = 15;
@@ -184,6 +184,19 @@ export function initTasks() {
 
     // 10
     [
+      'Bowyers',
+      [
+        [wood, -2],
+        [planks, -1],
+        [bows, 1]
+      ],
+      [
+        [building, bowyersWorkshop, built, 1]
+      ]
+    ],
+
+    // 11
+    [
       'Weaponsmiths',
       [
         [iron, -1],
@@ -195,7 +208,7 @@ export function initTasks() {
       ]
     ],
 
-    // 11
+    // 12
     [
       'Armorsmiths',
       [
@@ -205,19 +218,6 @@ export function initTasks() {
       ],
       [
         [building, armorersWorkshop, built, 1]
-      ]
-    ],
-
-    // 12
-    [
-      'Bowyers',
-      [
-        [wood, -2],
-        [planks, -1],
-        [bows, 1]
-      ],
-      [
-        [building, bowyersWorkshop, built, 1]
       ]
     ],
 

@@ -134,17 +134,17 @@ export function initActions() {
     // 5
     [
       'Reanimate Militia',
-      'Reanimate a group of corpses to fight for you as unarmed Militia.<br/><br/>Militia are cheap but weak vs Infantry, Archers, and Cavalry',
+      'Militia are cheap but weak vs Infantry, Archers, and Cavalry',
       LONG_COOLDOWN,
       [
-        [militia, 10]
+        [militia, 5]
       ],
       [
         [building, laboratory, built, 1]
       ],
       [
-        [mana, 50],
-        [corpses, 10]
+        [mana, 25],
+        [corpses, 5]
       ],
       30
     ],
@@ -152,7 +152,7 @@ export function initActions() {
     // 6
     [
       'Reanimate Archers',
-      'Reanimate a group of corpses to fight for you as Archers.<br/><br/>Archers are strong vs Infantry',
+      'Archers are strong vs Infantry',
       LONG_COOLDOWN,
       [
         [archers, 6]
@@ -171,7 +171,7 @@ export function initActions() {
     // 7
     [
       'Reanimate Infantry',
-      'Reanimate a group of corpses to fight for you as armed Infantry.<br/><br/>Infantry are strong vs Cavalry',
+      'Infantry are strong vs Cavalry',
       LONG_COOLDOWN,
       [
         [infantry, 5]
@@ -191,7 +191,7 @@ export function initActions() {
     // 8
     [
       'Reanimate Cavalry',
-      'Reanimate a group of corpses to fight for you as Cavalry.<br/><br/>Cavalry are strong vs Archers',
+      'Cavalry are strong vs Archers',
       LONG_COOLDOWN,
       [
         [cavalry, 4]

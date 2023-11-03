@@ -40,14 +40,16 @@ export default class UnlockableButton {
     const buttonName = data[name];
     let locked = data[researchCost] && !data[unlocked];
 
-    const button = html(`
-      <button class="tipC ${locked ? 'locked' : ''}">
-        ${locked
-          ? '<span class="lock">🔒</span>' + displayCost(resources[research], data[researchCost])
-          : ''
-        }
-        <span>${buttonName}</span>
-        <span class="tip">
+    const container = html(`
+      <div>
+        <button class="tipC ${locked ? 'locked' : ''}">
+          ${locked
+            ? '<span class="lock"><img width=20 height=20 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAApgAAAKYB3X3/OAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAM5SURBVEiJpZVPaBR3FMe/b2bM/nFnM9l1/2m2m4Q0tYSENIKwFQ8x4EWIFg8VpBeRHkorrbmk2iAS257SS2nIoYLgQYpGgv9QL0IU0R4CXrSHbGSpu8kmu9vdZNdxd3bm9bBSstnZ3YF+YWDmvd/7ft68H/MbYmY0ExEp7R3e7yVRGpEkKQAAlUolVdErj/L/ZH5m5lzT+mYAm23nMXd7+6/HPz+92x/YI6ylkgAAf2A31lIJY+6P35Mb+fw3pVJxvqEJM5teTqfz1OBwND05Nctd3X2pDo9vweVyT7pc7skOj2+hq7svNTk1y4PD0bTT6TzVyMc8CAQDwXDi/MUZVpRdMQBDJmuGFGVX7PzFGQ4EwwkAQcsAr9c/Pz4xbXSGe5IAeht2B/R2hnuS4xPThtfrnzdbI5iNTRDFAV3XqLCZn2PmpSbjXSps5ud0XSNBFAdMvbYHiMgty4pjOfaymMtl7jfcvPfK5TL3l2Mvi7KsOIjI3RIAoDsYCksriXgRQKwVAEBsJREvBkNhCUC3FQABTEaL72OrqmuZqrW1kswKmNEGJusEJhtzvXkjgBB//coloER9EflyV6e8qhswGnn7vXY5+fdfMmgHYDKROsDIfv+PJ0Z9wv6PFcBu/xQOu6WXeLqYNn67WvgOwBdNAeo7/eCXRyPVB0UBJNMp1ujhkwR6Iy6BiEZavgHMN76pDkVDAAAC1fm1bu+9nr9Yw7eXFgEAv5wbRvQT/3+5BwuJhnWm3WY3yshulGtiZ6YW4VD2waHsw9mfFmty61kV61nVOuDW41XcerxaEyMSYBg6DEOHJFmfouWVF77uR3ptGZn1ZfzwVX9NzqPY4FFs/w+wJ+CAQBoADSGfoyY3NhrB2GjEtM7yJvd/2AFnWwEVvXpvVXUAXWftow9c1Ra3nEeiSHh240hTM003SttjdSPSdON5Ml1CdMADaJrlTq/fe11S1cqf2+N1P30iahvaq9x1OaQDxw4G7WOHe6i3zwcSas8yZmApnsfNB3H12p1YPpMrPXmzUjjJzOWmgC0g2eu2f9YVdp55+7YS0kGGJAkiM3OpbJQ1zSiLAuKprHpFVfXbzLxp5vMvAzOtdKGXnXcAAAAASUVORK5CYII="/></span>' + displayCost(resources[research], data[researchCost])
+            : ''
+          }
+          <span>${buttonName}</span>
+        </button>
+        <div class="tip t">
           <b>${buttonName}</b>
           <span class="cost">
             ${data[cost].map(([resourceIndex, value]) => {
@@ -59,9 +61,10 @@ export default class UnlockableButton {
             ? `<em>Requires ${data[researchCost]} Research to unlock</em>`
             : ''
           }
-        </span>
-      </button>
+        </div>
+      </div>
     `);
+    const button = container.firstElementChild;
     button.hidden = !data[visible];
     button.setAttribute('aria-disabled', !!data[disabled]);
     showWhenPrereqMet(data, prereq, button, stateIndex, index, visible, () => {
@@ -121,6 +124,6 @@ export default class UnlockableButton {
       this.enableWhenCanAfford(data, index);
     }
 
-    return button;
+    return { container, button };
   }
 }

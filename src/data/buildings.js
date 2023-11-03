@@ -37,6 +37,7 @@ import {
   snatchers,
   channeler
 } from './tasks.js';
+import { displayIcon } from '../utils.js';
 
 // indices
 export const name = 0;
@@ -60,9 +61,9 @@ export const burnersCamp = 6;
 export const mine = 7;
 export const furnace = 8;
 export const smithy = 9;
-export const weaponsWorkshop = 10;
-export const armorersWorkshop = 11;
-export const bowyersWorkshop = 12;
+export const bowyersWorkshop = 10;
+export const weaponsWorkshop = 11;
+export const armorersWorkshop = 12;
 export const alchemyLab = 13;
 export const outpost = 14;
 export const manaPillar = 15;
@@ -97,7 +98,7 @@ export function initBuildings() {
     // 1
     [
       'Woodcutters Camp',
-      `Allows 3 Skeletons to gather <span>${resources[wood][icon]}</span>`,
+      `Allows 3 Skeletons to gather ${displayIcon(resources[wood])}`,
       [
         [wood, 25]
       ],
@@ -112,7 +113,7 @@ export function initBuildings() {
     // 2
     [
       'Lumber Mill',
-      `Allows 3 Skeletons to craft <span>${resources[planks][icon]}</span> from <span>${resources[wood][icon]}</span>`,
+      `Allows 3 Skeletons to craft ${displayIcon(resources[planks])} from ${displayIcon(resources[wood])}`,
       [
         [wood, 100],
         [stone, 10]
@@ -128,7 +129,7 @@ export function initBuildings() {
     // 3
     [
       'Laboratory',
-      `Allows 1 Skeleton to generate <span>${resources[research][icon]}</span>`,
+      `Allows 1 Skeleton to generate ${displayIcon(resources[research])}`,
       [
         [stone, 50],
         [planks, 25]
@@ -144,7 +145,7 @@ export function initBuildings() {
     // 4
     [
       'Quarry',
-      `Allows 5 Skeletons to gather <span>${resources[stone][icon]}</span>`,
+      `Allows 5 Skeletons to gather ${displayIcon(resources[stone])}`,
       [
         [wood, 50]
       ],
@@ -160,7 +161,7 @@ export function initBuildings() {
     // 5
     [
       'Masons Workshop',
-      `Allows 2 Skeletons to craft <span>${resources[blocks][icon]}</span> from <span>${resources[stone][icon]}</span>`,
+      `Allows 2 Skeletons to craft ${displayIcon(resources[blocks])} from ${displayIcon(resources[stone])}`,
       [
         [wood, 50]
       ],
@@ -176,7 +177,7 @@ export function initBuildings() {
     // 6
     [
       'Burners Camp',
-      `Allows 3 Skeletons to craft <span>${resources[charcoal][icon]}</span> from <span>${resources[wood][icon]}</span>`,
+      `Allows 3 Skeletons to craft ${displayIcon(resources[charcoal])} from ${displayIcon(resources[wood])}`,
       [
         [wood, 25]
       ],
@@ -192,7 +193,7 @@ export function initBuildings() {
     // 7
     [
       'Mine',
-      `Allows 5 Skeletons to gather <span>${resources[ironOre][icon]}</span>`,
+      `Allows 5 Skeletons to gather ${displayIcon(resources[ironOre])}`,
       [
         [stone, 25],
         [planks, 50],
@@ -209,7 +210,7 @@ export function initBuildings() {
     // 8
     [
       'Furnace',
-      `Allows 2 Skeletons to craft <span>${resources[iron][icon]}</span> from <span>${resources[ironOre][icon]}</span> and <span>${resources[charcoal][icon]}</span>`,
+      `Allows 2 Skeletons to craft ${displayIcon(resources[iron])} from ${displayIcon(resources[ironOre])} and ${displayIcon(resources[charcoal])}`,
       [
         [wood, 25],
         [blocks, 75]
@@ -226,7 +227,7 @@ export function initBuildings() {
     // 9
     [
       'Smithy',
-      `Allows 2 Skeletons to craft <span>${resources[tools][icon]}</span> from <span>${resources[iron][icon]}</span> and <span>${resources[charcoal][icon]}</span>`,
+      `Allows 2 Skeletons to craft ${displayIcon(resources[tools])} from ${displayIcon(resources[iron])} and ${displayIcon(resources[charcoal])}`,
       [
         [planks, 100],
         [blocks, 80]
@@ -242,8 +243,25 @@ export function initBuildings() {
 
     // 10
     [
+      'Bowyers Workshop',
+      `Allows 2 Skeletons to craft ${displayIcon(resources[bows])} from ${displayIcon(resources[wood])} and ${displayIcon(resources[planks])}`,
+      [
+        [planks, 200],
+        [tools, 40]
+      ],
+      [
+        [task, bowyers, assignable, 2]
+      ],
+      [
+        [building, laboratory, built, 1]
+      ],
+      250
+    ],
+
+    // 11
+    [
       'Weapons Workshop',
-      `Allows 2 Skeletons to craft <span>${resources[weapons][icon]}</span> from <span>${resources[iron][icon]}</span> and <span>${resources[charcoal][icon]}</span>`,
+      `Allows 2 Skeletons to craft ${displayIcon(resources[weapons])} from ${displayIcon(resources[iron])} and ${displayIcon(resources[charcoal])}`,
       [
         [planks, 120],
         [iron, 50],
@@ -255,13 +273,13 @@ export function initBuildings() {
       [
         [building, laboratory, built, 1]
       ],
-      250
+      300
     ],
 
-    // 11
+    // 12
     [
       'Armorers Workshop',
-      `Allows 2 Skeletons to craft <span>${resources[armor][icon]}</span> from <span>${resources[iron][icon]}</span> and <span>${resources[charcoal][icon]}</span>`,
+      `Allows 2 Skeletons to craft ${displayIcon(resources[armor])} from ${displayIcon(resources[iron])} and ${displayIcon(resources[charcoal])}`,
       [
         [planks, 120],
         [iron, 50],
@@ -273,30 +291,13 @@ export function initBuildings() {
       [
         [building, laboratory, built, 1]
       ],
-      250
-    ],
-
-    // 12
-    [
-      'Bowyers Workshop',
-      `Allows 2 Skeletons to craft <span>${resources[bows][icon]}</span> from <span>${resources[wood][icon]}</span> and <span>${resources[planks][icon]}</span>`,
-      [
-        [planks, 200],
-        [tools, 40]
-      ],
-      [
-        [task, bowyers, assignable, 2]
-      ],
-      [
-        [building, laboratory, built, 1]
-      ],
       300
     ],
 
     // 13
     [
       'Alchemy Lab',
-      `Allows 4 Skeletons to generate greater amounts of <span>${resources[research][icon]}</span>`,
+      `Allows 4 Skeletons to generate greater amounts of ${displayIcon(resources[research])}`,
       [
         [planks, 125],
         [iron, 75],
@@ -314,7 +315,7 @@ export function initBuildings() {
     // 14
     [
       'Outpost',
-      `Allows 2 Skeletons to gather <span>${resources[corpses][icon]}</span>`,
+      `Allows 2 Skeletons to gather ${displayIcon(resources[corpses])}`,
       [
         [planks, 75],
         [blocks, 100],
@@ -331,7 +332,7 @@ export function initBuildings() {
     // 15
     [
       'Mana Pillar',
-      `Allows 3 Skeletons to gather <span>${resources[mana][icon]}</span> and increases max <span>${resources[mana][icon]}</span> by 25`,
+      `Allows 3 Skeletons to gather ${displayIcon(resources[mana])} and increases max ${displayIcon(resources[mana])} by 25`,
       [
         [stone, 100],
         [iron, 25]
@@ -349,7 +350,7 @@ export function initBuildings() {
     // 16
     [
       'Morgue',
-      `Increases max <span>${resources[corpses][icon]}</span> by 3`,
+      `Increases max ${displayIcon(resources[corpses])} by 3`,
       [
         [wood, 150],
         [stone, 150],
