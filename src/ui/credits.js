@@ -13,7 +13,7 @@ const creditList = [
       ['Weapons Icon', 'https://www.flaticon.com/free-icon/swords_3763558'],
       ['Mana Icon', 'https://www.flaticon.com/free-icon/magic_867926'],
       ['Research Icon', 'https://www.flaticon.com/free-icon/ancient-scroll_1183815'],
-      ['Archers', 'htthttps://www.flaticon.com/free-icon/archer_6081840', 'Freepik'],
+      ['Archers Icon', 'https://www.flaticon.com/free-icon/archer_6081840', 'Freepik'],
       ['Lock Icon', 'https://www.flaticon.com/free-icon/padlock_473622']
     ]
   ],
@@ -21,7 +21,7 @@ const creditList = [
     'Good Ware',
     'https://www.flaticon.com/authors/good-ware',
     [
-      ['Stone Icon', 'https://www.flaticon.com/free-icon/wood_3275748'],
+      ['Stone Icon', 'https://www.flaticon.com/free-icon/stone_4746320'],
       ['Skeletons Icon', 'https://www.flaticon.com/free-icon/skeleton_5980902']
     ]
   ],

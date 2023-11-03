@@ -26,7 +26,8 @@ export default function initMenu() {
   // save game
   const saveDialog = new Dialog({
     cancel: 'Close',
-    head: 'Game saved successfully'
+    head: 'Save Game',
+    body: 'Game saved successfully.'
   });
   save.addEventListener('click', () => {
     saveGame();

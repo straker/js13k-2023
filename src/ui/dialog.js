@@ -57,9 +57,14 @@ export default class Dialog {
       return;
     }
 
-    loop.start();
+
     this.dialog.close();
     this.prevElm.focus();
+
+    // only start the loop if all dialogs are closed
+    if(!document.querySelector('dialog[open]')) {
+      loop.start();
+    }
 
     if (how) {
       this._callback?.();

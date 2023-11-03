@@ -28,7 +28,7 @@ import {
 import { assigned, idle } from './data/tasks.js';
 import { ATTACK_TICK } from './constants.js';
 import Dialog from './ui/dialog.js';
-import { displayArmy, displayCost } from './utils.js';
+import { displayArmy, displayCost, generateArmy } from './utils.js';
 import resolveBattle from './combat/resolve-battle.js';
 
 let attackDialog;
