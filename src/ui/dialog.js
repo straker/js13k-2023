@@ -10,8 +10,8 @@ export default class Dialog {
     cancel
   } = {}) {
     const dialog = this.dialog = html(`
-      <dialog ${id ? `id="${id}"` : ''}>
-        <div class="head">${head ? `<h2>${head}</h2>` : ''}</div>
+      <dialog ${id ? `id="${id}"` : ''} aria-label="${head}">
+        <div class="head"><h2>${head}</h2></div>
         <div class="body">${body}</div>
         <div class="foot"></div>
       </dialog>

@@ -6,8 +6,8 @@ import { saveGame } from '../utils.js';
 export default function initMenu() {
   // all global variables are from the menu
   const menuDialog = new Dialog({
-    id: 'menu',
-    cancel: 'Close',
+    id: 'menuD',
+    confirm: 'Close',
     head: 'Menu',
     body: `
       <button id="save">Save Game</button>
@@ -21,11 +21,11 @@ export default function initMenu() {
 
   menu.addEventListener('click', () => {
     menuDialog.open();
-  })
+  });
 
   // save game
   const saveDialog = new Dialog({
-    cancel: 'Close',
+    confirm: 'Close',
     head: 'Save Game',
     body: 'Game saved successfully.'
   });
@@ -68,6 +68,9 @@ export default function initMenu() {
       if (textArea.value) {
         button.removeAttribute('aria-disabled');
       }
+      else {
+        button.setAttribute('aria-disabled', true);
+      }
     });
 
     importDialog.open(() => {
@@ -78,7 +81,7 @@ export default function initMenu() {
 
   // export save
   const exportDialog = new Dialog({
-    cancel: 'Close',
+    confirm: 'Close',
     head: 'Export Save',
     body: '<textarea type="text" onclick="this.focus();this.select()" readonly rows="10"></textarea>'
   });

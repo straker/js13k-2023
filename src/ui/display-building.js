@@ -1,4 +1,4 @@
-import state, { resource, building } from '../data/state.js';
+import state, { resource, building, data } from '../data/state.js';
 import {
   name,
   description,
@@ -17,6 +17,7 @@ import resources, {
   amount,
   research
 } from '../data/resources.js';
+import { buildingVisible } from '../data/game-data.js';
 import { on } from '../events.js';
 import {
   html,
@@ -50,17 +51,14 @@ export default function displayBuilding(data, index) {
     visible,
     disabled
   );
-  const builtDiv = html(`<span class="btn-r">${data[built] ?? 0}</span>`);
+  const builtDiv = html(`<span class="btn-r"><span class="sr-only">Built:</span><span>${data[built] ?? 0}</span></span>`);
 
   button.appendChild(builtDiv);
 
   // show building heading when first building is shown
   if (index === 0) {
-    // `bldP` and `bltT` are global HTML ids from index.html
-    bldP.hidden = bldT.hidden = !data[visible];
-
     on([building, 0, visible], (value) => {
-      bldP.hidden = bldT.hidden = !value;
+      state.set([data, 0, buildingVisible, true]);
     });
   }
 

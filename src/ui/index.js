@@ -3,10 +3,17 @@ import displayResource from './display-resource.js';
 import displayBuilding from './display-building.js';
 import displayAction from './display-action.js';
 import displayTask from './display-task.js';
-import { attackTimer, attackArmy } from '../data/game-data.js';
+import {
+  attackTimer,
+  attackArmy,
+  actionVisible,
+  buildingVisible,
+  taskVisible
+} from '../data/game-data.js';
 import { displayArmy } from '../utils.js';
-import { on } from '../events.js';
+import { on, emit } from '../events.js';
 import initMenu from './menu.js';
+import './col-group.js';
 
 export default function initUI() {
   state.get([resource]).map(displayResource);
@@ -14,6 +21,58 @@ export default function initUI() {
   state.get([building]).map(displayBuilding);
   state.get([task]).map(displayTask);
   initMenu();
+
+  emit(['ui-init']);
+
+  // bind section visibility to state
+  // `act`, 'bld', and 'tsk' are global HTML ids from index.html
+  act.hidden = !state.get([data, 0, actionVisible]);
+  bld.hidden = !state.get([data, 0, buildingVisible]);
+  tsk.hidden = !state.get([data, 0, taskVisible]);
+
+  on([data, 0, actionVisible], value => {
+    act.hidden = !value;
+  });
+  on([data, 0, buildingVisible], value => {
+    console.log('bld.hidden =', !value);
+    bld.hidden = !value;
+  });
+  on([data, 0, taskVisible], value => {
+    tsk.hidden = !value;
+  });
+
+  // NOTE: needs to be kept in-sync with CSS media queries
+  const smallscreenMediaQuery = matchMedia('(max-width: 47.375rem)');
+  const mediumscreenMediaQuery = matchMedia('(max-width: 71.25rem)');
+  const fullscreenMediaQuery = matchMedia('(min-width: 71.26rem)');
+
+  smallscreenMediaQuery.addListener(evt => {
+    if (!evt.matches) {
+      return;
+    }
+
+    state.set([data, 0, actionVisible, true]);
+    state.set([data, 0, buildingVisible, false]);
+    state.set([data, 0, taskVisible, false]);
+  });
+  mediumscreenMediaQuery.addListener(evt => {
+    if (!evt.matches) {
+      return;
+    }
+
+    state.set([data, 0, actionVisible, true]);
+    state.set([data, 0, buildingVisible, true]);
+    state.set([data, 0, taskVisible, false]);
+  });
+  fullscreenMediaQuery.addListener(evt => {
+    if (!evt.matches) {
+      return;
+    }
+
+    state.set([data, 0, actionVisible, true]);
+    state.set([data, 0, buildingVisible, true]);
+    state.set([data, 0, taskVisible, true]);
+  });
 
   // display attacking army info
   const attackingArmy = state.get([data, 0, attackArmy]);

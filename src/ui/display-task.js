@@ -1,3 +1,4 @@
+import { clamp } from '../libs/kontra.js';
 import state, { resource, task } from '../data/state.js';
 import {
   name,
@@ -8,7 +9,13 @@ import {
   visible,
   idle
 } from '../data/tasks.js';
-import resources, { icon, amount, max, change, skeletons } from '../data/resources.js';
+import resources, {
+  name as resourceName,
+  icon, amount,
+  max,
+  change,
+  skeletons
+} from '../data/resources.js';
 import { on } from '../events.js';
 import { RESOURCE_TICK } from '../constants.js';
 import { html, showWhenPrereqMet } from '../utils.js';
@@ -27,13 +34,13 @@ export default function displayTask(data, index) {
   const taskName = html(`
     <div class="col">
       ${data[name]}
-      ${index !== idle ? `<span class="tip">${getTip(data, data[assigned] ?? 0)}</span>` : ``}
     </div>
   `);
 
   const div = html(`
     <div class="col">
-      <input type="number" min="0" max="0" value="${data[assigned] ?? 0}">
+      <input type="number" aria-label="${data[name]}" min="0" max="0" value="${data[assigned] ?? 0}">
+      ${index !== idle ? `<span class="tip">${getTip(data, data[assigned] ?? 0)}</span>` : ``}
     </div>
   `);
   const maxDiv = html(`<div class="col max"></div>`)
@@ -43,11 +50,11 @@ export default function displayTask(data, index) {
 
   // show tasks heading when first task is shown
   if (index === 0) {
-    // tskP` and `tskT` are global HTML ids from index.html
-    tskP.hidden = tskT.hidden = !data[visible]
+    // `tsk` is a global HTML id from index.html
+    tsk.hidden = !data[visible]
 
     on([task, 0, visible], (value) => {
-      tskP.hidden = tskT.hidden = !value;
+      tsk.hidden = !value;
     });
   }
 
@@ -56,8 +63,14 @@ export default function displayTask(data, index) {
     row.hidden = !value;
   });
 
-  // prevent user from typing into the input
-  input.addEventListener('keydown', (e) => e.preventDefault());
+  function onChange() {
+    const numAssigned = data[assigned] ?? 0;
+    const value = +input.value;
+    const diff = value - numAssigned;
+
+    state.add([task, index, assigned, diff])
+    state.add([task, idle, assigned, -diff])
+  }
 
   // special auto task that user cannot change
   if (index === idle) {
@@ -94,7 +107,7 @@ export default function displayTask(data, index) {
     on([task, index, assigned], (value, diff) => {
       if (index !== idle) {
         const tip = getTip(data, value);
-        taskName.querySelector('.tip').innerHTML = tip;
+        div.querySelector('.tip').innerHTML = tip;
       }
 
       // keep track of the change in resource state to display
@@ -104,15 +117,32 @@ export default function displayTask(data, index) {
       });
     });
 
-    // add or subtract assigned skeletons
-    input.addEventListener('change', (e) => {
-      const numAssigned = data[assigned] ?? 0;
-      const value = +input.value;
-      const diff = value - numAssigned;
+    input.addEventListener('keydown', (evt) => {
+      // allow only tab key or any key that uses ctrl/alt/meta
+      if (
+        !(
+          evt.code === 'Tab' ||
+          evt.metaKey ||
+          evt.altKey ||
+          evt.ctrlKey
+        )
+      ){
+        evt.preventDefault();
+      }
 
-      state.add([task, index, assigned, diff])
-      state.add([task, idle, assigned, -diff])
+      const max = data[assignable]
+      if (evt.code == 'ArrowRight') {
+        input.value = clamp(0, max, +input.value + 1);
+        onChange();
+      }
+      if (evt.code == 'ArrowLeft') {
+        input.value = clamp(0, max, +input.value - 1);
+        onChange();
+      }
     });
+
+    // add or subtract assigned skeletons
+    input.addEventListener('change', onChange);
   }
 
   // `tskG` is a global HTML id from index.html
@@ -125,17 +155,14 @@ export default function displayTask(data, index) {
 function getTip(data, value) {
   return data[effects].map(([resourceIndex, resourceValue]) => {
     return `
-      <div>
-        <span>${resources[resourceIndex][icon]}</span>
+      <div class="task-tip">
+        <span class="icon ${resources[resourceIndex][resourceName]}">${resources[resourceIndex][icon]}</span>
         <span>
-          ${
+          <span class="num">${
             resourceValue > 0
               ? '+'
-              // show -0
-              : value === 0
-                ? '-'
-                : ''
-          }${value * resourceValue} per ${RESOURCE_TICK / 60}s
+              : '-'
+          }</span>${value * Math.abs(resourceValue)} per ${RESOURCE_TICK / 60}s
         </span>
       </div>`;
   }).join('');

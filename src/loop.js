@@ -17,7 +17,7 @@ const loop = GameLoop({
     if (++resourceTimer >= RESOURCE_TICK) {
       resourceTimer = 0;
       taskTick();
-      attackTick(RESOURCE_TICK);
+      // attackTick(RESOURCE_TICK);
     }
 
     if (++saveTimer >= SAVE_TICK) {

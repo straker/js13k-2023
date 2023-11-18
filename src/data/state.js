@@ -207,22 +207,22 @@ function isValidState(saveState, initialState) {
     Array.isArray(saveState) &&
     saveState.length === initialState.length &&
 
-    saveState[resource].length === resources.length &&
+    saveState[resource].length <= resources.length &&
     saveState[resource].every(isObject) &&
 
-    saveState[action].length === actions.length &&
+    saveState[action].length <= actions.length &&
     saveState[action].every(isObject) &&
 
-    saveState[building].length === buildings.length &&
+    saveState[building].length <= buildings.length &&
     saveState[action].every(isObject) &&
 
-    saveState[task].length === tasks.length &&
+    saveState[task].length <= tasks.length &&
     saveState[task].every(isObject) &&
 
-    saveState[army].length === armies.length &&
+    saveState[army].length <= armies.length &&
     saveState[army].every(isObject) &&
 
-    saveState[data].length === gameData.length &&
+    saveState[data].length <= gameData.length &&
     Array.isArray(saveState[data][0])
   );
 }

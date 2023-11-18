@@ -128,7 +128,7 @@ export function displayArmy(armyList) {
       ${
         armyList.map((value, index) => {
           const resourceData = armyMap[index];
-          return `<span class="${resourceData[resourceName]}"><span class="cost-icon">${resourceData[icon]}</span> ${trucnateNumber(value)}</span>`;
+          return `<span class="${resourceData[resourceName]}"><span class="icon cost-icon">${resourceData[icon]}</span> ${trucnateNumber(value)}</span>`;
         }).join('')
       }
     </div>

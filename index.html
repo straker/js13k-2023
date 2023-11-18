@@ -23,12 +23,9 @@
     background: #fdfdfd;
   }
 
-  main {
+  .mainB {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-areas:
-      "resources resources resources"
-      "actP bldP tskP"
+    grid-template-columns: repeat(3, 1fr);
   }
 
   /* Resource group */
@@ -84,24 +81,50 @@
     margin-top: 0.5rem;
   }
 
-  .group {
+  col-group {
     position: relative;
+    opacity: 1;
+    transition: 0.15s opacity;
   }
 
-  .group [hidden] {
+  col-group.hidden {
+    opacity: 0;
+  }
+
+  col-group[hidden] {
     display: none !important;
   }
 
+  .h {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 0.5rem;
+    margin: 0 0 0.5rem 1rem;
+  }
+
   h2 {
-    margin: 0 1rem;
+    margin: 0;
+  }
+
+  /* Nav */
+  .h button {
+    padding: 0.5rem 1rem;
+    flex-direction: row;
+    gap: 1rem;
+    display: none;
+  }
+
+  .h span {
+    display: none;
   }
 
   /* Main body */
-  .group > div {
+  col-group section {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    padding: 1rem;
+    padding: 0.5rem 1rem 1rem;
     max-height: 59.5vh;
     overflow-y: auto;
   }
@@ -112,10 +135,11 @@
     align-items: center;
     justify-content: center;
     margin: 0;
-    padding: 1rem 0 0;
+    padding: 0;
+    height: 7rem;
   }
 
-  a, button {
+  a, button, input {
     outline-offset: 2px;
   }
 
@@ -138,13 +162,13 @@
   button[aria-disabled="true"],
   button[aria-disabled="true"]:focus,
   button[aria-disabled="true"]:hover {
-    background: rgba(233, 233, 237, 0.5);
+    background: rgba(233, 233, 237, 0.1);
     color: rgba(0, 0, 0, 0.5);
     border-color: rgba(0, 0, 0, 0.5);
     cursor: not-allowed;
   }
 
-  button[aria-disabled="true"] img {
+  button[aria-disabled="true"] .icon {
     opacity: 0.5;
   }
 
@@ -170,26 +194,6 @@
     gap: 0.25rem;
   }
 
-  .locked .Research {
-    font-size: 0.95rem;
-  }
-
-  .lock {
-    background: #E62200;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid black;
-    z-index: 2;
-    aspect-ratio: 1 / 1;
-    height: 1.4rem;
-  }
-
-  .lock img {
-    width: 1rem;
-  }
-
   .Research:not(.icon) {
     margin-left: -0.65rem;
     border: 1px solid black;
@@ -200,6 +204,8 @@
     align-items: center;
     gap: 0.25rem;
     height: 1.4rem;
+    width: 4.75rem;
+    justify-content: end;
   }
 
   .Research:not(.icon) img {
@@ -230,6 +236,10 @@
   }
 
   /* Task group */
+  #tskP {
+    grid-area: banner;
+  }
+
   input {
     width: 50%;
     padding: 0;
@@ -237,10 +247,7 @@
     height: 2rem;
     border: 0;
     float: right;
-  }
-
-  input:focus {
-    outline: 0;
+    background: inherit;
   }
 
   /* always show number arrows in Chrome */
@@ -249,10 +256,11 @@
      opacity: 1;
   }
 
-  .tsk {
+  #tsk {
     display: grid;
     grid-auto-rows: min-content;
     grid-template-areas:
+      "banner banner"
       "header pop"
       "body body"
   }
@@ -301,6 +309,11 @@
     white-space: nowrap;
   }
 
+  .task-tip {
+    display: inline-flex;
+    align-items: center;
+  }
+
   /* Footer */
   footer {
     display: flex;
@@ -313,7 +326,8 @@
     margin: 0.75rem 1rem;
   }
 
-  footer :is(button, a) {
+  footer :is(button, a),
+  .h button {
     background: none;
     color: #333;
     text-decoration: underline;
@@ -321,11 +335,14 @@
     margin: 0;
     border: 0;
     border-radius: 0;
+    width: auto;
     height: auto;
     white-space: nowrap;
   }
 
-  footer :is(button:hover, button:focus) {
+  footer :is(button:hover, button:focus),
+  .h button:hover,
+  .h button:focus {
     background: none;
     cursor: pointer;
   }
@@ -339,37 +356,117 @@
   .atkArmy .cost-icon {
     width: 1.35rem;
     height: 1.35rem;
-    margin-right: 0.35rem;
     display: inline-flex;
     align-items: center;
     justify-content: end;
-    text-shadow:
-      1px 0px 0 #fdfdfd,
-      0px 1px 0 #fdfdfd,
-      0px -1px 0 #fdfdfd,
-      -1px 0px 0 #fdfdfd
+  }
+
+  *:not(p) > .icon:not(.cost-icon, .Lock) {
+    margin-right: 0.35rem;
+  }
+
+  p > .icon {
+    margin: 0 0.1rem;
+  }
+
+  .icon [role=img] {
+    background: url('./sprites.png') no-repeat;
+    filter: drop-shadow(0.5px 0 #fdfdfd) drop-shadow(-0.5px 0 #fdfdfd) drop-shadow(0 0.5px #fdfdfd) drop-shadow(0 -0.5px #fdfdfd);
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+  }
+
+  .Wood [role=img] {
+     background-position: -80px -106px;
+  }
+
+  .Stone [role=img] {
+     background-position: -2px -106px;
+  }
+
+  .Corpses [role=img] {
+     background-position: -28px -28px;
+  }
+
+  .Mana [role=img] {
+     background-position: -80px -54px;
+  }
+
+  .Skeletons [role=img] {
+     background-position: -80px -80px;
+  }
+
+  .Planks [role=img] {
+     background-position: -28px -80px;
+  }
+
+  .Research [role=img] {
+     background-position: -54px -80px;
+  }
+
+  .Blocks [role=img] {
+     background-position: -54px -2px;
+  }
+
+  .Charcoal [role=img] {
+     background-position: -2px -28px;
+  }
+
+  .Iron.ore [role=img] {
+     background-position: -80px -28px;
+  }
+
+  .Iron [role=img] {
+     background-position: -2px -54px;
+  }
+
+  .Tools [role=img] {
+     background-position: -54px -106px;
+  }
+
+  .Bows [role=img] {
+     background-position: -80px -2px;
+  }
+
+  .Weapons [role=img] {
+     background-position: -28px -106px;
+  }
+
+  .Armor [role=img] {
+     background-position: -28px -2px;
+  }
+
+  .Militia [role=img] {
+     background-position: -2px -80px;
+  }
+
+  .Archers [role=img] {
+     background-position: -2px -2px;
+  }
+
+  .Infantry [role=img] {
+     background-position: -54px -28px;
+  }
+
+  .Cavalry [role=img] {
+     background-position: -28px -54px;
+  }
+
+  .Lock [role=img] {
+     background-position: -54px -54px;
   }
 
   .atkArmy .cost-icon {
     margin: 0;
   }
 
-  .icon:is(.Weapons, .Bows, .Planks, .Research) img {
-    width: 1.25rem;
+  .icon:is(.Weapons, .Bows, .Planks, .Research) [role=img] {
+    scale: 90%;
   }
 
   .cost-icon {
     margin: 0;
-  }
-
-  .cost-icon,
-  p span,
-  .lock {
-    text-shadow:
-      1px 0px 0 #222,
-      0px 1px 0 #222,
-      0px -1px 0 #222,
-      -1px 0px 0 #222;
   }
 
   .icon.Archers,
@@ -383,12 +480,33 @@
     gap: 0.25rem;
   }
 
-  img {
+  .locked .icon.Research {
+    margin-right: auto;
+    margin-left: 0.15rem;
+  }
+
+  .locked .Research [role=img] {
+    scale: 85%;
+  }
+
+  .locked .Lock [role=img] {
+    scale: 70%;
+  }
+
+  .Lock {
+    background: #E62200;
+    border-radius: 50%;
+    border: 1px solid black;
+    z-index: 2;
+    margin: 0;
+  }
+
+  /*img {
     filter: drop-shadow(0.5px 0 #fdfdfd) drop-shadow(-0.5px 0 #fdfdfd) drop-shadow(0 0.5px #fdfdfd) drop-shadow(0 -0.5px #fdfdfd);
     width: 1.35rem;
     height: auto;
     vertical-align: text-bottom;
-  }
+  }*/
 
   /* Tooltip */
   .tipC {
@@ -413,15 +531,15 @@
     font-size: 0.9rem;
     opacity: 1;
     color: #222;
-    font-weight: normal;
     transition: 0s opacity;
     opacity: 0;
     bottom: 110%;
     left: 0;
   }
 
-  :is(.tipC:hover, .tipC:focus-visible) + .tip:not(:hover),
-  :is(.tipC:hover, .tipC:focus-visible) .tip:not(:hover) {
+  .tipC:is(:hover, :focus-visible) + .tip:not(:hover),
+  .tipC input:focus + .tip:not(:hover),
+  .tipC:is(:hover, :focus-visible) .tip:not(:hover) {
     visibility: visible;
     transition-delay: 0.25s;
     transition-duration: 0.15s;
@@ -429,7 +547,7 @@
   }
 
   .tip.t {
-    top: -7.5rem;
+    top: 0.5rem;
     left: 1rem;
     bottom: unset;
     width: calc(100% - 2rem);
@@ -470,7 +588,6 @@
   }
 
   p span {
-    margin: 0 0.15rem;
     vertical-align: text-bottom;
   }
 
@@ -494,10 +611,6 @@
     transition: opacity 0.25s;
     overflow: hidden;
     min-width: 35vw;
-  }
-
-  dialog h2 {
-    margin: 0;
   }
 
   dialog[open] {
@@ -574,13 +687,44 @@
     }
   }
 
-  #menu button {
+  #menuD button {
     margin: 0.5rem 0;
+  }
+
+  /* Utility  */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+  }
+
+  .num {
+    font-family: monospace;
+  }
+
+  /* Media Queries */
+  @media screen and (max-width: 71.25rem) {
+    .mainB {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .h :is(button, span) {
+      display: block;
+    }
+  }
+
+  @media screen and (max-width: 47.375rem) {
+    .mainB {
+      grid-template-columns: 1fr;
+    }
   }
   </style>
 </head>
 <body>
   <main>
+
     <div id="resG">
       <div class="g" id="wG"></div> <!-- wood group -->
       <div class="g" id="sG"></div> <!-- stone group -->
@@ -597,46 +741,64 @@
       </div>
       <div id="saved" class="hide">Game Saved</div>
     </div>
-    <pre id="actP"><span>     __/\__
-. _  \\''//
--( )-/_||_\
- .'. \_()_/
-  |   | . \
-  |mrf| .  \
- .'. ,\_____'.
-</span></pre>
-    <pre hidden id="bldP"><span>       _
-     _|=|__________
-    /              \
-   /                \
-  /__________________\
-   ||  || /--\ ||  ||
-   ||[]|| | .| ||[]||
-   ||__||_|__|_||__||
-                [nosig]</span></pre>
-    <pre hidden id="tskP"><span>               .---.
-     |________/     \________
-()===|_______( () () )_______>
-     | VK     \  M  /
-               |HHH|
-               `---'
-</span></pre>
-    <div class="group">
-      <h2>Actions</h2>
-      <div id="actG"></div>
+
+    <div class="mainB" role="application">
+      <col-group id="act">
+        <pre aria-hidden="true">       __/\__
+  . _  \\''//
+  -( )-/_||_\
+   .'. \_()_/
+    |   | . \
+    |mrf| .  \
+   .'. ,\_____'.</pre>
+        <div class="h">
+          <h2>Actions</h2>
+        </div>
+        <section id="actG"></section>
+      </col-group>
+
+      <col-group hidden id="bld">
+        <pre aria-hidden="true">         _
+       _|=|__________
+      /              \
+     /                \
+    /__________________\
+     ||  || /--\ ||  ||
+     ||[]|| | .| ||[]||
+     ||__||_|__|_||__||
+                  [nosig]</pre>
+        <div class="h">
+          <h2 id="bldT">Buildings</h2>
+          <span aria-hidden="true">|</span>
+          <button data-t="tsk">Tasks</button>
+        </div>
+        <section id="bldG" tabindex="-1"></section>
+      </col-group>
+
+      <col-group hidden id="tsk" aria-describedby="tskD">
+        <div class="sr-only" id="tskD">Use Left or Right Arrows to increment or decrement values.</div>
+        <pre id="tskP" aria-hidden="true">                 .---.
+       |________/     \________
+  ()===|_______( () () )_______>
+       | VK     \  M  /
+                 |HHH|
+                 `---'</pre>
+        <div class="h">
+          <button data-t="bld">Buildings</button>
+          <span aria-hidden="true">|</span>
+          <h2 id="tskT">Tasks</h2>
+        </div>
+        <div id="pop"></div>
+        <section class="tskC" tabindex="-1">
+          <div id="tskG"></div>
+        </div>
+      </col-group>
     </div>
-    <div class="group">
-      <h2 hidden id="bldT">Buildings</h2>
-      <div id="bldG"></div>
-    </div>
-    <div class="group tsk">
-      <h2 hidden id="tskT">Tasks</h2>
-      <div id="pop"></div>
-      <div class="tskC"><div id="tskG"></div></div>
-    </div>
+
     <footer>
       <button id="menu">Menu</button>
     </footer>
+
   </main>
   <script src="./src/index.js" type="module"></script>
 </body>

@@ -8,6 +8,7 @@ const creditList = [
     [
       // 0 = name, 2 = url
       ['Wood Icon', 'https://www.flaticon.com/free-icon/wood_3275748'],
+      ['Plank Icon', 'https://www.flaticon.com/free-icon/wood-plank_9410721'],
       ['Tools Icon', 'https://www.flaticon.com/free-icon/hammer_595737'],
       ['Bows Icon', 'https://www.flaticon.com/free-icon/courage_8235296'],
       ['Weapons Icon', 'https://www.flaticon.com/free-icon/swords_3763558'],
@@ -101,16 +102,20 @@ const creditList = [
 
 export default function initCredits() {
   const creditDialog = new Dialog({
-    cancel: 'Close'
+    confirm: 'Close',
+    head: 'Credits'
   });
-  creditDialog.head.innerHTML = 'Credits';
   const listItems = creditList
     .map(([creator, creatorLink, images, ccby, changes]) => {
       let host;
       let imageList = images
         .map(([name, url, changes], index) => {
           if (!host) {
-            host = url.match(/(https:\/\/(www\.)?.*?\/)/)[0];
+            host = url.substring(
+              0,
+              // find the first '/' after the '.' (.com/net)
+              url.indexOf('/', url.indexOf('.'))
+            )
           }
 
           return `${index !== 0 && index == images.length - 1 ? 'and ' : ''}<a href="${url}">${name}</a>`
@@ -135,7 +140,7 @@ export default function initCredits() {
 function CCBy(changes) {
    let text = 'under <a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>'
    if (changes) {
-    text += '. Changes made: ' + changes
+    text += '. <i>Changes made: ' + changes + '</i>'
    }
 
    return text;

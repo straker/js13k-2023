@@ -49,14 +49,15 @@ export const digStone = 1;
 export const stealCorpse = 2;
 export const reanimateSkeleton = 3;
 export const recoverMana = 4;
-export const reanimateMilitia = 5;
-export const reanimateArchers = 6;
-export const reanimateInfantry = 7;
-export const reanimateCavalry = 8;
-export const attackHamlet = 9;
-export const attackVillage = 10;
-export const attackIronMine = 11;
-export const attackCity = 12;
+export const massReanimate = 5;
+export const reanimateMilitia = 6;
+export const reanimateArchers = 7;
+export const reanimateInfantry = 8;
+export const reanimateCavalry = 9;
+export const attackHamlet = 10;
+export const attackVillage = 11;
+export const attackIronMine = 12;
+export const attackCity = 13;
 
 const actions = [];
 export default actions;
@@ -133,6 +134,24 @@ export function initActions() {
 
     // 5
     [
+      'Mass Reanimate',
+      'Reanimate a group of corpses to perform various tasks',
+      XLONG_COOLDOWN,
+      [
+        [skeletons, 5]
+      ],
+      [
+        [building, laboratory, built, 1]
+      ],
+      [
+        [mana, 20],
+        [corpses, 5]
+      ],
+      100
+    ],
+
+    // 6
+    [
       'Reanimate Militia',
       'Militia are cheap but weak vs Infantry, Archers, and Cavalry',
       LONG_COOLDOWN,
@@ -149,7 +168,7 @@ export function initActions() {
       30
     ],
 
-    // 6
+    // 7
     [
       'Reanimate Archers',
       'Archers are strong vs Infantry',
@@ -168,7 +187,7 @@ export function initActions() {
       150
     ],
 
-    // 7
+    // 8
     [
       'Reanimate Infantry',
       'Infantry are strong vs Cavalry',
@@ -188,7 +207,7 @@ export function initActions() {
       300
     ],
 
-    // 8
+    // 9
     [
       'Reanimate Cavalry',
       'Cavalry are strong vs Archers',
