@@ -1,7 +1,7 @@
 import { clamp } from '../libs/kontra.js';
 import { on } from '../events.js';
 import state, { data } from '../data/state.js';
-import { actionVisible, buildingVisible, taskVisible } from '../data/game-data.js';
+import { actionVisible, buildingVisible, taskVisible, currentView } from '../data/game-data.js';
 
 let groupId = 0;
 const idMap = {
@@ -44,10 +44,11 @@ export class ColGroup extends HTMLElement {
         return;
       }
 
-      this.hide(() => {
-        window[target].show();
-      });
-    })
+      state.set([data, 0, currentView, target]);
+      document
+        .querySelectorAll(`[data-t=${target}]`)
+        .forEach(elm => elm.classList.remove('new'));
+    });
 
     // handle moving roving tabindex
     this.addEventListener('keydown', (evt) => {
@@ -77,29 +78,29 @@ export class ColGroup extends HTMLElement {
     this.curElm.focus();
   }
 
-  hide(cb) {
-    if (this.hidden) return;
+  // hide(cb) {
+  //   if (this.hidden) return;
 
-    this.addEventListener(
-      'transitionend',
-      evt => {
-        state.set([data, 0, idMap[this.id], false]);
-        this.classList.remove('hidden');
-        cb?.();
-      },
-      { once: true }
-    );
-    this.classList.add('hidden');
-  }
+  //   this.addEventListener(
+  //     'transitionend',
+  //     evt => {
+  //       state.set([data, 0, idMap[this.id], false]);
+  //       this.classList.remove('hidden');
+  //       cb?.();
+  //     },
+  //     { once: true }
+  //   );
+  //   this.classList.add('hidden');
+  // }
 
-  show() {
-    this.classList.add('hidden');
-    state.set([data, 0, idMap[this.id], true]);
-    setTimeout(() => {
-      this.curElm.focus();
-      this.classList.remove('hidden')
-    }, 100);
-  }
+  // show() {
+  //   this.classList.add('hidden');
+  //   state.set([data, 0, idMap[this.id], true]);
+  //   setTimeout(() => {
+  //     this.curElm.focus();
+  //     this.classList.remove('hidden')
+  //   }, 100);
+  // }
 }
 
 customElements.define('col-group', ColGroup);

@@ -1,5 +1,5 @@
 import { clamp } from '../libs/kontra.js';
-import state, { resource, task } from '../data/state.js';
+import state, { resource, task, data as gameData } from '../data/state.js';
 import {
   name,
   effects,
@@ -16,6 +16,7 @@ import resources, {
   change,
   skeletons
 } from '../data/resources.js';
+import { taskVisible } from '../data/game-data.js';
 import { on } from '../events.js';
 import { RESOURCE_TICK } from '../constants.js';
 import { html, showWhenPrereqMet } from '../utils.js';
@@ -46,16 +47,16 @@ export default function displayTask(data, index) {
   const maxDiv = html(`<div class="col max"></div>`)
   const input = div.querySelector('input');
   row.hidden = !data[visible];
-  showWhenPrereqMet(data, prereq, div, task, index, visible);
+
+  if (!data[visible]) {
+    showWhenPrereqMet(data, prereq, div, task, index, visible);
+  }
 
   // show tasks heading when first task is shown
   if (index === 0) {
-    // `tsk` is a global HTML id from index.html
-    tsk.hidden = !data[visible]
-
     on([task, 0, visible], (value) => {
-      tsk.hidden = !value;
-    });
+      state.set([gameData, 0, taskVisible, true]);
+    }, { once: true });
   }
 
   // bind hidden state to the task name

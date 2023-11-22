@@ -1,5 +1,12 @@
-import { on } from './events.js';
-import state, { resource, army, data } from './data/state.js';
+import { on, off } from './events.js';
+import state, {
+  resource,
+  action,
+  building,
+  task,
+  army,
+  data as gameData
+} from './data/state.js';
 import resources, {
   name as resourceName,
   icon,
@@ -16,7 +23,7 @@ import {
   cavalry as cavalryIndex
 } from './data/armies.js';
 import { upk } from './data/armies.js';
-import { randSeed } from './data/game-data.js';
+import { randSeed, currentView } from './data/game-data.js';
 
 /**
  * Traverse a nested array and return the value at the desired path. Each index of the `path` is the index of the array to traverse down at each level.
@@ -57,16 +64,35 @@ export function showWhenPrereqMet(data, prereqIndex, domElm, stateIndex, index, 
     const path = [...prereq];  // clone
     const neededValue = path.pop();
 
-    on(path, (curValue) => {
+    function fn(curValue) {
       if (curValue >= neededValue) {
         prereqsMet[i] = 1;
+
         if (prereqsMet.every(value => value)) {
+          off(path, fn);
           domElm.hidden = false;
           state.set([stateIndex, index, visible, true]);
-          callback && callback();
+          callback?.();
+
+          const indexMap = {
+            [action]: 'act',
+            [building]: 'bld',
+            [task]: 'tsk'
+          };
+
+          if (indexMap[stateIndex]) {
+            const curView = state.get([gameData, 0, currentView]);
+            // show new notification for buttons that aren't
+            // the current view
+            document
+              .querySelectorAll(`.navB:not(.${curView}B) [data-t=${indexMap[stateIndex]}]`)
+              .forEach(button => button.classList.add('new'));
+          }
         }
       }
-    });
+    }
+
+    on(path, fn);
   });
 }
 
@@ -154,7 +180,7 @@ let seed;
 export const random = {
   rand() {
     seed |= 0; seed = seed + 0x9e3779b9 | 0;
-    state.set([data, 0, randSeed, seed]);
+    state.set([gameData, 0, randSeed, seed]);
 
     let t = seed ^ seed >>> 16; t = Math.imul(t, 0x21f0aaad);
         t = t ^ t >>> 15; t = Math.imul(t, 0x735a2d97);
@@ -168,7 +194,7 @@ export const random = {
   },
   seed(t = Date.now()) {
     seed = t;
-    state.set([data, 0, randSeed, seed]);
+    state.set([gameData, 0, randSeed, seed]);
   }
 };
 

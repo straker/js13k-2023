@@ -67,12 +67,15 @@ export default class UnlockableButton {
     const button = container.firstElementChild;
     button.hidden = !data[visible];
     button.setAttribute('aria-disabled', !!data[disabled]);
-    showWhenPrereqMet(data, prereq, button, stateIndex, index, visible, () => {
-      // player can always click a button that needs research
-      if (!locked) {
-        state.set([stateIndex, index, disabled, !this.canAfford(data)]);
-      }
-    });
+
+    if (!data[visible]) {
+      showWhenPrereqMet(data, prereq, button, stateIndex, index, visible, () => {
+        // player can always click a button that needs research
+        if (!locked) {
+          state.set([stateIndex, index, disabled, !this.canAfford(data)]);
+        }
+      });
+    }
 
     // bind disabled state to the aria-disabled attribute
     on([stateIndex, index, disabled], (value) => {
@@ -92,7 +95,7 @@ export default class UnlockableButton {
           `Unlock ${buttonName} for ${displayCost(resources[research], data[researchCost])}?`,
           () => {
             locked = false;
-            button.querySelector('.lock').remove();
+            button.querySelector('.Lock').remove();
             button.querySelector('.Research').remove();
             button.classList.remove('locked');
 

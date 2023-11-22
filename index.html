@@ -21,9 +21,10 @@
     margin: 0;
     color: #222;
     background: #fdfdfd;
+    overflow: hidden;
   }
 
-  .mainB {
+  .main {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
   }
@@ -82,6 +83,7 @@
   }
 
   col-group {
+    display: none;
     position: relative;
     opacity: 1;
     transition: 0.15s opacity;
@@ -91,16 +93,28 @@
     opacity: 0;
   }
 
-  col-group[hidden] {
+  col-group [hidden] {
     display: none !important;
   }
 
+  .actV #act,
+  .bldV #bld {
+    display: block;
+  }
+
+  .tskV #tsk {
+    display: grid;
+  }
+
   .h {
+    margin: 0 0 0.5rem 1rem;
+  }
+
+  .h, .navB {
     display: flex;
     align-items: center;
     flex-direction: row;
     gap: 0.5rem;
-    margin: 0 0 0.5rem 1rem;
   }
 
   h2 {
@@ -109,14 +123,30 @@
 
   /* Nav */
   .h button {
+    display: flex;
     padding: 0.5rem 1rem;
     flex-direction: row;
     gap: 1rem;
+  }
+
+  .navB {
     display: none;
   }
 
-  .h span {
-    display: none;
+  .new {
+    position: relative;
+  }
+
+  .new:before {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    width: 0.5rem;
+    height: 0.5rem;
+    background: red;
+    top: 0;
+    right: -0.25rem;
+    border: 2px solid #fdfdfd;
   }
 
   /* Main body */
@@ -257,7 +287,6 @@
   }
 
   #tsk {
-    display: grid;
     grid-auto-rows: min-content;
     grid-template-areas:
       "banner banner"
@@ -611,6 +640,7 @@
     transition: opacity 0.25s;
     overflow: hidden;
     min-width: 35vw;
+    width: max-content;
   }
 
   dialog[open] {
@@ -705,19 +735,67 @@
   }
 
   /* Media Queries */
+  /* Medium + Small */
   @media screen and (max-width: 71.25rem) {
-    .mainB {
+    .main {
       grid-template-columns: repeat(2, 1fr);
     }
 
-    .h :is(button, span) {
+    /*.h :is(button, span) {
+      display: block;
+    }*/
+
+    /*.actB,
+    #act [class$="B"] {
+      display: none;
+    }*/
+
+    dialog {
+      max-width: 75vw;
+    }
+
+    body:not(.bldS) #bld,
+    body:not(.tskS) #tsk {
+      display: none;
+    }
+
+    .bldV :is(#bld, #tsk) .bldB,
+    .tskV :is(#bld, #tsk) .tskB {
+      display: flex;
+    }
+  }
+
+  /* Medium */
+  @media screen and (min-width: 47.376rem) and (max-width: 71.25rem) {
+    body.actS.bldV #bld {
       display: block;
     }
   }
 
+  /* Small */
   @media screen and (max-width: 47.375rem) {
-    .mainB {
+    .main {
       grid-template-columns: 1fr;
+    }
+
+    /*.actB,
+    #act [class$="B"] {
+      display: flex;
+    }*/
+
+    dialog {
+      max-width: 90vw;
+      min-width: 50vw;
+    }
+
+    body:not(.actS) #act {
+      display: none;
+    }
+
+    .actV .actB,
+    .bldV .bldB,
+    .tskV .tskB {
+      display: flex;
     }
   }
   </style>
@@ -742,7 +820,7 @@
       <div id="saved" class="hide">Game Saved</div>
     </div>
 
-    <div class="mainB" role="application">
+    <div class="main" role="application">
       <col-group id="act">
         <pre aria-hidden="true">       __/\__
   . _  \\''//
@@ -752,12 +830,20 @@
     |mrf| .  \
    .'. ,\_____'.</pre>
         <div class="h">
-          <h2>Actions</h2>
+          <h2 data-t="act">Actions</h2>
+          <div class="navB bldB">
+            <span aria-hidden="true">|</span>
+            <button data-t="bld">Buildings</button>
+          </div>
+          <div class="navB tskB">
+            <span aria-hidden="true">|</span>
+            <button data-t="tsk">Tasks</button>
+          </div>
         </div>
         <section id="actG"></section>
       </col-group>
 
-      <col-group hidden id="bld">
+      <col-group id="bld">
         <pre aria-hidden="true">         _
        _|=|__________
       /              \
@@ -768,14 +854,20 @@
      ||__||_|__|_||__||
                   [nosig]</pre>
         <div class="h">
-          <h2 id="bldT">Buildings</h2>
-          <span aria-hidden="true">|</span>
-          <button data-t="tsk">Tasks</button>
+          <div class="navB actB">
+            <button data-t="act">Actions</button>
+            <span aria-hidden="true">|</span>
+          </div>
+          <h2 id="bldT" data-t="bld">Buildings</h2>
+          <div class="navB tskB">
+            <span aria-hidden="true">|</span>
+            <button data-t="tsk">Tasks</button>
+          </div>
         </div>
         <section id="bldG" tabindex="-1"></section>
       </col-group>
 
-      <col-group hidden id="tsk" aria-describedby="tskD">
+      <col-group id="tsk" aria-describedby="tskD">
         <div class="sr-only" id="tskD">Use Left or Right Arrows to increment or decrement values.</div>
         <pre id="tskP" aria-hidden="true">                 .---.
        |________/     \________
@@ -784,9 +876,15 @@
                  |HHH|
                  `---'</pre>
         <div class="h">
-          <button data-t="bld">Buildings</button>
-          <span aria-hidden="true">|</span>
-          <h2 id="tskT">Tasks</h2>
+          <div class="navB actB">
+            <button data-t="act">Actions</button>
+            <span aria-hidden="true">|</span>
+          </div>
+          <div class="navB bldB">
+            <button data-t="bld">Buildings</button>
+            <span aria-hidden="true">|</span>
+          </div>
+          <h2 data-t="tsk" id="tskT">Tasks</h2>
         </div>
         <div id="pop"></div>
         <section class="tskC" tabindex="-1">

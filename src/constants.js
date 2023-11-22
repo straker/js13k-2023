@@ -12,4 +12,9 @@ export const LONG_ATTACK_COOLDOWN = 20;
 export const XLONG_ATTACK_COOLDOWN = LONG_ATTACK_COOLDOWN * 2;
 export const MEDIUM_ATTACK_COOLDOWN = LONG_ATTACK_COOLDOWN / 1.5;
 export const SHORT_ATTACK_COOLDOWN = LONG_ATTACK_COOLDOWN / 2;
+
 export const SAVE_KEY = 'straker-2023-state';
+
+export const SMALL_MEDIA_QUERY = matchMedia('(max-width: 47.375rem)');
+export const MEDIUM_MEDIA_QUERY = matchMedia('(min-width: 47.376rem) and (max-width: 71.25rem)');
+export const LARGE_MEDIA_QUERY = matchMedia('(min-width: 71.26rem)');

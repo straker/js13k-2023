@@ -1,4 +1,4 @@
-import state, { resource, building, data } from '../data/state.js';
+import state, { resource, building, data as gameData } from '../data/state.js';
 import {
   name,
   description,
@@ -17,7 +17,7 @@ import resources, {
   amount,
   research
 } from '../data/resources.js';
-import { buildingVisible } from '../data/game-data.js';
+import { buildingVisible, currentView } from '../data/game-data.js';
 import { on } from '../events.js';
 import {
   html,
@@ -26,6 +26,7 @@ import {
   canAfford
 } from '../utils.js';
 import UnlockableButton from './unlockable-button.js';
+import { SMALL_MEDIA_QUERY } from '../constants.js';
 
 /**
  * Display a building the player can build.
@@ -56,10 +57,14 @@ export default function displayBuilding(data, index) {
   button.appendChild(builtDiv);
 
   // show building heading when first building is shown
-  if (index === 0) {
+  if (index === 0 && !data[visible]) {
     on([building, 0, visible], (value) => {
-      state.set([data, 0, buildingVisible, true]);
-    });
+      state.set([gameData, 0, buildingVisible, true]);
+
+      if (!SMALL_MEDIA_QUERY.matches) {
+        state.set([gameData, 0, currentView, 'bld']);
+      }
+    }, { once: true });
   }
 
   // bind built state to built number

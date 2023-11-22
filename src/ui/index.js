@@ -8,12 +8,18 @@ import {
   attackArmy,
   actionVisible,
   buildingVisible,
-  taskVisible
+  taskVisible,
+  currentView
 } from '../data/game-data.js';
 import { displayArmy } from '../utils.js';
 import { on, emit } from '../events.js';
 import initMenu from './menu.js';
 import './col-group.js';
+import {
+  SMALL_MEDIA_QUERY,
+  MEDIUM_MEDIA_QUERY,
+  LARGE_MEDIA_QUERY
+} from '../constants.js';
 
 export default function initUI() {
   state.get([resource]).map(displayResource);
@@ -24,54 +30,42 @@ export default function initUI() {
 
   emit(['ui-init']);
 
-  // bind section visibility to state
-  // `act`, 'bld', and 'tsk' are global HTML ids from index.html
-  act.hidden = !state.get([data, 0, actionVisible]);
-  bld.hidden = !state.get([data, 0, buildingVisible]);
-  tsk.hidden = !state.get([data, 0, taskVisible]);
+  if (state.get([data, 0, actionVisible])) {
+    document.body.classList.add('actV');
+  }
+  else {
+    on([data, 0, actionVisible], value => {
+      document.body.classList.add('actV');
+    }, { once: true });
+  }
 
-  on([data, 0, actionVisible], value => {
-    act.hidden = !value;
-  });
-  on([data, 0, buildingVisible], value => {
-    console.log('bld.hidden =', !value);
-    bld.hidden = !value;
-  });
-  on([data, 0, taskVisible], value => {
-    tsk.hidden = !value;
-  });
+  if (state.get([data, 0, buildingVisible])) {
+    document.body.classList.add('bldV');
+  }
+  else {
+    on([data, 0, buildingVisible], value => {
+      document.body.classList.add('bldV');
+    }, { once: true });
+  }
 
-  // NOTE: needs to be kept in-sync with CSS media queries
-  const smallscreenMediaQuery = matchMedia('(max-width: 47.375rem)');
-  const mediumscreenMediaQuery = matchMedia('(max-width: 71.25rem)');
-  const fullscreenMediaQuery = matchMedia('(min-width: 71.26rem)');
+  if (state.get([data, 0, taskVisible])) {
+    document.body.classList.add('tskV');
+  }
+  else {
+    on([data, 0, taskVisible], value => {
+      document.body.classList.add('tskV');
+    }, { once: true });
+  }
 
-  smallscreenMediaQuery.addListener(evt => {
-    if (!evt.matches) {
-      return;
-    }
+  const curView = state.get([data, 0, currentView]);
+  if (curView) {
+    document.body.classList.add(curView + 'S');
+  }
 
-    state.set([data, 0, actionVisible, true]);
-    state.set([data, 0, buildingVisible, false]);
-    state.set([data, 0, taskVisible, false]);
-  });
-  mediumscreenMediaQuery.addListener(evt => {
-    if (!evt.matches) {
-      return;
-    }
-
-    state.set([data, 0, actionVisible, true]);
-    state.set([data, 0, buildingVisible, true]);
-    state.set([data, 0, taskVisible, false]);
-  });
-  fullscreenMediaQuery.addListener(evt => {
-    if (!evt.matches) {
-      return;
-    }
-
-    state.set([data, 0, actionVisible, true]);
-    state.set([data, 0, buildingVisible, true]);
-    state.set([data, 0, taskVisible, true]);
+  // bind the body class to the current visible view
+  on([data, 0, currentView], value => {
+    document.body.classList.remove('actS', 'bldS', 'tskS');
+    document.body.classList.add(value + 'S');
   });
 
   // display attacking army info

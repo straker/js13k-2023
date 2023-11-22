@@ -8,6 +8,7 @@ export const attackArmy = 5;
 export const actionVisible = 6;
 export const buildingVisible = 7;
 export const taskVisible = 8;
+export const currentView = 9;
 
 // game data only ever has 1 index value
 const gameData = [
@@ -17,9 +18,11 @@ const gameData = [
     ,
     0,
     1,
+    ,
     true,
     false,
-    false
+    false,
+    'act'
   ]
 ];
 export default gameData;
