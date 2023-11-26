@@ -24,6 +24,7 @@ import {
 } from './data/armies.js';
 import { upk } from './data/armies.js';
 import { randSeed, currentView } from './data/game-data.js';
+import { clamp } from './libs/kontra.js';
 
 /**
  * Traverse a nested array and return the value at the desired path. Each index of the `path` is the index of the array to traverse down at each level.
@@ -231,4 +232,135 @@ export function saveGame() {
   // `saved` is a global HTML id from index.html
   saved.classList.remove('hide');
   setTimeout(() => saved.classList.add('hide'));
+}
+
+/**
+ *
+ */
+window.isHidden = isHidden;
+function isHidden(elm) {
+  if (!elm || elm.nodeName === 'COL-GROUP') {
+    return false;
+  }
+
+  if (
+    elm.hidden ||
+    window.getComputedStyle(elm).getPropertyValue('display') === 'none'
+  ) {
+    return true;
+  }
+
+  return isHidden(elm.parentNode);
+}
+
+/**
+ * Enable and handle roving tabindex on an element.
+ */
+let rovingId = 0;
+export function rovingTabindex(elm, selector, {
+  dir,
+  selectCallback,
+  focus,
+  dynamic,
+  mutationCallback
+} = {}) {
+  const id = rovingId++;
+  const children = Array.from(elm.querySelectorAll(selector));
+  let curIndex = 0;
+  let curChild;
+
+  // select a child from the list
+  elm.selectChild = function(index, callback = true) {
+    const prevChild = curChild;
+
+    if (!children[index]) {
+      return;
+    }
+    if (isHidden(children[index])) {
+      return elm.selectChild(index + 1, callback);
+    }
+
+    curIndex = clamp(0, children.length - 1, index);
+    curChild = children[curIndex];
+
+    prevChild.setAttribute('tabindex', -1);
+    curChild.setAttribute('tabindex', 0);
+
+    if (focus) {
+      curChild.focus();
+    }
+
+    // selectCallback should handle focus
+    if (callback && selectCallback) {
+      selectCallback(index, curChild, prevChild);
+    }
+  }
+
+  children.forEach((child, index) => {
+    const childId = `child-${id}-${index}`;
+    child.setAttribute('id', childId);
+    child.setAttribute('tabindex', index === 0 ? 0 : -1);
+
+    if (index === 0) {
+      curChild = child;
+    }
+
+    // handle pointer moving roving tabindex
+    child.addEventListener('click', (evt) => {
+      elm.selectChild(index, true);
+    });
+  });
+
+  // handle keyboard moving roving tabindex
+  const keys = ['Home', 'End'];
+  if (dir === 'horizontal') {
+    keys.push('ArrowLeft', 'ArrowRight');
+  }
+  else {
+    keys.push('ArrowUp', 'ArrowDown');
+  }
+  elm.addEventListener('keydown', (evt) => {
+    if (!keys.includes(evt.code)) {
+      return;
+    }
+
+    evt.preventDefault();
+    let index = curIndex;
+
+    switch(evt.code) {
+    case 'ArrowUp':
+    case 'ArrowLeft':
+      index--;
+      break;
+    case 'ArrowDown':
+    case 'ArrowRight':
+      index++;
+      break;
+    case 'Home':
+      index = 0;
+      break;
+    case 'End':
+      index = children.length - 1;
+      break;
+    }
+
+    elm.selectChild(index, true);
+  });
+
+  if (dynamic) {
+    const observer = new MutationObserver((mutationList, observer) => {
+      for (const mutation of mutationList) {
+        if (
+          mutation.type === 'attributes' &&
+          mutation.attributeName === 'hidden' &&
+          !mutation.target.hidden &&
+          mutationCallback
+        ) {
+          mutationCallback(mutation.target);
+        }
+      }
+    });
+
+    observer.observe(elm, { attributes: true, subtree: true });
+  }
 }

@@ -133,12 +133,16 @@
     display: none;
   }
 
+  .h [role="tab"][aria-selected="true"] {
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
   .new {
     position: relative;
   }
 
   .new:before {
-    content: '';
     position: absolute;
     border-radius: 50%;
     width: 0.5rem;
@@ -270,6 +274,10 @@
     grid-area: banner;
   }
 
+  #tsk .hG {
+    grid-area: header;
+  }
+
   input {
     width: 50%;
     padding: 0;
@@ -301,6 +309,10 @@
   #tskG {
     display: table;
     padding-right: 1rem;
+  }
+
+  [role="row"]:not([aria-rowindex]) {
+    display: none !important;
   }
 
   .row {
@@ -763,12 +775,24 @@
     .tskV :is(#bld, #tsk) .tskB {
       display: flex;
     }
+
+    .new:before {
+      content: '';
+    }
   }
 
   /* Medium */
   @media screen and (min-width: 47.376rem) and (max-width: 71.25rem) {
     body.actS.bldV #bld {
       display: block;
+    }
+
+    .actB .new {
+      display: none;
+    }
+
+    :is(#bld, #tsk) h2 {
+      display: none !important;
     }
   }
 
@@ -797,6 +821,10 @@
     .tskV .tskB {
       display: flex;
     }
+
+    h2 {
+      display: none !important;
+    }
   }
   </style>
 </head>
@@ -821,7 +849,7 @@
     </div>
 
     <div class="main" role="application">
-      <col-group id="act">
+      <col-group id="act" name="Actions">
         <pre aria-hidden="true">       __/\__
   . _  \\''//
   -( )-/_||_\
@@ -829,21 +857,26 @@
     |   | . \
     |mrf| .  \
    .'. ,\_____'.</pre>
-        <div class="h">
-          <h2 data-t="act">Actions</h2>
-          <div class="navB bldB">
-            <span aria-hidden="true">|</span>
-            <button data-t="bld">Buildings</button>
+        <!-- <div class="h">
+          <h2 class="t" data-t="act">Actions</h2>
+          <div role="tablist">
+            <div class="navB bldB">
+              <button role="tab" aria-selected="false" aria-controls="atk" data-t="atk">Actions</button>
+            </div>
+            <div class="navB bldB">
+              <span aria-hidden="true">|</span>
+              <button role="tab" aria-selected="false" aria-controls="bld" data-t="bld">Buildings</button>
+            </div>
+            <div class="navB tskB">
+              <span aria-hidden="true">|</span>
+              <button role="tab" aria-selected="false" aria-controls="tsk" data-t="tsk">Tasks</button>
+            </div>
           </div>
-          <div class="navB tskB">
-            <span aria-hidden="true">|</span>
-            <button data-t="tsk">Tasks</button>
-          </div>
-        </div>
-        <section id="actG"></section>
+        </div> -->
+        <section role="group" id="actG"></section>
       </col-group>
 
-      <col-group id="bld">
+      <col-group id="bld" name="Buildings">
         <pre aria-hidden="true">         _
        _|=|__________
       /              \
@@ -853,43 +886,42 @@
      ||[]|| | .| ||[]||
      ||__||_|__|_||__||
                   [nosig]</pre>
-        <div class="h">
+        <!-- <div class="h">
           <div class="navB actB">
-            <button data-t="act">Actions</button>
+            <button role="tab" aria-selected="false" aria-controls="" data-t="act">Actions</button>
             <span aria-hidden="true">|</span>
           </div>
           <h2 id="bldT" data-t="bld">Buildings</h2>
           <div class="navB tskB">
             <span aria-hidden="true">|</span>
-            <button data-t="tsk">Tasks</button>
+            <button role="tab" aria-selected="false" aria-controls="" data-t="tsk">Tasks</button>
           </div>
-        </div>
-        <section id="bldG" tabindex="-1"></section>
+        </div> -->
+        <section id="bldG"></section>
       </col-group>
 
-      <col-group id="tsk" aria-describedby="tskD">
-        <div class="sr-only" id="tskD">Use Left or Right Arrows to increment or decrement values.</div>
+      <col-group id="tsk" name="Tasks">
         <pre id="tskP" aria-hidden="true">                 .---.
        |________/     \________
   ()===|_______( () () )_______>
        | VK     \  M  /
                  |HHH|
                  `---'</pre>
-        <div class="h">
+        <!-- <div class="h">
           <div class="navB actB">
-            <button data-t="act">Actions</button>
+            <button role="tab" aria-selected="false" aria-controls="" data-t="act">Actions</button>
             <span aria-hidden="true">|</span>
           </div>
           <div class="navB bldB">
-            <button data-t="bld">Buildings</button>
+            <button role="tab" aria-selected="false" aria-controls="" data-t="bld">Buildings</button>
             <span aria-hidden="true">|</span>
           </div>
           <h2 data-t="tsk" id="tskT">Tasks</h2>
-        </div>
+        </div> -->
         <div id="pop"></div>
-        <section class="tskC" tabindex="-1">
-          <div id="tskG"></div>
-        </div>
+        <div class="sr-only" id="tskD">Use Left or Right Arrows to increment or decrement values.</div>
+        <section class="tskC" id="tskG" aria-describedby="tskD">
+        </section>
       </col-group>
     </div>
 

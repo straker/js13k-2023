@@ -29,7 +29,7 @@ import { html, showWhenPrereqMet } from '../utils.js';
  */
 export default function displayTask(data, index) {
   const row = html(`
-    <div class="row tipC" ${!data[visible] ? 'hidden' : ''}>
+    <div role="row" class="row tipC" ${!data[visible] ? 'hidden' : ''}>
     </div>
   `);
   const taskName = html(`
@@ -39,14 +39,14 @@ export default function displayTask(data, index) {
   `);
 
   const div = html(`
-    <div class="col">
+    <div class="col" role="gridcell" aria-colindex="1">
       <input type="number" aria-label="${data[name]}" min="0" max="0" value="${data[assigned] ?? 0}">
       ${index !== idle ? `<span class="tip">${getTip(data, data[assigned] ?? 0)}</span>` : ``}
     </div>
   `);
   const maxDiv = html(`<div class="col max"></div>`)
   const input = div.querySelector('input');
-  row.hidden = !data[visible];
+  row.hidden = input.hidden = !data[visible];
 
   if (!data[visible]) {
     showWhenPrereqMet(data, prereq, div, task, index, visible);
@@ -61,7 +61,7 @@ export default function displayTask(data, index) {
 
   // bind hidden state to the task name
   on([task, index, visible], (value) => {
-    row.hidden = !value;
+    row.hidden = input.hidden =  !value;
   });
 
   function onChange() {
@@ -131,7 +131,7 @@ export default function displayTask(data, index) {
         evt.preventDefault();
       }
 
-      const max = data[assignable]
+      const max = +input.getAttribute('max');
       if (evt.code == 'ArrowRight') {
         input.value = clamp(0, max, +input.value + 1);
         onChange();
