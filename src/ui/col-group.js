@@ -3,8 +3,10 @@ import { on } from '../events.js';
 import state, { data } from '../data/state.js';
 import { actionVisible, buildingVisible, taskVisible, currentView } from '../data/game-data.js';
 import { html, rovingTabindex } from '../utils.js';
+import { MEDIUM_MEDIA_QUERY } from '../constants.js';
 
 let groupId = 0;
+let controlTablist;
 const idMap = {
   act: actionVisible,
   bld: buildingVisible,
@@ -42,6 +44,13 @@ export class ColGroup extends HTMLElement {
     const tablist = tabGroup.querySelector('[role="tablist"]');
     this.insertBefore(tabGroup, grid);
 
+    // the building tablist will drive the other tablists when
+    // the currentView is updated since it will be visible in
+    // both small and medium view
+    if (this.id === 'bld') {
+      controlTablist = tablist;
+    }
+
     rovingTabindex(
       tabGroup.querySelector('[role="tablist"]'),
       '[role="tab"]',
@@ -49,12 +58,14 @@ export class ColGroup extends HTMLElement {
         dir: 'horizontal',
         dynamic: true,
         selectCallback(index, curElm, prevElm) {
-          // automatic tab selection with handling multiple
+          // automatic tab selection and handling multiple
           // tablists as a single tablist
           const target = curElm.getAttribute('aria-controls');
           const tablists = document.querySelectorAll('[role="tablist"]');
           tablists.forEach(elm => {
-            elm.selectChild(index, false);
+            elm.selectChild(index, {
+              callback: false
+            });
           });
 
           document
@@ -75,15 +86,8 @@ export class ColGroup extends HTMLElement {
       }
     );
 
+    // create the grid
     on(['ui-init'], () => {
-      // select current view
-      const tabs = Array.from(tablist.querySelectorAll('[role="tab"]'));
-      tablist.selectChild(
-        // TODO: this focuses the element due to the callback from above, which we want to select the correct tab from all tablists but not focus the current element
-        tabs.findIndex(elm => elm.getAttribute('aria-controls') === state.get([data, 0, currentView]))
-      );
-
-      // create the grid
       const children = Array.from(grid.children);
       grid.setAttribute('role', 'grid');
       grid.setAttribute('aria-labelledby', `${this.id}T`);
@@ -155,3 +159,34 @@ export class ColGroup extends HTMLElement {
 }
 
 customElements.define('col-group', ColGroup);
+
+on(['ui-init'], () => {
+  const tabs = Array.from(controlTablist.querySelectorAll('[role="tab"]'));
+
+  // select current view tab
+  controlTablist.selectChild(
+    tabs.findIndex(elm => elm.getAttribute('aria-controls') === state.get([data, 0, currentView])),
+    {
+      focus: false
+    }
+  );
+
+  // handle the case of having action tab selected and the screen
+  // size changing to medium size (where there is no active tab)
+  on([data, 0, currentView], (value, oldValue) => {
+    if (
+      !MEDIUM_MEDIA_QUERY.matches ||
+      value !== 'bld' ||
+      oldValue !== 'act'
+    ) {
+      return;
+    }
+
+    controlTablist.selectChild(
+      tabs.findIndex(elm => elm.getAttribute('aria-controls') === 'bld'),
+      {
+        focus: false
+      }
+    );
+  });
+});

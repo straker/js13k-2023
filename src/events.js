@@ -25,8 +25,7 @@ export function off(path, fn) {
 }
 
 export function emit(path, ...args) {
-  const stuff = [...traversePath(callbacks, path)];  // clone
-  stuff.map(fn => {
+  [...traversePath(callbacks, path)].map(fn => {  // clone
     fn(...args);
   });
 }

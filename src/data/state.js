@@ -83,8 +83,9 @@ const state = {
   set(path) {
     const p = [...path];  // clone
     const { obj, value, index } = fromPath(p);
+    const oldValue = obj[index];
     obj[index] = value;
-    emit([...p, index], obj[index], value);
+    emit([...p, index], value, oldValue);
   },
 
   /**

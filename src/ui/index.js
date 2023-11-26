@@ -28,8 +28,6 @@ export default function initUI() {
   state.get([task]).map(displayTask);
   initMenu();
 
-  emit(['ui-init']);
-
   if (state.get([data, 0, actionVisible])) {
     document.body.classList.add('actV');
   }
@@ -68,6 +66,13 @@ export default function initUI() {
     document.body.classList.add(value + 'S');
   });
 
+  // update currentView when moving to medium screen size
+  MEDIUM_MEDIA_QUERY.addEventListener('change', (evt) => {
+    if (evt.matches && state.get([data, 0, currentView]) === 'act') {
+      state.set([data, 0, currentView, 'bld']);
+    }
+  });
+
   // display attacking army info
   const attackingArmy = state.get([data, 0, attackArmy]);
   if (attackingArmy?.length) {
@@ -92,4 +97,6 @@ export default function initUI() {
   on([data, 0, attackArmy], value => {
     atkArmy.innerHTML = displayArmy(value);
   });
+
+  emit(['ui-init']);
 }

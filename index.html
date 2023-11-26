@@ -121,6 +121,10 @@
     margin: 0;
   }
 
+  .h[role=tablist] {
+    margin: 0;
+  }
+
   /* Nav */
   .h button {
     display: flex;
@@ -787,12 +791,17 @@
       display: block;
     }
 
-    .actB .new {
+    .actB .new,
+    .bldB > span {
       display: none;
     }
 
     :is(#bld, #tsk) h2 {
       display: none !important;
+    }
+
+    :is(#bld, #tsk) .h {
+      margin: 0 0 0.5rem 1rem;
     }
   }
 
@@ -824,6 +833,10 @@
 
     h2 {
       display: none !important;
+    }
+
+    .h {
+      margin: 0 0 0.5rem 1rem !important;
     }
   }
   </style>

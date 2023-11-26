@@ -270,7 +270,10 @@ export function rovingTabindex(elm, selector, {
   let curChild;
 
   // select a child from the list
-  elm.selectChild = function(index, callback = true) {
+  elm.selectChild = function(index, {
+    callback = true,
+    focusElm = focus
+  }) {
     const prevChild = curChild;
 
     if (!children[index]) {
@@ -286,7 +289,7 @@ export function rovingTabindex(elm, selector, {
     prevChild.setAttribute('tabindex', -1);
     curChild.setAttribute('tabindex', 0);
 
-    if (focus) {
+    if (focusElm) {
       curChild.focus();
     }
 
